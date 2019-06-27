@@ -1,0 +1,37 @@
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "0.1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    lintOptions {
+        warningsAsErrors true
+    }
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/uiTest/java"
+        }
+        test {
+            java.srcDirs += "src/uiTest/java"
+        }
+    }
+    packagingOptions {
+        pickFirst("META-INF/atomicfu.kotlin_module")
+        exclude 'META-INF/LICENSE'
+    }
+}

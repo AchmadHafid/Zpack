@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+apply(from: "../shared_build.gradle")
+
+android {
+    defaultConfig {
+        applicationId "io.github.achmadhafid.sample_app"
+    }
+    buildTypes {
+        debug {
+            shrinkResources false
+            minifyEnabled false
+        }
+        release {
+            crunchPngs false
+            shrinkResources false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        allWarningsAsErrors = true
+    }
+}
+
+dependencies {
+    implementation project(":lib")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    implementation "androidx.core:core-ktx:1.2.0-alpha02"
+    implementation "androidx.appcompat:appcompat:1.1.0-beta01"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta2"
+
+    testImplementation "org.robolectric:robolectric:4.3"
+    testImplementation "androidx.test:core-ktx:1.2.1-alpha01"
+    testImplementation "androidx.test:rules:1.3.0-alpha01"
+    testImplementation "androidx.test:runner:1.3.0-alpha01"
+    testImplementation "androidx.test.espresso:espresso-core:3.3.0-alpha01"
+    testImplementation "androidx.test.ext:junit-ktx:1.1.2-alpha01"
+    testImplementation "androidx.test.ext:truth:1.3.0-alpha01"
+
+    androidTestImplementation "androidx.test:core-ktx:1.2.1-alpha01"
+    androidTestImplementation "androidx.test:rules:1.3.0-alpha01"
+    androidTestImplementation "androidx.test:runner:1.3.0-alpha01"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0-alpha01"
+    androidTestImplementation "androidx.test.ext:junit-ktx:1.1.2-alpha01"
+    androidTestImplementation "androidx.test.ext:truth:1.3.0-alpha01"
+}
