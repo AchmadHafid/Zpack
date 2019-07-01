@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "WildcardImport")
+@file:Suppress("TooManyFunctions", "unused", "WildcardImport")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -7,6 +7,7 @@ import android.app.*
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.createChooser
@@ -153,7 +154,7 @@ fun Context.openAdminSettings() {
         Intent(
             android.content.Intent()
                 .setComponent(
-                    android.content.ComponentName(
+                    ComponentName(
                         "com.android.settings",
                         "com.android.settings.DeviceAdminSettings"
                     )
@@ -275,7 +276,7 @@ inline fun <reified T : AppCompatActivity> Context.startActivity(block: Intent.(
 //endregion
 //region Service Helper
 
-inline fun <reified T : Service> Context.startService() =
+inline fun <reified T : Service> Context.startService(): ComponentName? =
     startService(Intent(this, T::class.java))
 
 @Suppress("DEPRECATION")

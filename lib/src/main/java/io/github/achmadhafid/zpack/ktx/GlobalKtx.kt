@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions")
+@file:Suppress("TooManyFunctions", "unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -41,7 +41,10 @@ fun atLeastPie()         = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 //endregion
 //region Theme Helper
 
-fun applyTheme(theme: Int) = AppCompatDelegate.setDefaultNightMode(theme)
+fun applyTheme(theme: Int): Int {
+    AppCompatDelegate.setDefaultNightMode(theme)
+    return theme
+}
 
 fun lightTheme() = applyTheme(AppCompatDelegate.MODE_NIGHT_NO)
 fun darkTheme()  = applyTheme(AppCompatDelegate.MODE_NIGHT_YES)

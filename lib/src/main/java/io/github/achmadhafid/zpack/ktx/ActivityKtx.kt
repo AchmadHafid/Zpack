@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions")
+@file:Suppress("TooManyFunctions", "unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -66,10 +66,9 @@ inline fun <reified VM : ViewModel> AppCompatActivity.bindViewModel() =
 fun AppCompatActivity.isDarkThemeEnable() = resources.configuration.uiMode and
         Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun AppCompatActivity.toggleTheme() {
+fun AppCompatActivity.toggleTheme() =
     if (isDarkThemeEnable()) lightTheme()
     else darkTheme()
-}
 
 //endregion
 //region View Helper

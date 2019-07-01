@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions")
+@file:Suppress("TooManyFunctions", "unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -97,9 +97,8 @@ inline fun <reified VM : ViewModel> Fragment.bindViewModel() =
 fun Fragment.isDarkThemeEnable() = resources.configuration.uiMode and
         Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun Fragment.toggleTheme() {
+fun Fragment.toggleTheme() =
     if (isDarkThemeEnable()) lightTheme()
     else darkTheme()
-}
 
 //endregion

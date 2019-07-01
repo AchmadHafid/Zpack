@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.achmadhafid.zpack.util
 
 import android.os.Handler
