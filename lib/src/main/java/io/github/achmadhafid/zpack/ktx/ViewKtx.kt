@@ -2,16 +2,22 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.graphics.Paint
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import androidx.core.widget.NestedScrollView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import io.github.achmadhafid.zpack.R
 
-//region Visibility Helper
+//region Visibility
 
 inline val View.isVisible
     get() = visibility == View.VISIBLE
@@ -64,166 +70,185 @@ inline fun View.goneIf(condition: () -> Boolean) : View {
     return this
 }
 
-fun View.visibleOrInvisible(visible: Boolean) {
-    if (visible) show() else hide()
+fun View.visibleOrInvisible(visibleIf: () -> Boolean) {
+    if (visibleIf()) show() else hide()
 }
 
-fun View.visibleOrGone(visible: Boolean) {
-    if (visible) show() else gone()
+fun View.visibleOrGone(visibleIf: () -> Boolean) {
+    if (visibleIf()) show() else gone()
 }
 
-inline fun <reified T> visibleOrInvisible(vararg targets: Pair<View, T>, visibleIf: (T) -> Boolean) {
-    for ((view, any) in targets) {
-        view.visibleOrInvisible(visibleIf(any))
+inline fun <reified T> List<Pair<View, T>>.visibleOrInvisible(visibleIf: (T) -> Boolean) {
+    for ((view, any) in this) {
+        if (visibleIf(any)) view.show() else view.hide()
     }
 }
 
-inline fun <reified T> visibleOrGone(vararg targets: Pair<View, T>, visibleIf: (T) -> Boolean) {
-    for ((view, any) in targets) {
-        view.visibleOrGone(visibleIf(any))
+inline fun <reified T> List<Pair<View, T>>.visibleOrGone(visibleIf: (T) -> Boolean) {
+    for ((view, any) in this) {
+        if (visibleIf(any)) view.show() else view.gone()
     }
 }
 
 //endregion
-//region Listener Helper
+//region Listener
 
-inline fun View.onClick(crossinline callback: () -> Unit) = setOnClickListener {
+fun View.onSingleClick(autoReEnable: Boolean = false, callback: () -> Unit) = setOnClickListener {
     isClickable = false
     callback()
-}
-
-inline fun View.onLongClick(crossinline callback: () -> Boolean) = setOnLongClickListener {
-    isLongClickable = false
-    callback()
+    if (autoReEnable) isClickable = true
 }
 
 //endregion
-//region Snack bar Helper
+//region Snack Bar
 
-fun View.snackBarShort(message: CharSequence, anchorView: View? = null) {
-    Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+private fun View.snackBar(
+    length: Int,
+    message: CharSequence,
+    anchorView: View? = null,
+    actionText: CharSequence? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) {
+    val snackbar = Snackbar.make(this, message, length)
         .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
+
+    onClick?.let {
+        snackbar.setAction(actionText) { it() }
+            .setActionTextColor(context.resolveColor(actionTextColorRes))
+    }
+
+    snackbar.show()
 }
 
 fun View.snackBarShort(
     message: CharSequence,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
-}
-
-fun View.snackBarShort(@StringRes messageRes: Int, anchorView: View? = null) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_SHORT)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
-}
+    actionText: CharSequence? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBar(Snackbar.LENGTH_SHORT, message, anchorView, actionText, actionTextColorRes, onClick)
 
 fun View.snackBarShort(
     @StringRes messageRes: Int,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_SHORT)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
-}
-
-fun View.snackBarLong(message: CharSequence, anchorView: View? = null) {
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
-}
+    @StringRes actionTextRes: Int? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBarShort(
+    context.getString(messageRes), anchorView,
+    actionTextRes?.let { context.getString(it) },
+    actionTextColorRes, onClick
+)
 
 fun View.snackBarLong(
     message: CharSequence,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
-}
-
-fun View.snackBarLong(@StringRes messageRes: Int, anchorView: View? = null) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_LONG)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
-}
+    actionText: CharSequence? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBar(Snackbar.LENGTH_LONG, message, anchorView, actionText, actionTextColorRes, onClick)
 
 fun View.snackBarLong(
     @StringRes messageRes: Int,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_LONG)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
-}
-
-fun View.snackBarForever(message: CharSequence, anchorView: View? = null) {
-    Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
-}
+    @StringRes actionTextRes: Int? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBarLong(
+    context.getString(messageRes), anchorView,
+    actionTextRes?.let { context.getString(it) },
+    actionTextColorRes, onClick
+)
 
 fun View.snackBarForever(
     message: CharSequence,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
-}
-
-fun View.snackBarForever(@StringRes messageRes: Int, anchorView: View? = null) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_INDEFINITE)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .show()
-}
+    actionText: CharSequence? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBar(Snackbar.LENGTH_INDEFINITE, message, anchorView, actionText, actionTextColorRes, onClick)
 
 fun View.snackBarForever(
     @StringRes messageRes: Int,
     anchorView: View? = null,
-    actionText: CharSequence,
-    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorAccent,
-    onClick: () -> Unit
-) {
-    Snackbar.make(this, messageRes, Snackbar.LENGTH_INDEFINITE)
-        .apply { anchorView?.let { setAnchorView(it) } }
-        .setAction(actionText) { onClick() }
-        .setActionTextColor(context.resolveColor(actionTextColorRes))
-        .show()
+    @StringRes actionTextRes: Int? = null,
+    @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
+    onClick: (() -> Unit)? = null
+) = snackBarForever(
+    context.getString(messageRes), anchorView,
+    actionTextRes?.let { context.getString(it) },
+    actionTextColorRes, onClick
+)
+
+//endregion
+//region TextView
+
+var TextView.textRes: Int
+    get () = TODO("Only use this extension function to set text from a string resource")
+    set(value) {
+        text = resources.getString(value)
+    }
+
+fun TextView.underLine() {
+    paint.flags = paint.flags or Paint.UNDERLINE_TEXT_FLAG
+    paint.isAntiAlias = true
+}
+
+fun TextView.deleteLine() {
+    paint.flags = paint.flags or Paint.STRIKE_THRU_TEXT_FLAG
+    paint.isAntiAlias = true
+}
+
+fun TextView.bold() {
+    paint.isFakeBoldText = true
+    paint.isAntiAlias = true
 }
 
 //endregion
-//region Toggle Group Helper
+//region EditText
 
-fun atLeastOneIsChecked(vararg buttons: MaterialButton) {
+var EditText.value: String
+    get() = text.toString()
+    set(value) {
+        setText(value)
+    }
+
+//endregion
+//region AppBarLayout
+
+fun AppBarLayout.setSelectedOnScrollDown(scrollView: NestedScrollView) {
+    scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
+        isSelected = scrollView.canScrollVertically(-1)
+    })
+}
+
+//endregion
+//region Util
+
+fun List<Pair<CompoundButton, Boolean>>.atLeastOneIsChecked(
+    onCheckedChange: ((Int, Boolean) -> Unit)? = null
+) {
+    for ((index, button) in withIndex()) {
+        button.first.isChecked = button.second
+        button.first.setOnCheckedChangeListener { buttonView, isChecked ->
+            onCheckedChange?.invoke(buttonView.id, isChecked)
+            forEach {
+                if (it.first.isChecked) return@setOnCheckedChangeListener
+            }
+            if (index != size - 1) this[index + 1].first.isChecked = true
+            else this[0].first.isChecked = true
+
+        }
+    }
+}
+
+fun MaterialButtonToggleGroup.exactlyOneMustBeChecked(
+    buttons: List<MaterialButton>,
+    defaultChecked: MaterialButton,
+    onCheckedChange: ((Int, Boolean) -> Unit)? = null
+) {
+    isSingleSelection = true
     buttons.forEach { button ->
         button.addOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -234,46 +259,54 @@ fun atLeastOneIsChecked(vararg buttons: MaterialButton) {
             }
         }
     }
-}
-
-fun atLeastOneIsCheckedV2(vararg buttons: CompoundButton) {
-    for((index, button) in buttons.withIndex()) {
-        button.setOnCheckedChangeListener { _, _ ->
-            buttons.forEach {
-                if (it.isChecked) return@setOnCheckedChangeListener
-            }
-            if (index != buttons.size - 1) buttons[index + 1].isChecked = true
-            else buttons[0].isChecked = true
-        }
+    defaultChecked.isChecked = true
+    addOnButtonCheckedListener { _, checkedId, isChecked ->
+        onCheckedChange?.invoke(checkedId, isChecked)
     }
 }
 
-fun CompoundButton.atLeastOneIsChecked(vararg buttons: MaterialButton) {
+@Suppress("LongParameterList")
+fun List<MaterialButton>.exactlyOneMustBeCheckedOrNone(
+    buttonGroup: MaterialButtonToggleGroup,
+    buttonGroupDefaultChecked: MaterialButton,
+    buttonGroupListener: (id: Int, isChecked: Boolean) -> Unit,
+    switchButton: CompoundButton,
+    switchButtonDefaultIsChecked: Boolean,
+    switchButtonListener: (isChecked: Boolean) -> Unit
+) {
     val listener = MaterialButton.OnCheckedChangeListener { button, isChecked ->
         if (isChecked) {
             button.isCheckable = false
-            buttons.forEach {
+            forEach {
                 if (it !== button) it.isCheckable = true
             }
         }
     }
-    setOnCheckedChangeListener { _, isChecked ->
+    val groupListener = MaterialButtonToggleGroup.OnButtonCheckedListener { _, id, isChecked ->
+        buttonGroupListener(id, isChecked)
+    }
+    switchButton.setOnCheckedChangeListener { _, isChecked ->
         if (isChecked) {
-            buttons.forEach {
-                it.isEnabled   = true
+            forEach {
+                it.isEnabled = true
                 it.isCheckable = true
                 it.addOnCheckedChangeListener(listener)
             }
-            buttons[0].isChecked = true
+            buttonGroupDefaultChecked.isChecked = true
+            buttonGroup.addOnButtonCheckedListener(groupListener)
         } else {
-            buttons.forEach {
+            buttonGroup.removeOnButtonCheckedListener(groupListener)
+            forEach {
                 it.removeOnCheckedChangeListener(listener)
                 it.isCheckable = true
-                it.isChecked   = false
-                it.isEnabled   = false
+                it.isChecked = false
+                it.isEnabled = false
             }
         }
+        switchButtonListener(isChecked)
     }
+    switchButton.isChecked = switchButtonDefaultIsChecked
 }
+
 
 //endregion

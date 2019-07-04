@@ -2,125 +2,348 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.app.*
+import android.app.admin.DevicePolicyManager
+import android.app.job.JobScheduler
+import android.app.usage.NetworkStatsManager
+import android.app.usage.StorageStatsManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
+import android.appwidget.AppWidgetManager
+import android.bluetooth.BluetoothManager
+import android.companion.CompanionDeviceManager
+import android.content.*
 import android.content.Intent.createChooser
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
+import android.content.pm.*
 import android.graphics.drawable.Drawable
+import android.hardware.ConsumerIrManager
+import android.hardware.SensorManager
+import android.hardware.camera2.CameraManager
+import android.hardware.display.DisplayManager
+import android.hardware.input.InputManager
+import android.hardware.usb.UsbManager
+import android.location.LocationManager
+import android.media.AudioManager
+import android.media.MediaRouter
+import android.media.midi.MidiManager
+import android.media.projection.MediaProjectionManager
+import android.media.session.MediaSessionManager
+import android.media.tv.TvInputManager
 import android.net.ConnectivityManager
+import android.net.IpSecManager
 import android.net.Uri
+import android.net.nsd.NsdManager
 import android.net.wifi.WifiManager
-import android.os.PowerManager
+import android.net.wifi.aware.WifiAwareManager
+import android.net.wifi.p2p.WifiP2pManager
+import android.net.wifi.rtt.WifiRttManager
+import android.nfc.NfcManager
+import android.os.*
+import android.os.health.SystemHealthManager
+import android.os.storage.StorageManager
+import android.print.PrintManager
 import android.provider.Settings
+import android.telecom.TelecomManager
+import android.telephony.CarrierConfigManager
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.WindowManager
+import android.view.accessibility.AccessibilityManager
+import android.view.accessibility.CaptioningManager
+import android.view.textclassifier.TextClassificationManager
+import android.view.textservice.TextServicesManager
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
+import androidx.core.os.UserManagerCompat
 
 //region System Service
 
+inline val Context.accessibilityManager
+    get() = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+inline val Context.accountManager
+    get() = getSystemService(Context.ACCOUNT_SERVICE) as AccountManager
 inline val Context.activityManager
     get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+inline val Context.alarmManager
+    get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 inline val Context.appOpsManager
-    get() = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    get() = (getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager).also {
+        Log.d("Zpack", "Please use `AppOpsManagerCompat instead`")
+    }
+inline val Context.appWidgetManager
+    get() = getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
+inline val Context.audioManager
+    get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+inline val Context.bluetoothManager
+    get() = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+inline val Context.cameraManager
+    get() = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+inline val Context.captioningManager
+    get() = getSystemService(Context.CAPTIONING_SERVICE) as CaptioningManager
+inline val Context.clipboardManager
+    get() = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+inline val Context.connectivityManager: ConnectivityManager
+    get() = (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).also {
+        Log.d("Zpack", "Please use `ConnectivityManagerCompat instead`")
+    }
+inline val Context.consumerIrManager
+    get() = getSystemService(Context.CONSUMER_IR_SERVICE) as ConsumerIrManager
+inline val Context.devicePolicyManager
+    get() = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+inline val Context.displayManager
+    get() = (getSystemService(Context.DISPLAY_SERVICE) as DisplayManager).also {
+        Log.d("Zpack", "Please use `DisplayManagerCompatCompat` instead")
+    }
+inline val Context.downloadManager
+    get() = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+inline val Context.dropBoxManager
+    get() = getSystemService(Context.DROPBOX_SERVICE) as DropBoxManager
+inline val Context.inputManager
+    get() = getSystemService(Context.INPUT_SERVICE) as InputManager
+inline val Context.jobScheduler
+    get() = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+inline val Context.keyGuardManager
+    get() = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+inline val Context.launcherApps
+    get() = getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+inline val Context.layoutInflate
+    get() = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).also {
+        Log.d("Zpack", "Please use `LayoutInflaterCompat instead`")
+    }
+inline val Context.locationManager
+    get() = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+inline val Context.mediaProjectionManager
+    get() = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+inline val Context.mediaRouter
+    get() = getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter
+inline val Context.mediaSessionManager
+    get() = getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+inline val Context.nfcManager
+    get() = getSystemService(Context.NFC_SERVICE) as NfcManager
+inline val Context.notificationManager
+    get() = (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).also {
+        Log.d("Zpack", "Please use `NotificationManagerCompat instead`")
+    }
+inline val Context.nsdManager
+    get() = getSystemService(Context.NSD_SERVICE) as NsdManager
+inline val Context.powerManager: PowerManager
+    get() = getSystemService(Context.POWER_SERVICE) as PowerManager
+inline val Context.printManager
+    get() = getSystemService(Context.PRINT_SERVICE) as PrintManager
+inline val Context.restrictionsManager
+    get() = getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
+inline val Context.searchManager
+    get() = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+inline val Context.sensorManager
+    get() = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+inline val Context.storageManager
+    get() = getSystemService(Context.STORAGE_SERVICE) as StorageManager
+inline val Context.telecomManager
+    get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+inline val Context.telephonyManager
+    get() = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+inline val Context.textServicesManager
+    get() = getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE) as TextServicesManager
+inline val Context.tvInputManager
+    get() = getSystemService(Context.TV_INPUT_SERVICE) as TvInputManager
+inline val Context.uiModeManager
+    get() = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
 inline val Context.usageStatsManager
     @SuppressLint("WrongConstant")
     get() = getSystemService("usagestats") as UsageStatsManager
-inline val Context.notificationManager
-    get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-inline val Context.powerManager: PowerManager
-    get() = getSystemService(Context.POWER_SERVICE) as PowerManager
-val Context.keyGuardManager
-    get() = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-val Context.telephonyManager
-    get() = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-val Context.layoutInflater
-    get() = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-val Context.connectivityManager
-    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-val Context.wifiManager
+inline val Context.usbManager
+    get() = getSystemService(Context.USB_SERVICE) as UsbManager
+inline val Context.userManager
+    get() = getSystemService(Context.USER_SERVICE) as UserManager
+inline val Context.vibrator
+    get() = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+inline val Context.wallpaperManager
+    get() = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
+inline val Context.wifiManager
     get() = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+inline val Context.wifiP2pManager
+    get() = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
+inline val Context.windowManager
+    get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+//region Lollipop MR1
+
+inline val Context.subscriptionManager
+    get() = if (atLeastLollipopMR1())
+        getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+    else null
 
 //endregion
-//region Resource Binding Helper
+//region Marshmallow
+
+inline val Context.carrierConfigManager
+    get() = if (atLeastMarshmallow())
+        getSystemService(Context.CARRIER_CONFIG_SERVICE) as CarrierConfigManager
+    else null
+inline val Context.midiManager
+    get() = if (atLeastMarshmallow())
+        getSystemService(Context.MIDI_SERVICE) as MidiManager
+    else null
+inline val Context.networkStatsManager
+    get() = if (atLeastMarshmallow())
+        getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
+    else null
+
+//endregion
+//region Nougat
+
+inline val Context.hardwarePropertiesManager
+    get() = if (atLeastNougat())
+        getSystemService(Context.HARDWARE_PROPERTIES_SERVICE) as HardwarePropertiesManager
+    else null
+inline val Context.systemHealthManager
+    get() = if (atLeastNougat())
+        getSystemService(Context.SYSTEM_HEALTH_SERVICE) as SystemHealthManager
+    else null
+
+//endregion
+//region Nougat MR1
+
+inline val Context.shortcutManager
+    get() = (if (atLeastNougatMR1())
+        getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
+    else null).also {
+        Log.d("Zpack", "Please use `ShortcutManagerCompat instead`")
+    }
+
+//endregion
+//region Oreo
+
+inline val Context.companionDeviceManager
+    get() = if (atLeastOreo())
+        getSystemService(Context.COMPANION_DEVICE_SERVICE) as CompanionDeviceManager
+    else null
+inline val Context.storageStatsManager
+    get() = if (atLeastOreo())
+        getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+    else null
+inline val Context.textClassificationManager
+    get() = if (atLeastOreo())
+        getSystemService(Context.TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
+    else null
+inline val Context.wifiAwareManager
+    get() = if (atLeastOreo())
+        getSystemService(Context.WIFI_AWARE_SERVICE) as WifiAwareManager
+    else null
+
+//endregion
+//region Pie
+
+inline val Context.crossProfileApps
+    get() = if (atLeastPie())
+        getSystemService(Context.CROSS_PROFILE_APPS_SERVICE) as CrossProfileApps
+    else null
+inline val Context.ipSecManager
+    get() = if (atLeastPie())
+        getSystemService(Context.IPSEC_SERVICE) as IpSecManager
+    else null
+inline val Context.wifiRttManager
+    get() = if (atLeastPie())
+        getSystemService(Context.WIFI_RTT_RANGING_SERVICE) as WifiRttManager
+    else null
+
+//endregion
+
+fun LocationManager.isLocationEnabledCompat() =
+    LocationManagerCompat.isLocationEnabled(this)
+fun UserManager.isUserUnlockedCompat(context: Context) =
+    UserManagerCompat.isUserUnlocked(context)
+
+//endregion
+//region Resource Binding
 
 @MainThread
-fun Context.dimenRes(@DimenRes id: Int) =
+fun Context.stringRes(@StringRes stringRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getDimensionPixelSize(id)
+        resources.getString(stringRes)
     }
 
 @MainThread
-fun Context.stringRes(@StringRes id: Int) =
+fun Context.stringArrayRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getString(id)
+        resources.getStringArray(arrayRes)
     }
 
-fun Context.stringArrayRes(@ArrayRes id: Int) =
+@MainThread
+fun Context.stringListRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(id)
-    }
-
-fun Context.stringListRes(@ArrayRes id: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(id)
+        resources.getStringArray(arrayRes)
             .toList()
     }
 
 @MainThread
-fun Context.intRes(@IntegerRes id: Int) =
+fun Context.intRes(@IntegerRes intRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getInteger(id)
+        resources.getInteger(intRes)
     }
 
-fun Context.intArrayRes(@ArrayRes id: Int) =
+@MainThread
+fun Context.intArrayRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(id)
+        resources.getIntArray(arrayRes)
     }
 
-fun Context.intListRes(@ArrayRes id: Int) =
+@MainThread
+fun Context.intListRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(id)
+        resources.getIntArray(arrayRes)
             .toList()
     }
 
 @MainThread
-fun Context.longRes(@IntegerRes id: Int) =
+fun Context.longRes(@IntegerRes intRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getInteger(id)
+        resources.getInteger(intRes)
             .toLong()
     }
 
-fun Context.longArrayRes(@ArrayRes id: Int) =
+@MainThread
+fun Context.longArrayRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(id)
+        resources.getIntArray(arrayRes)
             .map { it.toLong() }
             .toLongArray()
     }
 
-fun Context.longListRes(@ArrayRes id: Int) =
+@MainThread
+fun Context.longListRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(id)
+        resources.getIntArray(arrayRes)
             .map { it.toLong() }
     }
 
-fun Context.getColorCompat(color: Int) = ContextCompat.getColor(this, color)
+@MainThread
+fun Context.dimenRes(@DimenRes dimenRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimensionPixelSize(dimenRes)
+    }
+
+@MainThread
+fun Context.colorRes(@ColorRes colorRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        getColorCompat(colorRes)
+    }
+
+fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
 
 fun Context.resolveColor(@ColorRes @AttrRes id: Int) = with(TypedValue()) {
-    if (theme.resolveAttribute(id, this, true)) {
-        data
-    } else {
-        ContextCompat.getColor(this@resolveColor, id)
+    when {
+        theme.resolveAttribute(id, this, true) -> data
+        atLeastMarshmallow() -> getColor(id)
+        else -> getColorCompat(id)
     }
 }
 
@@ -133,16 +356,50 @@ fun Context.spToPx(sp: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
 fun Context.pxToSp(px: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
 
 //endregion
-//region Intent Helper
+//region Toast
 
-inline fun <reified T : Any> Context.intent() =
-    Intent(this, T::class.java)
+fun Context.toastShort(message: CharSequence) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
 
-inline fun <reified T : Any> Context.intent(body: Intent.() -> Unit): Intent =
-    Intent(this, T::class.java).apply(body)
+fun Context.toastShort(@StringRes messageRes: Int) {
+    Toast.makeText(this, messageRes, Toast.LENGTH_SHORT).show()
+}
 
-inline fun Context.intent(action: String, body: Intent.() -> Unit): Intent =
-    Intent(action).apply(body)
+fun Context.toastShort(@StringRes messageRes: Int, vararg messages: CharSequence) {
+    toastShort(String.format(getString(messageRes), *messages))
+}
+
+fun Context.toastLong(message: CharSequence) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.toastLong(@StringRes messageRes: Int) {
+    Toast.makeText(this, messageRes, Toast.LENGTH_LONG).show()
+}
+
+fun Context.toastLong(@StringRes messageRes: Int, vararg messages: CharSequence) {
+    toastLong(String.format(getString(messageRes), *messages))
+}
+
+//endregion
+//region Intent
+
+inline fun <reified T : Any> Context.intent(noinline block: (Intent.() -> Unit)? = null): Intent {
+    val intent = Intent(this, T::class.java)
+    if (block != null) intent.apply(block)
+    return intent
+}
+
+fun Context.intent(action: String, block: (Intent.() -> Unit)? = null): Intent =
+    if (block == null) Intent(action) else Intent(action).apply(block)
+
+//endregion
+//region Navigation
+
+inline fun <reified T : AppCompatActivity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
+    startActivity(intent<T>(block))
+}
 
 fun Context.openAppDetailSettings() {
     startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -181,7 +438,7 @@ fun Context.openWriteSettings() {
     }
 }
 
-fun Context.homeLauncher() {
+fun Context.openHomeLauncher() {
     startActivity(
         Intent(Intent.ACTION_MAIN)
             .addCategory(Intent.CATEGORY_HOME)
@@ -196,7 +453,7 @@ fun Context.homeLauncher() {
 }
 
 @Suppress("TooGenericExceptionCaught")
-fun Context.browse(url: String, newTask: Boolean = false): Boolean {
+fun Context.openUrl(url: String, newTask: Boolean = false): Boolean {
     return try {
         val intent = intent(Intent.ACTION_VIEW) {
             data = Uri.parse(url)
@@ -223,7 +480,7 @@ fun Context.share(text: String, subject: String? = null): Boolean {
     }
 }
 
-fun Context.email(email: String, subject: String = "", text: String = ""): Boolean {
+fun Context.sendEmail(email: String, subject: String = "", text: String = ""): Boolean {
     val intent = intent(Intent.ACTION_SENDTO) {
         data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -238,7 +495,7 @@ fun Context.email(email: String, subject: String = "", text: String = ""): Boole
 }
 
 @Suppress("TooGenericExceptionCaught")
-fun Context.makeCall(number: String): Boolean {
+fun Context.dial(number: String): Boolean {
     return try {
         startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:$number")))
         true
@@ -246,8 +503,6 @@ fun Context.makeCall(number: String): Boolean {
         false
     }
 }
-
-fun Context.dial(tel: String?) = startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$tel")))
 
 @Suppress("TooGenericExceptionCaught")
 fun Context.sendSms(number: String, text: String = ""): Boolean {
@@ -263,78 +518,39 @@ fun Context.sendSms(number: String, text: String = ""): Boolean {
 }
 
 //endregion
-//region Navigation
+//region Service
 
-@MainThread
-inline fun <reified T : AppCompatActivity> Context.startActivity() =
-    startActivity(Intent(this, T::class.java))
+inline fun <reified T : Service> Context.startService(noinline block: (Intent.() -> Unit)? = null): ComponentName? =
+    startService(intent<T>(block))
 
-@MainThread
-inline fun <reified T : AppCompatActivity> Context.startActivity(block: Intent.() -> Unit) =
-    startActivity(Intent(this, T::class.java).apply(block))
+inline fun <reified T : Service> Context.startForegroundServiceCompat(noinline block: (Intent.() -> Unit)? = null) =
+    ContextCompat.startForegroundService(this, intent<T>(block))
 
-//endregion
-//region Service Helper
-
-inline fun <reified T : Service> Context.startService(): ComponentName? =
-    startService(Intent(this, T::class.java))
+inline fun <reified T : Service> Context.isForegroundServiceRunning() =
+    getRunningServiceInfo<T>()
+        ?.foreground
+        ?: false
 
 @Suppress("DEPRECATION")
-fun Context.getRunningServiceInfo(serviceClassName: String): ActivityManager.RunningServiceInfo? {
+inline fun <reified T : Service> Context.getRunningServiceInfo(): ActivityManager.RunningServiceInfo? {
     for (serviceInfo in activityManager.getRunningServices(Integer.MAX_VALUE)) {
-        if (serviceClassName == serviceInfo.service.className) {
+        if (T::class.java.name == serviceInfo.service.className) {
             return serviceInfo
         }
     }
     return null
 }
 
-fun Context.isForegroundServiceRunning(serviceClassName: String) =
-    getRunningServiceInfo(serviceClassName)
-        ?.foreground
-        ?: false
-
-fun Context.startForegroundServiceCompat(intent: Intent) =
-    ContextCompat.startForegroundService(this, intent)
-
 //endregion
-//region Toast Helper
+//region Permission
 
-fun Context.toastShort(message: CharSequence) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-fun Context.toastShort(@StringRes messageRes: Int) {
-    Toast.makeText(this, messageRes, Toast.LENGTH_SHORT).show()
-}
-
-fun Context.toastLong(message: CharSequence) {
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-}
-
-fun Context.toastLong(@StringRes messageRes: Int) {
-    Toast.makeText(this, messageRes, Toast.LENGTH_LONG).show()
-}
-
-//endregion
-//region Permission Helper
-
-fun Context.isGranted(permission: String) =
-    when {
-        belowMarshmallow() -> true
-        else -> {
-            ContextCompat.checkSelfPermission(this, permission) ==
-                    PackageManager.PERMISSION_GRANTED
-        }
-    }
-
-val Context.hasWriteSettingPermission
+inline val Context.hasWriteSettingPermission
     get() = when{
         atLeastMarshmallow() -> Settings.System.canWrite(this)
         else -> null
     }
 
-val Context.hasAppUsagePermission: Boolean
+inline val Context.hasAppUsagePermission: Boolean
     get() {
         val mode = appOpsManager.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
@@ -351,8 +567,17 @@ val Context.hasAppUsagePermission: Boolean
         }
     }
 
+fun Context.isGranted(permission: String) =
+    when {
+        belowMarshmallow() -> true
+        else -> {
+            ContextCompat.checkSelfPermission(this, permission) ==
+                    PackageManager.PERMISSION_GRANTED
+        }
+    }
+
 //endregion
-//region Internet Connection Helper
+//region Internet Connection
 
 inline val Context.isConnected
     get() = connectivityManager.activeNetworkInfo.isConnected
@@ -367,12 +592,12 @@ inline val Context.isWifiEnabled
     get() = wifiManager.isWifiEnabled
 
 //endregion
-//region Device Helper
+//region Device
 
-val Context.isScreenOn
+inline val Context.isScreenOn
     get() = powerManager.isInteractive
 
-val Context.isDeviceLocked
+inline val Context.isDeviceLocked
     get() = if (atLeastLollipopMR1()) keyGuardManager.isDeviceLocked
     else keyGuardManager.isKeyguardLocked
 
@@ -382,9 +607,9 @@ inline val Context.displayHeight: Int
     get() = resources.displayMetrics.heightPixels
 
 //endregion
-//region App Helper
+//region App
 
-val Context.foregroundApp: String?
+inline val Context.foregroundApp: String?
     get() {
         if (!hasAppUsagePermission) {
             return null
@@ -407,10 +632,10 @@ val Context.foregroundApp: String?
         return foregroundApp
     }
 
-val Context.installedApps: List<ApplicationInfo>
+inline val Context.installedApps: List<ApplicationInfo>
     get() = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
-val Context.installedAppsWithLaunchIntent: List<ApplicationInfo>
+inline val Context.installedAppsWithLaunchIntent: List<ApplicationInfo>
     get() = installedApps
         .filter { it.packageName?.isNotEmpty() ?: false }
         .filter { it.name?.isNotEmpty() ?: false }
