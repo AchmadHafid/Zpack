@@ -243,7 +243,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 </details>
 
-**That's it! May this library ease your Android development task**
+**Not yet finish, please see the source code for all functionalities that available**
 
 
 License
