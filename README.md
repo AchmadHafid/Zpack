@@ -46,10 +46,31 @@ Quick Usage
 -----------
 
 <details>
-  <summary>Context Extensions</summary>
+  <summary>Context (e.g. AppCompatActivity & Service) Extensions </summary>
   <br />
+
 <details>
-  <summary>Resource Binding</summary>
+  <summary>System Services</summary>
+  
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val allSystemServices = listOf(
+            accessibilityManager, accountManager, activityManager, appOpsManager,
+            usageStatsManager, notificationManager, powerManager, keyGuardManager,
+            telephonyManager, layoutInflater, connectivityManager, wifiManager
+            // and many more.....
+        )
+    }
+}
+```
+
+</details>
+<details>
+  <summary>Lazy Resource Binding</summary>
   
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -72,27 +93,32 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 </details>
 <details>
-  <summary>System Services</summary>
+  <summary>Toast</summary>
   
 ```kotlin
+
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val systemServices = listOf(
-            accessibilityManager, accountManager, activityManager, appOpsManager,
-            usageStatsManager, notificationManager, powerManager, keyGuardManager,
-            telephonyManager, layoutInflater, connectivityManager, wifiManager
-            // and many more.....
-        )
+        /**
+         * Simpler way to show a toast
+         */
+        toastShort("Message")
+        toastShort(R.string.message)
+        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
+        toastLong("Message")
+        toastLong(R.string.message)
+        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
     }
 }
+
 ```
 
 </details>
 <details>
-  <summary>Intent & Navigation</summary>
+  <summary>Intent</summary>
   
 ```kotlin
 
@@ -102,16 +128,46 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         // Build your intent this way
+        val intent = intent<Component>()
+        
+        // or if you want to do some setup on the intent
         val intent = intent<Component> {
             // setup the intent here
         }
+        
+        // Build your intent for action this way
+        val intent = intent(action)
+        
+        // or if you want to do some setup on the intent
+        val intent = intent(action) {
+            // setup the intent here
+        }
+    }
+}
 
-        // Same with startActivity
-        open<OtherActivity> {
+```
+
+</details>
+<details>
+  <summary>Navigation</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Same with default startActivity
+        startActivtiy<OtherActivity>()
+        // or
+        startActivtiy<OtherActivity> {
             // setup the intent here
         }
 
         // This will open OtherActivity than call finish
+        goto<OtherActivity>()
+        // or
         goto<OtherActivity> {
             // setup the intent here
         }
@@ -148,12 +204,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Start a service
+        // Same with default service
+        startService<MyService>()
+        // or
         startService<MyService> {
             // setup your intent here
         }
 
         // Start a foreground service
+        startForegroundServiceCompat<MyForegroundService>()
+        // or
         startForegroundServiceCompat<MyForegroundService> {
             // setup your intent here
         }
@@ -170,32 +230,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   
 </details>
 <details>
-  <summary>Toast (Also Available in Fragment & View)</summary>
-  
-```kotlin
-
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        /**
-         * Simple way to show a toast
-         */
-        toastShort("Message")
-        toastShort(R.string.message)
-        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
-        toastLong("Message")
-        toastLong(R.string.message)
-        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
-    }
-}
-
-```
-
-</details>
-<details>
-  <summary>Permission Checker (Also Available in Fragment & View)</summary>
+  <summary>Permission Checker</summary>
   
 ```kotlin
 
@@ -219,7 +254,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 </details>
 <details>
-  <summary>Internet Connection States(Also Available in Fragment & View)</summary>
+  <summary>Internet Connection States</summary>
   
 ```kotlin
 
@@ -240,10 +275,351 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 ```
 
 </details>
+<details>
+  <summary>Device States & Properties</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Device states
+        val someDeviceProperties = listOf(
+            isScreenOn,
+            isDeviceLocked
+        )
+        
+        // Device properties
+        val someDeviceProperties = listOf(
+            displayWidth,
+            displayHeight
+        )
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Application Info</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // current foreground app (usually used in foreground service)
+        val packageName = foregroundApp
+        
+        // list of installed apps in this device
+        val packageNameList = installedApps
+        
+        // list of installed apps in this device that can be launched from home only
+        val packageNameList = installedAppsWithLaunchIntent
+        
+        // application name
+        val appName = getAppName(packageName)
+        
+        // launcher icon
+        val iconDrawable = getAppIcon(packageName)
+    }
+}
+
+```
 
 </details>
 
-**Not yet finish, please see the source code for all functionalities that available**
+</details>
+<details>
+  <summary>AppCompatActivity Extensions </summary>
+  <br />
+  
+<details>
+  <summary>Lazy Resource Binding</summary>
+  
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    // bind a view
+    private val toolbar: Toolbar by bindView(R.id.toolbar)
+
+}
+```
+
+</details>
+<details>
+  <summary>Navigation</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // This will open OtherActivity than call finish
+        goto<OtherActivity>()
+        // or
+        goto<OtherActivity> {
+            // setup the intent here
+        }
+        
+        // Finish this activity only if user double click the back button
+        val onBackPressedCallback = finishActivityOnDoubleBackPressed(
+            message    = "My Exit Message" // or R.string.some_messsage // first backpress message
+            handler    = handler,          // Android handler to do postDelayed 
+            delayMilis = 1000L             // time to wait for the second back press
+        )
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>ViewModel</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    // bind a view model lazily
+    private val viewModel: MainActivtiyViewModel by bindViewModel()
+
+}
+
+```
+
+</details>
+<details>
+  <summary>Theme</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // check whether dark theme currently applied
+        val x = isDarkThemeEnabled
+        
+        /**
+         * if currently not dark (default or light), will switch to dark theme
+         * if currently dark, switch to light theme
+         * Notes:
+         * - This is application level theme setting
+         * - will restart current activity
+         */
+        val currentTheme = toggleTheme()
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>View</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // shortcut function, because many times we do nothing with toolbar
+        setToolbar(R.id.toolbar)
+        // or if you use MaterialToolbar from MaterialComponents
+        setMaterialToolbar(R.id.toolbar)
+    }
+}
+
+```
+
+</details>
+
+</details>
+<details>
+  <summary>Fragment Extensions </summary>
+  <br />
+
+<details>
+  <summary>Toast</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        /**
+         * Simpler way to show a toast
+         */
+        toastShort("Message")
+        toastShort(R.string.message)
+        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
+        toastLong("Message")
+        toastLong(R.string.message)
+        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Permission Checker</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Check permission already granted, more to come
+        val permissions = listOf(
+            hasWriteSettingPermission,
+            hasAppUsagePermission
+        )
+
+        // fallback function that can be used to check permissions
+        val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Intent</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Build your intent this way
+        val intent = intent<Component>()
+        
+        // or if you want to do some setup on the intent
+        val intent = intent<Component> {
+            // setup the intent here
+        }
+        
+        // Build your intent for action this way
+        val intent = intent(action)
+        
+        // or if you want to do some setup on the intent
+        val intent = intent(action) {
+            // setup the intent here
+        }
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Navigation</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Same with startActivity on Activity
+        startActivtiy<OtherActivity>()
+        // or
+        startActivtiy<OtherActivity> {
+            // setup the intent here
+        }
+
+        // This will open OtherActivity than call finish on holder activity (if any)
+        goto<OtherActivity>()
+        // or
+        goto<OtherActivity> {
+            // setup the intent here
+        }
+
+        // JetPack navigation
+        // Check whether this fragment is a start destination
+        val x = isStartDestination
+        
+        // JetPack navigation
+        // Finish holder activity only if user double click the back button
+        // Can only be used if this fragment is defined as a start destination
+        val onBackPressedCallback = finishActivityOnDoubleBackPressed(
+            message    = "My Exit Message" // or R.string.some_messsage // first backpress message
+            handler    = handler,          // Android handler to do postDelayed 
+            delayMilis = 1000L             // time to wait for the second back press
+        )
+        
+        // Finish holder activity when user press the back button
+        // Useful when using JetPack navigation, when we want to override its back press default behavior
+        val onBackPressedCallback = finishActivityOnBackPressed()
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>ViewModel</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    // bind a view model lazily
+    private val viewModel: MainFragmentViewModel by bindViewModel()
+
+}
+
+```
+
+</details>
+<details>
+  <summary>Theme</summary>
+  
+```kotlin
+
+class MainFragment : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // check whether dark theme currently applied
+        val x = isDarkThemeEnabled
+        
+        /**
+         * if currently not dark (default or light), will switch to dark theme
+         * if currently dark, switch to light theme
+         * Notes:
+         * - This is application level theme setting
+         * - will restart current activity
+         */
+        val currentTheme = toggleTheme()
+    }
+}
+
+```
+
+</details>
+
+</details>
+
+**Not yet finish, please see the source code for all functionalities available**
 
 
 License
