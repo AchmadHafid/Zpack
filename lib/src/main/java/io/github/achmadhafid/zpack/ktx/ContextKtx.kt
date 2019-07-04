@@ -494,6 +494,7 @@ fun Context.sendEmail(email: String, subject: String = "", text: String = ""): B
     return false
 }
 
+@SuppressLint("MissingPermission")
 @Suppress("TooGenericExceptionCaught")
 fun Context.dial(number: String): Boolean {
     return try {
@@ -552,9 +553,10 @@ inline val Context.hasWriteSettingPermission
 
 inline val Context.hasAppUsagePermission: Boolean
     get() {
+        @Suppress("DEPRECATION")
         val mode = appOpsManager.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
-            android.os.Process.myUid(),
+            Process.myUid(),
             packageName
         )
 
@@ -579,8 +581,9 @@ fun Context.isGranted(permission: String) =
 //endregion
 //region Internet Connection
 
+@Suppress("DEPRECATION")
 inline val Context.isConnected
-    get() = connectivityManager.activeNetworkInfo.isConnected
+    get() = connectivityManager.activeNetworkInfo?.isConnected
 
 inline val Context.isMobileDataEnabled: Boolean?
     get() = when {
@@ -624,6 +627,7 @@ inline val Context.foregroundApp: String?
         var foregroundApp = ""
         while (usageEvents.hasNextEvent()) {
             usageEvents.getNextEvent(event)
+            @Suppress("DEPRECATION")
             if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
                 foregroundApp = event.packageName
             }
