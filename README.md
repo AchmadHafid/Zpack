@@ -46,7 +46,79 @@ Quick Usage
 -----------
 
 <details>
-  <summary>Context (e.g. AppCompatActivity & Service) Extensions </summary>
+  <summary>Top Level (Global) Extensions</summary>
+  <br />
+  
+<details>
+  <summary>Logging</summary>
+  
+```kotlin
+class MyClass {
+
+    fun logAll(message: String) {
+        d(message) // debug log
+        e(message) // error log
+        i(message) // info log
+        w(message) // warning log
+        v(message) // verbose log
+    }
+    
+}
+```
+  
+</details>
+<details>
+  <summary>SDK Version</summary>
+  
+```kotlin
+class MyClass {
+
+    fun checkVersion() {
+        if (belowLollipopMR1()) TODO()
+        if (belowMarshmallow()) TODO()
+        if (belowNougat()) TODO()
+        if (belowNougatMR1()) TODO()
+        if (belowOreo()) TODO()
+        if (belowOreoMR1()) TODO()
+        if (belowPie()) TODO()
+
+        if (atLeastLollipopMR1()) TODO()
+        if (atLeastMarshmallow()) TODO()
+        if (atLeastNougat()) TODO()
+        if (atLeastNougatMR1()) TODO()
+        if (atLeastOreo()) TODO()
+        if (atLeastOreoMR1()) TODO()
+        if (atLeastPie()) TODO()
+    }
+    
+}
+```
+  
+</details>
+<details>
+  <summary>Theme</summary>
+
+```kotlin
+class MyClass {
+
+    // This will restart current foreground activity
+    fun applyApplicationLevelTheme() {
+        // use AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM on Pie and above
+        // else use AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+        defaultTheme()
+        
+        lightTheme()
+        darkTheme()
+    }
+    
+}
+```
+
+</details>
+  
+</details>
+<details>
+  <summary>Context (e.g. AppCompatActivity & Service) Extensions</summary>
   <br />
 
 <details>
@@ -96,7 +168,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Toast</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +184,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
     }
 }
-
 ```
 
 </details>
@@ -121,7 +191,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Intent</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,7 +213,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 }
-
 ```
 
 </details>
@@ -152,7 +220,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Navigation</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,7 +257,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         sendSms("+6281234567890", "This is content")
     }
 }
-
 ```
 
 </details>
@@ -198,7 +264,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Service</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -225,7 +290,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val serviceInfo = getRunningServiceInfo<MyService>
     }
 }
-
 ```
   
 </details>
@@ -233,7 +297,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Permission Checker</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -249,7 +312,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
     }
 }
-
 ```
 
 </details>
@@ -257,7 +319,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Internet Connection States</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -271,7 +332,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 }
-
 ```
 
 </details>
@@ -279,7 +339,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Device States & Properties</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -298,7 +357,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 }
-
 ```
 
 </details>
@@ -306,7 +364,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Application Info</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -328,7 +385,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val iconDrawable = getAppIcon(packageName)
     }
 }
-
 ```
 
 </details>
@@ -355,7 +411,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Navigation</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -376,7 +431,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 }
-
 ```
 
 </details>
@@ -384,14 +438,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>ViewModel</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     // bind a view model lazily
     private val viewModel: MainActivtiyViewModel by bindViewModel()
 
 }
-
 ```
 
 </details>
@@ -399,7 +451,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Theme</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -418,7 +469,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val currentTheme = toggleTheme()
     }
 }
-
 ```
 
 </details>
@@ -426,7 +476,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>View</summary>
   
 ```kotlin
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -438,7 +487,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setMaterialToolbar(R.id.toolbar)
     }
 }
-
 ```
 
 </details>
@@ -452,7 +500,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Toast</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -469,7 +516,6 @@ class MainFragment : Fragment() {
         toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
     }
 }
-
 ```
 
 </details>
@@ -477,7 +523,6 @@ class MainFragment : Fragment() {
   <summary>Permission Checker</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -493,7 +538,6 @@ class MainFragment : Fragment() {
         val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
     }
 }
-
 ```
 
 </details>
@@ -501,7 +545,6 @@ class MainFragment : Fragment() {
   <summary>Intent</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -524,7 +567,6 @@ class MainFragment : Fragment() {
         }
     }
 }
-
 ```
 
 </details>
@@ -532,7 +574,6 @@ class MainFragment : Fragment() {
   <summary>Navigation</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -570,7 +611,6 @@ class MainFragment : Fragment() {
         val onBackPressedCallback = finishActivityOnBackPressed()
     }
 }
-
 ```
 
 </details>
@@ -578,14 +618,12 @@ class MainFragment : Fragment() {
   <summary>ViewModel</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     // bind a view model lazily
     private val viewModel: MainFragmentViewModel by bindViewModel()
 
 }
-
 ```
 
 </details>
@@ -593,7 +631,6 @@ class MainFragment : Fragment() {
   <summary>Theme</summary>
   
 ```kotlin
-
 class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -612,9 +649,93 @@ class MainFragment : Fragment() {
         val currentTheme = toggleTheme()
     }
 }
-
 ```
 
+</details>
+
+</details>
+<details>
+  <summary>View Extensions</summary>
+  <br />
+  
+<details>
+  <summary>Visibility</summary>
+  
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val myView: ViewType by bindView(R.id.my_view)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        
+        val visibilityStates = listOf(
+            myView.isVisible,
+            myView.isInvisible,
+            myView.isGone
+        )
+        
+        // change visibility state
+        myView.show() // set visibility = View.VISIBLE
+        myView.hide() // set visibility = View.INVISIBLE
+        myView.gone() // set visibility = View.GONE
+        
+        // same as above but takes function as arguments
+        myView.showif { true }
+        myView.hideIf { false }
+        myView.goneIf { true }
+        
+        // self explanatory
+        myView.visibleOrInvisible { true }
+        myView.visibleOrGone { false }
+    }
+}
+```
+  
+</details>
+<details>
+  <summary>Listener</summary>
+  
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val myView: ViewType by bindView(R.id.my_view)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // guarentee that this view can only be clicked once before fire a callback
+        myView.onSingleClick { TODO() }
+        
+        // If you wish to re-enable click listener manually, specify a flag for it
+        myView.onSingleClick(autoReEnable = false) { TODO() }
+        // Then you MUST re-enable click listener manually later by using:
+        // myView.isClickable = true
+    }
+}
+```
+
+</details>
+<details>
+  <summary>Snack Bar</summary>
+  **WIP**
+</details>
+<details>
+  <summary>TextView</summary>
+  **WIP**
+</details>
+<details>
+  <summary>EditText</summary>
+  **WIP**
+</details>
+<details>
+  <summary>AppBarLayout</summary>
+  **WIP**
+</details>
+<details>
+  <summary>Util</summary>
+  **WIP**
 </details>
 
 </details>
