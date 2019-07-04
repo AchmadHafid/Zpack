@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 </details>
 <details>
-  <summary> Service </summary>
+  <summary>Service</summary>
   
 ```kotlin
 
@@ -169,12 +169,81 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 ```
   
 </details>
+<details>
+  <summary>Toast (Also Available in Fragment & View)</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        /**
+         * Simple way to show a toast
+         */
+        toastShort("Message")
+        toastShort(R.string.message)
+        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
+        toastLong("Message")
+        toastLong(R.string.message)
+        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Permission Checker (Also Available in Fragment & View)</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Check permission already granted, more to come
+        val permissions = listOf(
+            hasWriteSettingPermission,
+            hasAppUsagePermission
+        )
+
+        // fallback function that can be used to check permissions
+        val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
+    }
+}
+
+```
+
+</details>
+<details>
+  <summary>Internet Connection States(Also Available in Fragment & View)</summary>
+  
+```kotlin
+
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Check some connection states
+        val connections = listOf(
+            isConnected,
+            isMobileDataEnabled,
+            isWifiEnabled
+        )
+    }
+}
+
+```
 
 </details>
 
-<br />
-__That's it! May this library ease your Android development task__
-<br />
+</details>
+
+**That's it! May this library ease your Android development task**
 
 
 License
