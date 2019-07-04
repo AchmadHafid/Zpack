@@ -739,8 +739,54 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 
 </details>
+<details>
+  <summary>LiveData Extensions</summary>
+  <br />
+  
+```kotlin
+class MainFragmentViewModel : ViewModel() {
 
-**Not yet finish, please see the source code for all functionalities available**
+    private val _myLiveData: MutableLiveData<List<String>> = MutableLiveData()
+    private val myLiveData: LiveData<List<String>> = _myLiveData
+
+    private fun notifyOberver() {
+        // In quite a rare case, you may to call the observer callback manually without change live data value
+        _myLiveData.notifyObserver()
+    }
+}
+```
+  
+</details>
+<details>
+  <summary>String Extensions</summary>
+  <br />
+  
+<details>
+  <summary>Date</summary>
+
+```kotlin
+// get Date instance from a string
+// default format is "yyyy/MM/dd hh:mm"
+fun getSomeImportantDate() = "2000/01/01 00:00".toDate()
+
+// You can specify a custom format
+fun getSomeImportantDate(someDateFormat: String) = "2000/01/01 00:00".toDate(someDateFormat)
+```
+
+</details>
+<details>
+  <summary>Case</summary>
+
+```kotlin
+val thisIsTheResult = ThIsTetheResULt.toCamelCase
+val ThisIsTheResult = ThIsTetheResULt.toTitleCase 
+```
+
+</details>
+  
+</details>
+
+**That's it! May this library ease your Android development task**
 
 
 License
