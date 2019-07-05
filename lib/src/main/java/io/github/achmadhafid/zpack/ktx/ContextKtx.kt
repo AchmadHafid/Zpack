@@ -394,8 +394,17 @@ inline fun <reified T : Any> Context.intent(noinline block: (Intent.() -> Unit)?
 fun Context.intent(action: String, block: (Intent.() -> Unit)? = null): Intent =
     if (block == null) Intent(action) else Intent(action).apply(block)
 
+fun Context.canBeResolved(intent: Intent) = intent.resolveActivity(packageManager) != null
+
 //endregion
 //region Navigation
+
+fun Context.startActivityIfResolved(intent: Intent): Boolean {
+    return if (canBeResolved(intent)) {
+        startActivity(intent)
+        true
+    } else false
+}
 
 inline fun <reified T : AppCompatActivity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
     startActivity(intent<T>(block))
@@ -452,20 +461,6 @@ fun Context.openHomeLauncher() {
     )
 }
 
-@Suppress("TooGenericExceptionCaught")
-fun Context.openUrl(url: String, newTask: Boolean = false): Boolean {
-    return try {
-        val intent = intent(Intent.ACTION_VIEW) {
-            data = Uri.parse(url)
-            if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        startActivity(intent)
-        true
-    } catch (e: Exception) {
-        false
-    }
-}
-
 fun Context.share(text: String, subject: String? = null): Boolean {
     val intent = Intent().apply {
         type = "text/plain"
@@ -480,43 +475,28 @@ fun Context.share(text: String, subject: String? = null): Boolean {
     }
 }
 
-fun Context.sendEmail(email: String, subject: String = "", text: String = ""): Boolean {
-    val intent = intent(Intent.ACTION_SENDTO) {
+fun Context.openUrl(url: String, newTask: Boolean = false): Boolean =
+    startActivityIfResolved(intent(Intent.ACTION_VIEW) {
+        data = Uri.parse(url)
+        if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    })
+
+fun Context.sendEmail(email: String, subject: String = "", text: String = ""): Boolean =
+    startActivityIfResolved(intent(Intent.ACTION_SENDTO) {
         data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
         if (subject.isNotBlank()) putExtra(Intent.EXTRA_SUBJECT, subject)
         if (text.isNotBlank()) putExtra(Intent.EXTRA_TEXT, text)
-    }
-    if (intent.resolveActivity(packageManager) != null) {
-        startActivity(intent)
-        return true
-    }
-    return false
-}
+    })
 
-@SuppressLint("MissingPermission")
-@Suppress("TooGenericExceptionCaught")
-fun Context.dial(number: String): Boolean {
-    return try {
-        startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:$number")))
-        true
-    } catch (e: Exception) {
-        false
-    }
-}
+fun Context.dial(number: String): Boolean =
+    startActivityIfResolved(Intent(
+        Intent.ACTION_CALL, Uri.parse("tel:$number")
+    ))
 
-@Suppress("TooGenericExceptionCaught")
-fun Context.sendSms(number: String, text: String = ""): Boolean {
-    return try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("smsto:$number")).apply {
-            putExtra("sms_body", text)
-        }
-        startActivity(intent)
-        true
-    } catch (e: Exception) {
-        false
-    }
-}
+fun Context.sendSms(number: String, text: String = ""): Boolean =
+    startActivityIfResolved(Intent(Intent.ACTION_VIEW, Uri.parse("smsto:$number"))
+        .apply { putExtra("sms_body", text) })
 
 //endregion
 //region Service
@@ -526,21 +506,6 @@ inline fun <reified T : Service> Context.startService(noinline block: (Intent.()
 
 inline fun <reified T : Service> Context.startForegroundServiceCompat(noinline block: (Intent.() -> Unit)? = null) =
     ContextCompat.startForegroundService(this, intent<T>(block))
-
-inline fun <reified T : Service> Context.isForegroundServiceRunning() =
-    getRunningServiceInfo<T>()
-        ?.foreground
-        ?: false
-
-@Suppress("DEPRECATION")
-inline fun <reified T : Service> Context.getRunningServiceInfo(): ActivityManager.RunningServiceInfo? {
-    for (serviceInfo in activityManager.getRunningServices(Integer.MAX_VALUE)) {
-        if (T::class.java.name == serviceInfo.service.className) {
-            return serviceInfo
-        }
-    }
-    return null
-}
 
 //endregion
 //region Permission
@@ -554,7 +519,11 @@ inline val Context.hasWriteSettingPermission
 inline val Context.hasAppUsagePermission: Boolean
     get() {
         @Suppress("DEPRECATION")
-        val mode = appOpsManager.checkOpNoThrow(
+        val mode = if (atLeastQ()) appOpsManager.unsafeCheckOpNoThrow(
+            AppOpsManager.OPSTR_GET_USAGE_STATS,
+            Process.myUid(),
+            packageName
+        ) else appOpsManager.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
             Process.myUid(),
             packageName
@@ -581,9 +550,15 @@ fun Context.isGranted(permission: String) =
 //endregion
 //region Internet Connection
 
-@Suppress("DEPRECATION")
-inline val Context.isConnected
-    get() = connectivityManager.activeNetworkInfo?.isConnected
+inline val Context.isConnected: Boolean?
+    get() {
+        if (atLeastQ()) d(
+                "This function is deprecated in Q, please use NetworkCallback" +
+                "\nSee: https://developer.android.com/reference/android/net/NetworkInfo.html"
+        )
+        @Suppress("DEPRECATION")
+        return connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
+    }
 
 inline val Context.isMobileDataEnabled: Boolean?
     get() = when {
@@ -627,8 +602,12 @@ inline val Context.foregroundApp: String?
         var foregroundApp = ""
         while (usageEvents.hasNextEvent()) {
             usageEvents.getNextEvent(event)
+
             @Suppress("DEPRECATION")
-            if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+            val eventType = if (atLeastQ()) UsageEvents.Event.ACTIVITY_RESUMED
+            else UsageEvents.Event.MOVE_TO_FOREGROUND
+
+            if (event.eventType == eventType) {
                 foregroundApp = event.packageName
             }
         }
