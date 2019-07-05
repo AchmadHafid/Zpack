@@ -224,7 +224,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        
+        // Start activity if the intent can be resolved
+        val isSuccess = startActivtiyIfResolved(intent)
+        
         // Same with default startActivity
         startActivtiy<OtherActivity>()
         // or
@@ -282,12 +285,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         startForegroundServiceCompat<MyForegroundService> {
             // setup your intent here
         }
-
-        // check whether a foreground service is running
-        val isMyForegroundServiceRunning = isForegroundServiceRunning<MyForegroundService>()
-
-        // get a running service info
-        val serviceInfo = getRunningServiceInfo<MyService>
     }
 }
 ```
