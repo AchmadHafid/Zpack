@@ -716,23 +716,101 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Snack Bar</summary>
-  **WIP**
+
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val myView: ViewType by bindView(R.id.my_view)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // basic snackbar
+        myView.snackBarShort("message")
+        
+        // fully customized snack bar with action
+        myView.snackBarShort(
+            message = "My message", // or: messageRes = R.string.my_message
+            anchorView = anAnchorView, // default is null
+            actionText = "Undo", // or: actionTextRes = R.string.action_text
+            actionTextColorRes = R.color.colorAccent // can also be attribute value, e.g. R.attr.colorOnPrimary
+        ) { TODO("Do something when action button is clicked") }
+        
+        // also available for other lenght types
+        myView.snackBarLong()     // Arguments are the same with above
+        myView.snackBarForever()  // Arguments are the same with above
+    }
+}
+```
+
 </details>
 <details>
   <summary>TextView</summary>
-  **WIP**
+
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val tv: TextView by bindView(R.id.tv)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // set TextView's text from string resource
+        tv.textRes = R.string.text
+        
+        // self explanatory
+        tv.underline()
+        tv.deleteLine()
+        tv.bold()
+    }
+}
+```
+
 </details>
 <details>
   <summary>EditText</summary>
-  **WIP**
+
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val edt: EditText by bindView(R.id.edt)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // no more edt.text.toString()
+        val text = edt.value
+    }
+}
+```
+
 </details>
 <details>
   <summary>AppBarLayout</summary>
-  **WIP**
+
+```kotlin
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val appBarLayout: AppBarLayout by bindView(R.id.appBarLayout)
+    private val scrollView: NestedScrollView by bindView(R.id.scrollView)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Set appBarLayout selected property to true when scrollView scrolled down
+        // and to false when it can not scroll up anymore
+        // Commonly used to set/unset elevation on AppBarLayout based on list position inside scrollView
+        appBarLayout.setSelectedOnScrollDown(scrollView)
+    }
+}
+```
+
 </details>
 <details>
   <summary>Util</summary>
-  **WIP**
+  
+  **WIP, please see source code**
+  
 </details>
 
 </details>
@@ -775,15 +853,15 @@ fun getSomeImportantDate(someDateFormat: String) = "2000/01/01 00:00".toDate(som
   <summary>Case</summary>
 
 ```kotlin
-val thisIsTheResult = ThIsTetheResULt.toCamelCase
-val ThisIsTheResult = ThIsTetheResULt.toTitleCase 
+val thisIsTheResult = "ThIs iS tHe ResULt".toCamelCase
+val ThisIsTheResult = "ThIs iS tHe ResULt".toTitleCase 
 ```
 
 </details>
   
 </details>
 
-**That's it! May this library ease your Android development task**
+**Stay tuned, There will be more to come!<br/>Anyway may this library ease your Android development task**
 
 
 License
