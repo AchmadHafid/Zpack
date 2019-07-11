@@ -11,6 +11,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -220,6 +221,14 @@ var EditText.value: String
 fun AppBarLayout.setSelectedOnScrollDown(scrollView: NestedScrollView) {
     scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
         isSelected = scrollView.canScrollVertically(-1)
+    })
+}
+
+fun AppBarLayout.setSelectedOnScrollDown(recyclerView: RecyclerView) {
+    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            isSelected = recyclerView.canScrollVertically(-1)
+        }
     })
 }
 

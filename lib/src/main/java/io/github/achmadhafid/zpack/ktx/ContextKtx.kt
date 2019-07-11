@@ -60,6 +60,7 @@ import android.view.textservice.TextServicesManager
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.os.UserManagerCompat
@@ -130,8 +131,10 @@ inline val Context.nfcManager
     get() = getSystemService(Context.NFC_SERVICE) as NfcManager
 inline val Context.notificationManager
     get() = (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).also {
-        Log.d("Zpack", "Please use `NotificationManagerCompat instead`")
+        Log.d("Zpack", "Please use `notificationManagerCompat instead`")
     }
+inline val Context.notificationManagerCompat
+    get() = NotificationManagerCompat.from(this)
 inline val Context.nsdManager
     get() = getSystemService(Context.NSD_SERVICE) as NsdManager
 inline val Context.powerManager: PowerManager
