@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.3.0'
+  implementation 'com.github.AchmadHafid:Zpack:0.4.0'
   ...
 }
 ```
@@ -48,10 +48,10 @@ Quick Usage
 <details>
   <summary>Top Level (Global) Extensions</summary>
   <br />
-  
+
 <details>
   <summary>Logging</summary>
-  
+
 ```kotlin
 class MyClass {
 
@@ -62,14 +62,14 @@ class MyClass {
         w(message) // warning log
         v(message) // verbose log
     }
-    
+
 }
 ```
-  
+
 </details>
 <details>
   <summary>SDK Version</summary>
-  
+
 ```kotlin
 class MyClass {
 
@@ -90,10 +90,10 @@ class MyClass {
         if (atLeastOreoMR1()) TODO()
         if (atLeastPie()) TODO()
     }
-    
+
 }
 ```
-  
+
 </details>
 <details>
   <summary>Theme</summary>
@@ -106,16 +106,16 @@ class MyClass {
         // use AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM on Pie and above
         // else use AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
         defaultTheme()
-        
+
         lightTheme()
         darkTheme()
     }
-    
+
 }
 ```
 
 </details>
-  
+
 </details>
 <details>
   <summary>Context (e.g. AppCompatActivity & Service) Extensions</summary>
@@ -123,7 +123,7 @@ class MyClass {
 
 <details>
   <summary>System Services</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Lazy Resource Binding</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Toast</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Intent</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -198,15 +198,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // Build your intent this way
         val intent = intent<Component>()
-        
+
         // or if you want to do some setup on the intent
         val intent = intent<Component> {
             // setup the intent here
         }
-        
+
         // Build your intent for action this way
         val intent = intent(action)
-        
+
         // or if you want to do some setup on the intent
         val intent = intent(action) {
             // setup the intent here
@@ -218,16 +218,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Navigation</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         // Start activity if the intent can be resolved
         val isSuccess = startActivtiyIfResolved(intent)
-        
+
         // Same with default startActivity
         startActivtiy<OtherActivity>()
         // or
@@ -265,7 +265,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Service</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -288,11 +288,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 }
 ```
-  
+
 </details>
 <details>
   <summary>Permission Checker</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -314,7 +314,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Internet Connection States</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -334,7 +334,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Device States & Properties</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -346,7 +346,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             isScreenOn,
             isDeviceLocked
         )
-        
+
         // Device properties
         val someDeviceProperties = listOf(
             displayWidth,
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Application Info</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -368,16 +368,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // current foreground app (usually used in foreground service)
         val packageName = foregroundApp
-        
+
         // list of installed apps in this device
         val packageNameList = installedApps
-        
+
         // list of installed apps in this device that can be launched from home only
         val packageNameList = installedAppsWithLaunchIntent
-        
+
         // application name
         val appName = getAppName(packageName)
-        
+
         // launcher icon
         val iconDrawable = getAppIcon(packageName)
     }
@@ -390,10 +390,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 <details>
   <summary>AppCompatActivity Extensions </summary>
   <br />
-  
+
 <details>
   <summary>Lazy Resource Binding</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -406,7 +406,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Navigation</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -419,11 +419,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         goto<OtherActivity> {
             // setup the intent here
         }
-        
+
         // Finish this activity only if user double click the back button
         val onBackPressedCallback = finishActivityOnDoubleBackPressed(
             message    = "My Exit Message" // or R.string.some_messsage // first backpress message
-            handler    = handler,          // Android handler to do postDelayed 
+            handler    = handler,          // Android handler to do postDelayed
             delayMilis = 1000L             // time to wait for the second back press
         )
     }
@@ -433,7 +433,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>ViewModel</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -446,7 +446,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Theme</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -455,7 +455,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // check whether dark theme currently applied
         val x = isDarkThemeEnabled
-        
+
         /**
          * if currently not dark (default or light), will switch to dark theme
          * if currently dark, switch to light theme
@@ -471,7 +471,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>View</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -495,7 +495,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 <details>
   <summary>Toast</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -518,7 +518,7 @@ class MainFragment : Fragment() {
 </details>
 <details>
   <summary>Permission Checker</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -540,7 +540,7 @@ class MainFragment : Fragment() {
 </details>
 <details>
   <summary>Intent</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -549,15 +549,15 @@ class MainFragment : Fragment() {
 
         // Build your intent this way
         val intent = intent<Component>()
-        
+
         // or if you want to do some setup on the intent
         val intent = intent<Component> {
             // setup the intent here
         }
-        
+
         // Build your intent for action this way
         val intent = intent(action)
-        
+
         // or if you want to do some setup on the intent
         val intent = intent(action) {
             // setup the intent here
@@ -569,7 +569,7 @@ class MainFragment : Fragment() {
 </details>
 <details>
   <summary>Navigation</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -593,16 +593,16 @@ class MainFragment : Fragment() {
         // JetPack navigation
         // Check whether this fragment is a start destination
         val x = isStartDestination
-        
+
         // JetPack navigation
         // Finish holder activity only if user double click the back button
         // Can only be used if this fragment is defined as a start destination
         val onBackPressedCallback = finishActivityOnDoubleBackPressed(
             message    = "My Exit Message" // or R.string.some_messsage // first backpress message
-            handler    = handler,          // Android handler to do postDelayed 
+            handler    = handler,          // Android handler to do postDelayed
             delayMilis = 1000L             // time to wait for the second back press
         )
-        
+
         // Finish holder activity when user press the back button
         // Useful when using JetPack navigation, when we want to override its back press default behavior
         val onBackPressedCallback = finishActivityOnBackPressed()
@@ -613,7 +613,7 @@ class MainFragment : Fragment() {
 </details>
 <details>
   <summary>ViewModel</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -626,7 +626,7 @@ class MainFragment : Fragment() {
 </details>
 <details>
   <summary>Theme</summary>
-  
+
 ```kotlin
 class MainFragment : Fragment() {
 
@@ -635,7 +635,7 @@ class MainFragment : Fragment() {
 
         // check whether dark theme currently applied
         val x = isDarkThemeEnabled
-        
+
         /**
          * if currently not dark (default or light), will switch to dark theme
          * if currently dark, switch to light theme
@@ -654,10 +654,10 @@ class MainFragment : Fragment() {
 <details>
   <summary>View Extensions</summary>
   <br />
-  
+
 <details>
   <summary>Visibility</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -666,34 +666,34 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        
+
         val visibilityStates = listOf(
             myView.isVisible,
             myView.isInvisible,
             myView.isGone
         )
-        
+
         // change visibility state
         myView.show() // set visibility = View.VISIBLE
         myView.hide() // set visibility = View.INVISIBLE
         myView.gone() // set visibility = View.GONE
-        
+
         // same as above but takes function as arguments
         myView.showif { true }
         myView.hideIf { false }
         myView.goneIf { true }
-        
+
         // self explanatory
         myView.visibleOrInvisible { true }
         myView.visibleOrGone { false }
     }
 }
 ```
-  
+
 </details>
 <details>
   <summary>Listener</summary>
-  
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -704,7 +704,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // guarentee that this view can only be clicked once before fire a callback
         myView.onSingleClick { TODO() }
-        
+
         // If you wish to re-enable click listener manually, specify a flag for it
         myView.onSingleClick(autoReEnable = false) { TODO() }
         // Then you MUST re-enable click listener manually later by using:
@@ -727,7 +727,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // basic snackbar
         myView.snackBarShort("message")
-        
+
         // fully customized snack bar with action
         myView.snackBarShort(
             message = "My message", // or: messageRes = R.string.my_message
@@ -735,7 +735,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             actionText = "Undo", // or: actionTextRes = R.string.action_text
             actionTextColorRes = R.color.colorAccent // can also be attribute value, e.g. R.attr.colorOnPrimary
         ) { TODO("Do something when action button is clicked") }
-        
+
         // also available for other lenght types
         myView.snackBarLong()     // Arguments are the same with above
         myView.snackBarForever()  // Arguments are the same with above
@@ -757,7 +757,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         // set TextView's text from string resource
         tv.textRes = R.string.text
-        
+
         // self explanatory
         tv.underline()
         tv.deleteLine()
@@ -808,16 +808,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 </details>
 <details>
   <summary>Util</summary>
-  
+
   **WIP, please see source code**
-  
+
 </details>
 
 </details>
 <details>
   <summary>LiveData Extensions</summary>
   <br />
-  
+
 ```kotlin
 class MainFragmentViewModel : ViewModel() {
 
@@ -830,12 +830,12 @@ class MainFragmentViewModel : ViewModel() {
     }
 }
 ```
-  
+
 </details>
 <details>
   <summary>String Extensions</summary>
   <br />
-  
+
 <details>
   <summary>Date</summary>
 
@@ -854,11 +854,11 @@ fun getSomeImportantDate(someDateFormat: String) = "2000/01/01 00:00".toDate(som
 
 ```kotlin
 val thisIsTheResult = "ThIs iS tHe ResULt".toCamelCase
-val ThisIsTheResult = "ThIs iS tHe ResULt".toTitleCase 
+val ThisIsTheResult = "ThIs iS tHe ResULt".toTitleCase
 ```
 
 </details>
-  
+
 </details>
 
 **Stay tuned, There will be more to come!<br/>Anyway may this library ease your Android development task**
@@ -872,9 +872,9 @@ License
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    
+
        http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
