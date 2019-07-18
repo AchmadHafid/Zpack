@@ -454,6 +454,7 @@ fun Context.openHomeLauncher() {
     startActivity(
         Intent(Intent.ACTION_MAIN)
             .addCategory(Intent.CATEGORY_HOME)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .setPackage(
                 packageManager.queryIntentActivities(
                     Intent(Intent.ACTION_MAIN)
