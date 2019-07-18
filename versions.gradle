@@ -87,7 +87,10 @@ ext.deps = [
         activity        : "androidx.activity:activity-ktx:$versions.activity",
         fragment        : "androidx.fragment:fragment-ktx:$versions.fragment",
         constraintlayout: "androidx.constraintlayout:constraintlayout:$versions.constraintlayout",
-        lifecycle       : "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle",
+        lifecycle       : [
+                "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle",
+                "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+        ],
         navigation      : "androidx.navigation:navigation-fragment-ktx:$versions.navigation",
 
         //endregion
