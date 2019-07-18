@@ -6,7 +6,7 @@ Zpack
 
 **Assalamu'alaikum brothers and sisters, peace be upon you!**
 
-In this small library, I try to compile many kotlin snippet code (mostly extension funtions) regularly use in my project.
+In this small library, I try to compile many kotlin snippet code (mostly extension functions) regularly use in my project.
 You can directly look into its source code to find some code that you may need or just add this lib into your build.
 
 
@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.4.0'
+  implementation 'com.github.AchmadHafid:Zpack:0.5.0'
   ...
 }
 ```
@@ -226,12 +226,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         // Start activity if the intent can be resolved
-        val isSuccess = startActivtiyIfResolved(intent)
+        val isSuccess = startActivityIfResolved(intent)
 
         // Same with default startActivity
-        startActivtiy<OtherActivity>()
+        startActivity<OtherActivity>()
         // or
-        startActivtiy<OtherActivity> {
+        startActivity<OtherActivity> {
             // setup the intent here
         }
 
@@ -438,7 +438,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     // bind a view model lazily
-    private val viewModel: MainActivtiyViewModel by bindViewModel()
+    private val viewModel: MainActivityViewModel by bindViewModel()
 
 }
 ```
@@ -577,9 +577,9 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // Same with startActivity on Activity
-        startActivtiy<OtherActivity>()
+        startActivity<OtherActivity>()
         // or
-        startActivtiy<OtherActivity> {
+        startActivity<OtherActivity> {
             // setup the intent here
         }
 
@@ -598,7 +598,7 @@ class MainFragment : Fragment() {
         // Finish holder activity only if user double click the back button
         // Can only be used if this fragment is defined as a start destination
         val onBackPressedCallback = finishActivityOnDoubleBackPressed(
-            message    = "My Exit Message" // or R.string.some_messsage // first backpress message
+            message    = "My Exit Message" // or R.string.some_message // first back press message
             handler    = handler,          // Android handler to do postDelayed
             delayMilis = 1000L             // time to wait for the second back press
         )
@@ -679,7 +679,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         myView.gone() // set visibility = View.GONE
 
         // same as above but takes function as arguments
-        myView.showif { true }
+        myView.showIf { true }
         myView.hideIf { false }
         myView.goneIf { true }
 
@@ -702,7 +702,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // guarentee that this view can only be clicked once before fire a callback
+        // Make sure that this view can only be clicked once before fire a callback
         myView.onSingleClick { TODO() }
 
         // If you wish to re-enable click listener manually, specify a flag for it
@@ -736,7 +736,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             actionTextColorRes = R.color.colorAccent // can also be attribute value, e.g. R.attr.colorOnPrimary
         ) { TODO("Do something when action button is clicked") }
 
-        // also available for other lenght types
+        // also available for other length types
         myView.snackBarLong()     // Arguments are the same with above
         myView.snackBarForever()  // Arguments are the same with above
     }
@@ -824,7 +824,7 @@ class MainFragmentViewModel : ViewModel() {
     private val _myLiveData: MutableLiveData<List<String>> = MutableLiveData()
     private val myLiveData: LiveData<List<String>> = _myLiveData
 
-    private fun notifyOberver() {
+    private fun notifyObserver() {
         // In quite a rare case, you may to call the observer callback manually without change live data value
         _myLiveData.notifyObserver()
     }

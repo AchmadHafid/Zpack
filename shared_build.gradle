@@ -1,10 +1,10 @@
 android {
-    compileSdkVersion 29
+    compileSdkVersion versions.compileSdkVersion
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 4
-        versionName "0.4.0"
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+        versionCode versions.code
+        versionName versions.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dexOptions {
@@ -34,4 +34,23 @@ android {
         pickFirst("META-INF/atomicfu.kotlin_module")
         exclude 'META-INF/LICENSE'
     }
+}
+
+dependencies {
+    implementation deps.stdlib
+    implementation deps.material
+    implementation deps.core
+    implementation deps.appcompat
+    implementation deps.constraintlayout
+
+    testImplementation deps.test_core
+    testImplementation deps.test_runner
+    testImplementation deps.test_rules
+    testImplementation deps.test_junit_ktx
+    testImplementation deps.robolectric
+
+    androidTestImplementation deps.test_core
+    androidTestImplementation deps.test_runner
+    androidTestImplementation deps.test_rules
+    androidTestImplementation deps.test_junit_ktx
 }
