@@ -2,19 +2,16 @@
 
 package io.github.achmadhafid.zpack.ktx
 
-import android.graphics.Paint
+import android.graphics.Outline
 import android.view.View
-import android.widget.CompoundButton
-import android.widget.EditText
-import android.widget.TextView
+import android.view.ViewOutlineProvider
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
-import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.button.MaterialButtonToggleGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.setPadding
 import com.google.android.material.snackbar.Snackbar
 import io.github.achmadhafid.zpack.R
 
@@ -183,139 +180,76 @@ fun View.snackBarForever(
 )
 
 //endregion
-//region TextView
+//region Constraint Layout
 
-var TextView.textRes: Int
-    get () = TODO("Only use this extension function to set text from a string resource")
+inline fun View.clearConstraint(function: ConstraintSet.() -> Unit) {
+    with(ConstraintSet()) {
+        clone(this@clearConstraint as ConstraintLayout)
+        function()
+        applyTo(this@clearConstraint)
+    }
+}
+
+inline var View.constraintMarginStart: Int?
+    get() = with(layoutParams as ConstraintLayout.LayoutParams) {
+        marginStart
+    }
     set(value) {
-        text = resources.getString(value)
+        with(layoutParams as ConstraintLayout.LayoutParams) {
+            marginStart = value ?: 0
+            layoutParams = this
+        }
     }
 
-fun TextView.underLine() {
-    paint.flags = paint.flags or Paint.UNDERLINE_TEXT_FLAG
-    paint.isAntiAlias = true
-}
-
-fun TextView.deleteLine() {
-    paint.flags = paint.flags or Paint.STRIKE_THRU_TEXT_FLAG
-    paint.isAntiAlias = true
-}
-
-fun TextView.bold() {
-    paint.isFakeBoldText = true
-    paint.isAntiAlias = true
-}
-
-//endregion
-//region EditText
-
-var EditText.value: String
-    get() = text.toString()
+inline var View.constraintMarginEnd: Int?
+    get() = with(layoutParams as ConstraintLayout.LayoutParams) {
+        marginEnd
+    }
     set(value) {
-        setText(value)
+        with(layoutParams as ConstraintLayout.LayoutParams) {
+            marginEnd = value ?: 0
+            layoutParams = this
+        }
     }
 
 //endregion
-//region AppBarLayout
+//region Padding
 
-fun AppBarLayout.setSelectedOnScrollDown(scrollView: NestedScrollView) {
-    scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
-        isSelected = scrollView.canScrollVertically(-1)
-    })
+fun View.setPaddingRes(@DimenRes paddingRes: Int) {
+    setPadding(resources.getDimensionPixelSize(paddingRes))
 }
 
-fun AppBarLayout.setSelectedOnScrollDown(recyclerView: RecyclerView) {
-    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            isSelected = recyclerView.canScrollVertically(-1)
-        }
-    })
+fun View.addNavigationBarPadding() {
+    setPadding(
+        paddingLeft,
+        paddingTop,
+        paddingRight,
+        paddingBottom + resources.navBarHeightX
+    )
 }
 
 //endregion
-//region Util
+//region Background
 
-fun List<Pair<CompoundButton, Boolean>>.atLeastOneIsChecked(
-    onCheckedChange: ((Int, Boolean) -> Unit)? = null
-) {
-    for ((index, button) in withIndex()) {
-        button.first.isChecked = button.second
-        button.first.setOnCheckedChangeListener { buttonView, isChecked ->
-            onCheckedChange?.invoke(buttonView.id, isChecked)
-            forEach {
-                if (it.first.isChecked) return@setOnCheckedChangeListener
-            }
-            if (index != size - 1) this[index + 1].first.isChecked = true
-            else this[0].first.isChecked = true
-
-        }
-    }
+fun View.setBackgroundColorRes(@ColorRes @AttrRes colorRes: Int) {
+    setBackgroundColor(context.resolveColor(colorRes))
 }
 
-fun MaterialButtonToggleGroup.exactlyOneMustBeChecked(
-    buttons: List<MaterialButton>,
-    defaultChecked: MaterialButton,
-    onCheckedChange: ((Int, Boolean) -> Unit)? = null
-) {
-    isSingleSelection = true
-    buttons.forEach { button ->
-        button.addOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                button.isCheckable = false
-                buttons.forEach {
-                    if (it !== button) it.isCheckable = true
-                }
-            }
-        }
-    }
-    defaultChecked.isChecked = true
-    addOnButtonCheckedListener { _, checkedId, isChecked ->
-        onCheckedChange?.invoke(checkedId, isChecked)
-    }
-}
+//endregion
+//region Shape
 
-@Suppress("LongParameterList")
-fun List<MaterialButton>.exactlyOneMustBeCheckedOrNone(
-    buttonGroup: MaterialButtonToggleGroup,
-    buttonGroupDefaultChecked: MaterialButton,
-    buttonGroupListener: (id: Int, isChecked: Boolean) -> Unit,
-    switchButton: CompoundButton,
-    switchButtonDefaultIsChecked: Boolean,
-    switchButtonListener: (isChecked: Boolean) -> Unit
-) {
-    val listener = MaterialButton.OnCheckedChangeListener { button, isChecked ->
-        if (isChecked) {
-            button.isCheckable = false
-            forEach {
-                if (it !== button) it.isCheckable = true
-            }
+fun View.makeRoundedCornerOnTop(@DimenRes radiusRes: Int) {
+    val radius = resources.getDimensionPixelSize(radiusRes)
+    outlineProvider = object : ViewOutlineProvider() {
+        override fun getOutline(view: View, outline: Outline) {
+            outline.setRoundRect(
+                0, 0,
+                view.width, view.height + radius,
+                radius.toFloat()
+            )
         }
     }
-    val groupListener = MaterialButtonToggleGroup.OnButtonCheckedListener { _, id, isChecked ->
-        buttonGroupListener(id, isChecked)
-    }
-    switchButton.setOnCheckedChangeListener { _, isChecked ->
-        if (isChecked) {
-            forEach {
-                it.isEnabled = true
-                it.isCheckable = true
-                it.addOnCheckedChangeListener(listener)
-            }
-            buttonGroupDefaultChecked.isChecked = true
-            buttonGroup.addOnButtonCheckedListener(groupListener)
-        } else {
-            buttonGroup.removeOnButtonCheckedListener(groupListener)
-            forEach {
-                it.removeOnCheckedChangeListener(listener)
-                it.isCheckable = true
-                it.isChecked = false
-                it.isEnabled = false
-            }
-        }
-        switchButtonListener(isChecked)
-    }
-    switchButton.isChecked = switchButtonDefaultIsChecked
+    clipToOutline = true
 }
-
 
 //endregion

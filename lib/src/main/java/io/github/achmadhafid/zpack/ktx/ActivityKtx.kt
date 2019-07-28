@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 
 //region Resource Binding
@@ -39,6 +40,10 @@ fun AppCompatActivity.finishActivityOnDoubleBackPressed(
     isEnabled = false
     handler.postDelayed({ isEnabled = true }, delayMilis)
 }
+
+@MainThread
+fun AppCompatActivity.bindNavController(@IdRes id: Int) =
+    lazy(LazyThreadSafetyMode.NONE) { findNavController(id) }
 
 //endregion
 //region ViewModel
