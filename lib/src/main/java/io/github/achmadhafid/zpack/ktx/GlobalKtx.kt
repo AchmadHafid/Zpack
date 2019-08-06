@@ -2,6 +2,7 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -71,5 +72,11 @@ fun defaultTheme() {
         }
     )
 }
+
+//endregion
+//region Permissions
+
+fun arePermissionsGranted(grantResults: IntArray) =
+    belowMarshmallow() || grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
 //endregion
