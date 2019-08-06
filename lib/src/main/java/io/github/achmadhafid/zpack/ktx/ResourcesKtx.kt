@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.achmadhafid.zpack.ktx
 
 import android.content.res.Resources

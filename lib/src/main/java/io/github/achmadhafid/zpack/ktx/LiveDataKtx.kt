@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "unused")
+@file:Suppress("unused")
 
 package io.github.achmadhafid.zpack.ktx
 

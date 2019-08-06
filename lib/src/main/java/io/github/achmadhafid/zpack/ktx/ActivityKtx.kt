@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "unused")
+@file:Suppress("unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -17,6 +17,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 
+//region Permissions
+
+//@SuppressLint("NewApi")
+fun AppCompatActivity.shouldShowRequestPermissionRationales(vararg permissions: String) =
+    atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
+
+//endregion
 //region Resource Binding
 
 @MainThread

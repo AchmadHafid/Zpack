@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "unused")
+@file:Suppress("unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -44,13 +44,19 @@ fun Fragment.toastLong(@StringRes messageRes: Int, vararg messages: CharSequence
 //endregion
 //region Permission
 
-fun Fragment.isGranted(permission: String) = context?.isGranted(permission)
-
 inline val Fragment.hasWriteSettingPermission
     get() = context?.hasWriteSettingPermission
 
 inline val Fragment.hasAppUsagePermission
     get() = context?.hasAppUsagePermission
+
+fun Fragment.isPermissionGranted(permission: String) = context?.isPermissionGranted(permission)
+
+fun Fragment.arePermissionsGranted(vararg permissions: String) =
+    context?.arePermissionsGranted(*permissions)
+
+fun Fragment.shouldShowRequestPermissionRationales(vararg permissions: String) =
+    atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
 
 //endregion
 //region Intent
@@ -126,5 +132,14 @@ fun Fragment.isDarkThemeEnabled() = resources.configuration.uiMode and
 fun Fragment.toggleTheme() =
     if (isDarkThemeEnabled()) lightTheme()
     else darkTheme()
+
+//endregion
+//region Lifecycle
+
+inline val Fragment.lifecycleState
+    get() = lifecycle.currentState
+
+inline val Fragment.viewLifecycleState
+    get() = viewLifecycleOwner.lifecycle.currentState
 
 //endregion

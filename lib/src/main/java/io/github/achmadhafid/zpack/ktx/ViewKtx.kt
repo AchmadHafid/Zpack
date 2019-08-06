@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "unused")
+@file:Suppress("unused")
 
 package io.github.achmadhafid.zpack.ktx
 
@@ -8,6 +8,7 @@ import android.view.ViewOutlineProvider
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -15,6 +16,12 @@ import androidx.core.view.setPadding
 import com.google.android.material.snackbar.Snackbar
 import io.github.achmadhafid.zpack.R
 
+//region Binding
+
+inline fun <reified V: View> View.f(@IdRes id: Int): V =
+    findViewById(id)
+
+//endregion
 //region Visibility
 
 inline val View.isVisible
@@ -91,10 +98,10 @@ inline fun <reified T> List<Pair<View, T>>.visibleOrGone(visibleIf: (T) -> Boole
 //endregion
 //region Listener
 
-fun View.onSingleClick(autoReEnable: Boolean = false, callback: () -> Unit) = setOnClickListener {
+fun View.onSingleClick(autoReEnable: Boolean = true, callback: () -> Unit) = setOnClickListener {
     isClickable = false
     callback()
-    if (autoReEnable) isClickable = true
+    isClickable = autoReEnable
 }
 
 //endregion

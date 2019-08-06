@@ -1,10 +1,19 @@
-@file:Suppress("TooManyFunctions", "unused", "WildcardImport")
+@file:Suppress("unused")
 
 package io.github.achmadhafid.zpack.ktx
 
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.ActivityManager
+import android.app.AlarmManager
+import android.app.AppOpsManager
+import android.app.DownloadManager
+import android.app.KeyguardManager
+import android.app.NotificationManager
+import android.app.SearchManager
+import android.app.Service
+import android.app.UiModeManager
+import android.app.WallpaperManager
 import android.app.admin.DevicePolicyManager
 import android.app.job.JobScheduler
 import android.app.usage.NetworkStatsManager
@@ -14,9 +23,18 @@ import android.app.usage.UsageStatsManager
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothManager
 import android.companion.CompanionDeviceManager
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ClipboardManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.Intent.createChooser
-import android.content.pm.*
+import android.content.RestrictionsManager
+import android.content.pm.ApplicationInfo
+import android.content.pm.CrossProfileApps
+import android.content.pm.LauncherApps
+import android.content.pm.PackageManager
+import android.content.pm.ShortcutManager
 import android.graphics.drawable.Drawable
 import android.hardware.ConsumerIrManager
 import android.hardware.SensorManager
@@ -40,7 +58,11 @@ import android.net.wifi.aware.WifiAwareManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.net.wifi.rtt.WifiRttManager
 import android.nfc.NfcManager
-import android.os.*
+import android.os.DropBoxManager
+import android.os.HardwarePropertiesManager
+import android.os.PowerManager
+import android.os.UserManager
+import android.os.Vibrator
 import android.os.health.SystemHealthManager
 import android.os.storage.StorageManager
 import android.print.PrintManager
@@ -58,7 +80,13 @@ import android.view.accessibility.CaptioningManager
 import android.view.textclassifier.TextClassificationManager
 import android.view.textservice.TextServicesManager
 import android.widget.Toast
-import androidx.annotation.*
+import androidx.annotation.ArrayRes
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.IntegerRes
+import androidx.annotation.MainThread
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -414,8 +442,10 @@ inline fun <reified T : AppCompatActivity> Context.startActivity(noinline block:
 }
 
 fun Context.openAppDetailSettings() {
-    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        .apply { data = Uri.parse(`package`) })
+    startActivity(Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ))
 }
 
 fun Context.openAdminSettings() {
@@ -525,11 +555,11 @@ inline val Context.hasAppUsagePermission: Boolean
         @Suppress("DEPRECATION")
         val mode = if (atLeastQ()) appOpsManager.unsafeCheckOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
-            Process.myUid(),
+            android.os.Process.myUid(),
             packageName
         ) else appOpsManager.checkOpNoThrow(
             AppOpsManager.OPSTR_GET_USAGE_STATS,
-            Process.myUid(),
+            android.os.Process.myUid(),
             packageName
         )
 
@@ -542,14 +572,11 @@ inline val Context.hasAppUsagePermission: Boolean
         }
     }
 
-fun Context.isGranted(permission: String) =
-    when {
-        belowMarshmallow() -> true
-        else -> {
-            ContextCompat.checkSelfPermission(this, permission) ==
-                    PackageManager.PERMISSION_GRANTED
-        }
-    }
+fun Context.isPermissionGranted(permission: String) = belowMarshmallow() ||
+        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+fun Context.arePermissionsGranted(vararg permissions: String) =
+    belowMarshmallow() || permissions.all { isPermissionGranted(it) }
 
 //endregion
 //region Internet Connection
