@@ -575,7 +575,7 @@ inline val Context.hasAppUsagePermission: Boolean
 fun Context.isPermissionGranted(permission: String) = belowMarshmallow() ||
         ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
-fun Context.arePermissionsGranted(vararg permissions: String) =
+fun Context.arePermissionsGranted(permissions: Array<out String>) =
     belowMarshmallow() || permissions.all { isPermissionGranted(it) }
 
 //endregion

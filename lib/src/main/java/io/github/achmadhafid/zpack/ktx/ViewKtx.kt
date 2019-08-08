@@ -260,3 +260,10 @@ fun View.makeRoundedCornerOnTop(@DimenRes radiusRes: Int) {
 }
 
 //endregion
+//region Properties
+
+inline fun <reified T: View> T.disableIf(function: () -> Boolean) {
+    isEnabled = isEnabled && !function()
+}
+
+//endregion

@@ -2,6 +2,7 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Handler
@@ -19,8 +20,8 @@ import com.google.android.material.appbar.MaterialToolbar
 
 //region Permissions
 
-//@SuppressLint("NewApi")
-fun AppCompatActivity.shouldShowRequestPermissionRationales(vararg permissions: String) =
+@SuppressLint("NewApi")
+fun AppCompatActivity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
     atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
 
 //endregion

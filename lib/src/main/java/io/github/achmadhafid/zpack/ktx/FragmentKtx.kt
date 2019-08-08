@@ -7,6 +7,10 @@ import android.content.res.Configuration
 import android.os.Handler
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.annotation.ArrayRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.IntegerRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +19,82 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
+//region Binding
+
+@MainThread
+fun Fragment.stringRes(@StringRes stringRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getString(stringRes)
+    }
+
+@MainThread
+fun Fragment.stringArrayRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getStringArray(arrayRes)
+    }
+
+@MainThread
+fun Fragment.stringListRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getStringArray(arrayRes)
+            .toList()
+    }
+
+@MainThread
+fun Fragment.intRes(@IntegerRes intRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getInteger(intRes)
+    }
+
+@MainThread
+fun Fragment.intArrayRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(arrayRes)
+    }
+
+@MainThread
+fun Fragment.intListRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(arrayRes)
+            .toList()
+    }
+
+@MainThread
+fun Fragment.longRes(@IntegerRes intRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getInteger(intRes)
+            .toLong()
+    }
+
+@MainThread
+fun Fragment.longArrayRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(arrayRes)
+            .map { it.toLong() }
+            .toLongArray()
+    }
+
+@MainThread
+fun Fragment.longListRes(@ArrayRes arrayRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(arrayRes)
+            .map { it.toLong() }
+    }
+
+@MainThread
+fun Fragment.dimenRes(@DimenRes dimenRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimensionPixelSize(dimenRes)
+    }
+
+@MainThread
+fun Fragment.colorRes(@ColorRes colorRes: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().getColorCompat(colorRes)
+    }
+
+
+//endregion
 //region Toast
 
 fun Fragment.toastShort(message: CharSequence) {
@@ -52,10 +132,10 @@ inline val Fragment.hasAppUsagePermission
 
 fun Fragment.isPermissionGranted(permission: String) = context?.isPermissionGranted(permission)
 
-fun Fragment.arePermissionsGranted(vararg permissions: String) =
-    context?.arePermissionsGranted(*permissions)
+fun Fragment.arePermissionsGranted(permissions: Array<out String>) =
+    requireContext().arePermissionsGranted(permissions)
 
-fun Fragment.shouldShowRequestPermissionRationales(vararg permissions: String) =
+fun Fragment.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
     atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
 
 //endregion

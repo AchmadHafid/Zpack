@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.6.2'
+  implementation 'com.github.AchmadHafid:Zpack:0.6.3'
   ...
 }
 ```
