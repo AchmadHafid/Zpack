@@ -87,11 +87,11 @@ import androidx.annotation.DimenRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.os.UserManagerCompat
+import androidx.fragment.app.FragmentActivity
 
 //region System Service
 
@@ -437,7 +437,7 @@ fun Context.startActivityIfResolved(intent: Intent): Boolean {
     } else false
 }
 
-inline fun <reified T : AppCompatActivity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T : FragmentActivity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
     startActivity(intent<T>(block))
 }
 

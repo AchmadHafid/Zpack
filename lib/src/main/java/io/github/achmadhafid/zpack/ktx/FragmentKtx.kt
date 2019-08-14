@@ -13,10 +13,10 @@ import androidx.annotation.DimenRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 //region Binding
@@ -155,11 +155,11 @@ fun Fragment.intent(action: String, block: (Intent.() -> Unit)? = null): Intent 
 //endregion
 //region Navigation
 
-inline fun <reified T : AppCompatActivity> Fragment.startActivity(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T : FragmentActivity> Fragment.startActivity(noinline block: (Intent.() -> Unit)? = null) {
     context?.startActivity(intent<T>(block))
 }
 
-inline fun <reified T: AppCompatActivity> Fragment.goTo(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T: FragmentActivity> Fragment.goTo(noinline block: (Intent.() -> Unit)? = null) {
     startActivity<T>(block)
     activity?.finish()
 }
@@ -199,7 +199,7 @@ fun Fragment.finishActivityOnBackPressed() =
 @MainThread
 inline fun <reified VM : ViewModel> Fragment.bindViewModel() =
     lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this)
+        ViewModelProvider(this)
             .get(VM::class.java)
     }
 

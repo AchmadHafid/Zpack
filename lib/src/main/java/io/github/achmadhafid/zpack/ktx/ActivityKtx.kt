@@ -13,33 +13,34 @@ import androidx.annotation.IdRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 
 //region Permissions
 
 @SuppressLint("NewApi")
-fun AppCompatActivity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
+fun FragmentActivity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
     atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
 
 //endregion
 //region Resource Binding
 
 @MainThread
-inline fun <reified V : View> AppCompatActivity.bindView(@IdRes id: Int) =
+inline fun <reified V : View> FragmentActivity.bindView(@IdRes id: Int) =
     lazy(LazyThreadSafetyMode.NONE) { findViewById<V>(id) }
 
 //endregion
 //region Navigation
 
-inline fun <reified T: AppCompatActivity> AppCompatActivity.goTo(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T: FragmentActivity> FragmentActivity.goTo(noinline block: (Intent.() -> Unit)? = null) {
     startActivity<T>(block)
     finish()
 }
 
-fun AppCompatActivity.finishActivityOnDoubleBackPressed(
+fun FragmentActivity.finishActivityOnDoubleBackPressed(
     message: String,
     handler: Handler,
     delayMilis: Long
@@ -50,27 +51,27 @@ fun AppCompatActivity.finishActivityOnDoubleBackPressed(
 }
 
 @MainThread
-fun AppCompatActivity.bindNavController(@IdRes id: Int) =
+fun FragmentActivity.bindNavController(@IdRes id: Int) =
     lazy(LazyThreadSafetyMode.NONE) { findNavController(id) }
 
 //endregion
 //region ViewModel
 
 @MainThread
-inline fun <reified VM : ViewModel> AppCompatActivity.bindViewModel() =
+inline fun <reified VM : ViewModel> FragmentActivity.bindViewModel() =
     lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this)
+        ViewModelProvider(this)
             .get(VM::class.java)
     }
 
 //endregion
 //region Theme
 
-inline val AppCompatActivity.isDarkThemeEnabled
+inline val FragmentActivity.isDarkThemeEnabled
     get() = resources.configuration.uiMode and
             Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun AppCompatActivity.toggleTheme() =
+fun FragmentActivity.toggleTheme() =
     if (isDarkThemeEnabled) lightTheme()
     else darkTheme()
 
