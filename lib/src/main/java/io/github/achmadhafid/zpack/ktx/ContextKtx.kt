@@ -4,6 +4,7 @@ package io.github.achmadhafid.zpack.ktx
 
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.AppOpsManager
@@ -91,7 +92,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.os.UserManagerCompat
-import androidx.fragment.app.FragmentActivity
 
 //region System Service
 
@@ -386,6 +386,12 @@ fun Context.pxToDp(px: Number) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
 fun Context.spToPx(sp: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
 fun Context.pxToSp(px: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
 
+fun Context.getIntRes(@IntegerRes intRes: Int) =
+    resources.getInteger(intRes)
+
+fun Context.getLongRes(@IntegerRes longRes: Int) =
+    getIntRes(longRes).toLong()
+
 //endregion
 //region Toast
 
@@ -437,7 +443,7 @@ fun Context.startActivityIfResolved(intent: Intent): Boolean {
     } else false
 }
 
-inline fun <reified T : FragmentActivity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T : Activity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
     startActivity(intent<T>(block))
 }
 
@@ -533,8 +539,9 @@ fun Context.sendSms(number: String, text: String = ""): Boolean =
 inline fun <reified T : Service> Context.startService(noinline block: (Intent.() -> Unit)? = null): ComponentName? =
     startService(intent<T>(block))
 
-inline fun <reified T : Service> Context.startForegroundServiceCompat(noinline block: (Intent.() -> Unit)? = null) =
+inline fun <reified T : Service> Context.startForegroundServiceCompat(noinline block: (Intent.() -> Unit)? = null) {
     ContextCompat.startForegroundService(this, intent<T>(block))
+}
 
 //endregion
 //region Permission

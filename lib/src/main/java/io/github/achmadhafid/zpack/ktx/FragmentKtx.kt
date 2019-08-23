@@ -2,6 +2,9 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.Manifest
+import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Handler
@@ -19,7 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
-//region Binding
+//region Resource Binding
 
 @MainThread
 fun Fragment.stringRes(@StringRes stringRes: Int) =
@@ -93,44 +96,43 @@ fun Fragment.colorRes(@ColorRes colorRes: Int) =
         requireContext().getColorCompat(colorRes)
     }
 
-
 //endregion
 //region Toast
 
 fun Fragment.toastShort(message: CharSequence) {
-    context?.toastShort(message)
+    requireContext().toastShort(message)
 }
 
 fun Fragment.toastShort(@StringRes messageRes: Int) {
-    context?.toastShort(messageRes)
+    requireContext().toastShort(messageRes)
 }
 
 fun Fragment.toastShort(@StringRes messageRes: Int, vararg messages: CharSequence) {
-    context?.toastShort(messageRes, *messages)
+    requireContext().toastShort(messageRes, *messages)
 }
 
 fun Fragment.toastLong(message: CharSequence) {
-    context?.toastLong(message)
+    requireContext().toastLong(message)
 }
 
 fun Fragment.toastLong(@StringRes messageRes: Int) {
-    context?.toastLong(messageRes)
+    requireContext().toastLong(messageRes)
 }
 
 fun Fragment.toastLong(@StringRes messageRes: Int, vararg messages: CharSequence) {
-    context?.toastLong(messageRes, *messages)
+    requireContext().toastLong(messageRes, *messages)
 }
 
 //endregion
 //region Permission
 
 inline val Fragment.hasWriteSettingPermission
-    get() = context?.hasWriteSettingPermission
+    get() = requireContext().hasWriteSettingPermission
 
 inline val Fragment.hasAppUsagePermission
-    get() = context?.hasAppUsagePermission
+    get() = requireContext().hasAppUsagePermission
 
-fun Fragment.isPermissionGranted(permission: String) = context?.isPermissionGranted(permission)
+fun Fragment.isPermissionGranted(permission: String) = requireContext().isPermissionGranted(permission)
 
 fun Fragment.arePermissionsGranted(permissions: Array<out String>) =
     requireContext().arePermissionsGranted(permissions)
@@ -141,22 +143,36 @@ fun Fragment.shouldShowRequestPermissionRationales(permissions: Array<out String
 //endregion
 //region Intent
 
-inline fun <reified T : Any> Fragment.intent(noinline block: (Intent.() -> Unit)? = null): Intent? {
-    return context?.let {
-        val intent = Intent(it, T::class.java)
-        if (block != null) intent.apply(block)
-        intent
-    }
+inline fun <reified T : Any> Fragment.intent(noinline block: (Intent.() -> Unit)? = null): Intent {
+    val intent = Intent(requireContext(), T::class.java)
+    if (block != null) intent.apply(block)
+    return intent
 }
 
 fun Fragment.intent(action: String, block: (Intent.() -> Unit)? = null): Intent =
     if (block == null) Intent(action) else Intent(action).apply(block)
 
 //endregion
+//region Service
+
+inline fun <reified T : Service> Fragment.startService(noinline block: (Intent.() -> Unit)? = null): ComponentName? =
+    requireContext().startService<T>(block)
+
+inline fun <reified T : Service> Fragment.startForegroundService(
+    requestCode: Int,
+    noinline block: (Intent.() -> Unit)? = null
+) {
+    if (atLeastPie()) {
+        requestPermissions(arrayOf(Manifest.permission.FOREGROUND_SERVICE), requestCode)
+    }
+    requireContext().startForegroundServiceCompat<T>(block)
+}
+
+//endregion
 //region Navigation
 
 inline fun <reified T : FragmentActivity> Fragment.startActivity(noinline block: (Intent.() -> Unit)? = null) {
-    context?.startActivity(intent<T>(block))
+    requireContext().startActivity(intent<T>(block))
 }
 
 inline fun <reified T: FragmentActivity> Fragment.goTo(noinline block: (Intent.() -> Unit)? = null) {

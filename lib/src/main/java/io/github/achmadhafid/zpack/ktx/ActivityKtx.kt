@@ -2,7 +2,10 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Service
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Handler
@@ -12,6 +15,7 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,20 +25,36 @@ import com.google.android.material.appbar.MaterialToolbar
 //region Permissions
 
 @SuppressLint("NewApi")
-fun FragmentActivity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
+fun Activity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
     atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
+
+fun Activity.requestPermissionCompat(permission: Array<out String>, requestCode: Int) =
+    ActivityCompat.requestPermissions(this, permission, requestCode)
 
 //endregion
 //region Resource Binding
 
 @MainThread
-inline fun <reified V : View> FragmentActivity.bindView(@IdRes id: Int) =
+inline fun <reified V : View> Activity.bindView(@IdRes id: Int) =
     lazy(LazyThreadSafetyMode.NONE) { findViewById<V>(id) }
+
+//endregion
+//region Service
+
+inline fun <reified T : Service> Activity.startForegroundServiceCompat(
+    requestCode: Int,
+    noinline block: (Intent.() -> Unit)? = null
+) {
+    if (atLeastPie()) {
+        requestPermissionCompat(arrayOf(Manifest.permission.FOREGROUND_SERVICE), requestCode)
+    }
+    ActivityCompat.startForegroundService(this, intent<T>(block))
+}
 
 //endregion
 //region Navigation
 
-inline fun <reified T: FragmentActivity> FragmentActivity.goTo(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T: Activity> Activity.goTo(noinline block: (Intent.() -> Unit)? = null) {
     startActivity<T>(block)
     finish()
 }
@@ -53,7 +73,7 @@ fun FragmentActivity.finishActivityOnDoubleBackPressed(
 }
 
 @MainThread
-fun FragmentActivity.bindNavController(@IdRes id: Int) =
+fun Activity.bindNavController(@IdRes id: Int) =
     lazy(LazyThreadSafetyMode.NONE) { findNavController(id) }
 
 //endregion
@@ -75,11 +95,11 @@ inline fun <reified T: ViewModel> FragmentActivity.getViewModel(factory: ViewMod
 //endregion
 //region Theme
 
-inline val FragmentActivity.isDarkThemeEnabled
+inline val Activity.isDarkThemeEnabled
     get() = resources.configuration.uiMode and
             Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun FragmentActivity.toggleTheme() =
+fun Activity.toggleTheme() =
     if (isDarkThemeEnabled) lightTheme()
     else darkTheme()
 
