@@ -449,17 +449,12 @@ fun Context.openAppDetailSettings() {
 }
 
 fun Context.openAdminSettings() {
-    startActivity(
-        Intent(
-            android.content.Intent()
-                .setComponent(
-                    ComponentName(
-                        "com.android.settings",
-                        "com.android.settings.DeviceAdminSettings"
-                    )
-                )
+    startActivity(Intent().apply {
+        component = ComponentName(
+            "com.android.settings",
+            "com.android.settings.DeviceAdminSettings"
         )
-    )
+    })
 }
 
 fun Context.openUsageAccessSettings() {
@@ -627,7 +622,7 @@ inline val Context.foregroundApp: String?
         val usageEvents = System.currentTimeMillis().let {
             @Suppress("MagicNumber")
             // query for the last one minute
-            usageStatsManager.queryEvents(it - 600000L, it)
+            usageStatsManager.queryEvents(it - 60 * 1000L, it)
         }
         val event = UsageEvents.Event()
         var foregroundApp = ""
@@ -652,8 +647,36 @@ inline val Context.installedApps: List<ApplicationInfo>
 inline val Context.installedAppsWithLaunchIntent: List<ApplicationInfo>
     get() = installedApps
         .filter { it.packageName?.isNotEmpty() ?: false }
-        .filter { it.name?.isNotEmpty() ?: false }
         .filter { packageManager.getLaunchIntentForPackage(it.packageName) != null }
+
+inline val Context.installedAppsWithLaunchActivity: List<ApplicationInfo>
+    get() {
+        val intent = Intent(Intent.ACTION_MAIN, null)
+            .apply { addCategory(Intent.CATEGORY_LAUNCHER) }
+
+        val packageNames = packageManager.queryIntentActivities(intent, 0)
+            .map { it.activityInfo.packageName }
+
+        return installedApps
+            .filter { it.packageName?.isNotEmpty() ?: false }
+            .filter { packageNames.contains(it.packageName) }
+    }
+
+inline val Context.installedLauncherApp: List<ApplicationInfo>
+    get() {
+        val intent = Intent(Intent.ACTION_MAIN, null)
+            .apply { addCategory(Intent.CATEGORY_LAUNCHER) }
+
+        val packageNames = packageManager.queryIntentActivities(intent, 0)
+            .map { it.activityInfo.packageName }
+
+        return installedApps
+            .filter { it.packageName?.isNotEmpty() ?: false }
+            .filter {
+                packageManager.getLaunchIntentForPackage(it.packageName) != null ||
+                        packageNames.contains(it.packageName)
+            }
+    }
 
 fun Context.getAppName(packageName: String): String? {
     return try {

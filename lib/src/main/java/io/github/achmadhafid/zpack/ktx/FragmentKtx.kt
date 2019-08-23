@@ -169,6 +169,10 @@ inline val Fragment.isStartDestination
         graph.startDestination == currentDestination?.id
     }
 
+fun Fragment.addBackPressedListener(callback: OnBackPressedCallback.() -> Unit) =
+    requireActivity().onBackPressedDispatcher
+        .addCallback(viewLifecycleOwner, true, callback)
+
 fun Fragment.finishActivityOnDoubleBackPressed(
     message: String,
     handler: Handler,
@@ -202,6 +206,18 @@ inline fun <reified VM : ViewModel> Fragment.bindViewModel() =
         ViewModelProvider(this)
             .get(VM::class.java)
     }
+
+inline fun <reified T: ViewModel> Fragment.getViewModelWithActivityScope() =
+    ViewModelProvider(requireActivity()).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModel() =
+    ViewModelProvider(this).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModelWithActivityScope(factory: ViewModelProvider.Factory) =
+    ViewModelProvider(requireActivity(), factory).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModel(factory: ViewModelProvider.Factory) =
+    ViewModelProvider(this, factory).getViewModel<T>()
 
 //endregion
 //region Theme

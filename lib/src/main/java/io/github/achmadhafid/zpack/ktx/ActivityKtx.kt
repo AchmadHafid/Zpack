@@ -12,7 +12,6 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +39,9 @@ inline fun <reified T: FragmentActivity> FragmentActivity.goTo(noinline block: (
     finish()
 }
 
+fun FragmentActivity.addBackPressedListener(callback: OnBackPressedCallback.() -> Unit) =
+    onBackPressedDispatcher.addCallback(this, true, callback)
+
 fun FragmentActivity.finishActivityOnDoubleBackPressed(
     message: String,
     handler: Handler,
@@ -64,6 +66,12 @@ inline fun <reified VM : ViewModel> FragmentActivity.bindViewModel() =
             .get(VM::class.java)
     }
 
+inline fun <reified T: ViewModel> FragmentActivity.getViewModel() =
+    ViewModelProvider(this).getViewModel<T>()
+
+inline fun <reified T: ViewModel> FragmentActivity.getViewModel(factory: ViewModelProvider.Factory) =
+    ViewModelProvider(this, factory).getViewModel<T>()
+
 //endregion
 //region Theme
 
@@ -79,7 +87,7 @@ fun FragmentActivity.toggleTheme() =
 //region View
 
 fun AppCompatActivity.setToolbar(@IdRes id: Int) {
-    setSupportActionBar(findViewById<Toolbar>(id))
+    setSupportActionBar(findViewById(id))
 }
 
 fun AppCompatActivity.setMaterialToolbar(@IdRes id: Int) {

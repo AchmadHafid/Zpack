@@ -53,3 +53,12 @@ val String.toTitleCase: String
     }
 
 //endregion
+//region Content
+
+fun String?.blankIfNull() =
+    this ?: ""
+
+fun String?.nullIfBlank() =
+    if (this == "") null else this
+
+//endregion
