@@ -3,10 +3,14 @@
 package io.github.achmadhafid.zpack.ktx
 
 import android.Manifest
+import android.annotation.TargetApi
+import android.app.Activity
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
@@ -16,11 +20,13 @@ import androidx.annotation.DimenRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import kotlin.reflect.KClass
 
 //region Resource Binding
 
@@ -168,16 +174,55 @@ inline fun <reified T : Service> Fragment.startForegroundService(
     requireContext().startForegroundServiceCompat<T>(block)
 }
 
+fun <S : Service> Fragment.startForegroundService(
+    clazz: KClass<S>,
+    requestCode: Int,
+    block: Intent.() -> Unit = {}
+) {
+    @TargetApi(Build.VERSION_CODES.P)
+    if (atLeastPie()) {
+        requestPermissions(arrayOf(Manifest.permission.FOREGROUND_SERVICE), requestCode)
+    }
+    with(requireContext()) {
+        ContextCompat.startForegroundService(this, Intent(this, clazz.java).apply(block))
+    }
+}
+
+inline fun <reified T : Service> Fragment.stopService() =
+    requireContext().stopService<T>()
+
 //endregion
 //region Navigation
 
-inline fun <reified T : FragmentActivity> Fragment.startActivity(noinline block: (Intent.() -> Unit)? = null) {
+fun Fragment.finish() = findNavController().popBackStack()
+
+fun Fragment.activityFinish() {
+    requireActivity().finish()
+}
+
+inline fun <reified T : Activity> Fragment.startActivity(noinline block: (Intent.() -> Unit)? = null) {
     requireContext().startActivity(intent<T>(block))
 }
 
-inline fun <reified T: FragmentActivity> Fragment.goTo(noinline block: (Intent.() -> Unit)? = null) {
+inline fun <reified T: Activity> Fragment.goTo(noinline block: (Intent.() -> Unit)? = null) {
     startActivity<T>(block)
     activity?.finish()
+}
+
+inline fun <reified T: Activity> Fragment.startActivityForResult(
+    requestCode: Int,
+    noinline block: Intent.() -> Unit = {}
+) {
+    bundleOf()
+    startActivityForResult(intent<T>(block), requestCode)
+}
+
+inline fun <reified T: Activity> Fragment.startActivityForResult(
+    requestCode: Int,
+    noinline block: Intent.() -> Unit = {},
+    noinline bundle: Bundle.() -> Unit = {}
+) {
+    startActivityForResult(intent<T>(block), requestCode, bundleOf().apply(bundle))
 }
 
 inline val Fragment.isStartDestination
@@ -253,5 +298,17 @@ inline val Fragment.lifecycleState
 
 inline val Fragment.viewLifecycleState
     get() = viewLifecycleOwner.lifecycle.currentState
+
+//endregion
+//region Internet Connection
+
+inline val Fragment.isConnected: Boolean?
+    get() = requireContext().isConnected
+
+inline val Fragment.isMobileDataEnabled: Boolean?
+    get() = requireContext().isMobileDataEnabled
+
+inline val Fragment.isWifiEnabled
+    get() = requireContext().isWifiEnabled
 
 //endregion

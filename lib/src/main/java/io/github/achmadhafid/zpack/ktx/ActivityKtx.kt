@@ -4,10 +4,13 @@ package io.github.achmadhafid.zpack.ktx
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -16,11 +19,13 @@ import androidx.annotation.IdRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
+import kotlin.reflect.KClass
 
 //region Permissions
 
@@ -51,12 +56,39 @@ inline fun <reified T : Service> Activity.startForegroundServiceCompat(
     ActivityCompat.startForegroundService(this, intent<T>(block))
 }
 
+fun <S: Service>Activity.startForegroundServiceCompat(
+    clazz: KClass<S>,
+    requestCode: Int,
+    block: Intent.() -> Unit = {}
+) {
+    @TargetApi(Build.VERSION_CODES.P)
+    if (atLeastPie()) {
+        requestPermissionCompat(arrayOf(Manifest.permission.FOREGROUND_SERVICE), requestCode)
+    }
+    ActivityCompat.startForegroundService(this, Intent(this, clazz.java).apply(block))
+}
+
 //endregion
 //region Navigation
 
 inline fun <reified T: Activity> Activity.goTo(noinline block: (Intent.() -> Unit)? = null) {
     startActivity<T>(block)
     finish()
+}
+
+inline fun <reified T: Activity> Activity.startActivityForResult(
+    requestCode: Int,
+    noinline block: Intent.() -> Unit = {}
+) {
+    startActivityForResult(intent<T>(block), requestCode)
+}
+
+inline fun <reified T: Activity> Activity.startActivityForResult(
+    requestCode: Int,
+    noinline block: Intent.() -> Unit = {},
+    noinline bundle: Bundle.() -> Unit = {}
+) {
+    startActivityForResult(intent<T>(block), requestCode, bundleOf().apply(bundle))
 }
 
 fun FragmentActivity.addBackPressedListener(callback: OnBackPressedCallback.() -> Unit) =

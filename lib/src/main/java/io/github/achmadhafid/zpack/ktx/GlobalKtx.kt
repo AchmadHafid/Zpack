@@ -80,3 +80,22 @@ fun arePermissionsGranted(grantResults: IntArray) =
     belowMarshmallow() || grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
 //endregion
+//region Null Check
+
+internal fun <T : Any> ifAllWereNull(vararg list: T?, function: () -> Unit) {
+    if (list.all { it == null }) function()
+}
+
+internal fun <T : Any> ifAllWereNotNull(vararg list: T?, function: List<T>.() -> Unit) {
+    if (list.all { it != null }) function(list.map { it!! })
+}
+
+internal fun <T : Any> ifAnyWasNull(vararg list: T?, function: List<T?>.() -> Unit) {
+    if (list.any { it == null }) function(list.toList())
+}
+
+internal fun <T : Any> ifAnyWasNotNull(vararg list: T?, function: List<T?>.() -> Unit) {
+    if (list.any { it != null }) function(list.toList())
+}
+
+//endregion

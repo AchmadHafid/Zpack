@@ -543,6 +543,9 @@ inline fun <reified T : Service> Context.startForegroundServiceCompat(noinline b
     ContextCompat.startForegroundService(this, intent<T>(block))
 }
 
+inline fun <reified T : Service> Context.stopService() =
+    stopService(Intent(this, T::class.java))
+
 //endregion
 //region Permission
 

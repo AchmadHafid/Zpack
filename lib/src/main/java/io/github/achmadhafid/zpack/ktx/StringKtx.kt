@@ -2,6 +2,7 @@
 
 package io.github.achmadhafid.zpack.ktx
 
+import android.text.TextUtils
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -60,5 +61,24 @@ fun String?.blankIfNull() =
 
 fun String?.nullIfBlank() =
     if (this == "") null else this
+
+//endregion
+//region Null & Empty Check
+
+fun <T: String?> ifAllWereNullOrEmpty(vararg any: T, function: () -> Unit) {
+    if (any.all { TextUtils.isEmpty(it) }) function()
+}
+
+fun <T: String?> ifAllWereNotNullOrEmpty(vararg any: T, function: () -> Unit) {
+    if (any.all { !TextUtils.isEmpty(it) }) function()
+}
+
+fun <T: String?> ifAnyWasNullOrEmpty(vararg any: T, function: () -> Unit) {
+    if (any.any { TextUtils.isEmpty(it) }) function()
+}
+
+fun <T: String?> ifAnyWasNotNullOrEmpty(vararg any: T, function: () -> Unit) {
+    if (any.any { !TextUtils.isEmpty(it) }) function()
+}
 
 //endregion
