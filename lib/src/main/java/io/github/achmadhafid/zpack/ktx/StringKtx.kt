@@ -65,19 +65,19 @@ fun String?.nullIfBlank() =
 //endregion
 //region Null & Empty Check
 
-internal fun ifAllWereNullOrEmpty(vararg list: String?, function: () -> Unit) {
+fun ifAllWereNullOrEmpty(vararg list: String?, function: () -> Unit) {
     if (list.all { TextUtils.isEmpty(it) }) function()
 }
 
-internal fun ifAllWereNotNullOrEmpty(vararg list: String?, function: List<String>.() -> Unit) {
+fun ifAllWereNotNullOrEmpty(vararg list: String?, function: List<String>.() -> Unit) {
     if (list.all { !TextUtils.isEmpty(it) }) function(list.map { it!! })
 }
 
-internal fun ifAnyWasNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
+fun ifAnyWasNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
     if (list.any { TextUtils.isEmpty(it) }) function(list.toList())
 }
 
-internal fun ifAnyWasNotNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
+fun ifAnyWasNotNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
     if (list.any { !TextUtils.isEmpty(it) }) function(list.toList())
 }
 
