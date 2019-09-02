@@ -65,20 +65,20 @@ fun String?.nullIfBlank() =
 //endregion
 //region Null & Empty Check
 
-fun <T: String?> ifAllWereNullOrEmpty(vararg any: T, function: () -> Unit) {
-    if (any.all { TextUtils.isEmpty(it) }) function()
+internal fun ifAllWereNullOrEmpty(vararg list: String?, function: () -> Unit) {
+    if (list.all { TextUtils.isEmpty(it) }) function()
 }
 
-fun <T: String?> ifAllWereNotNullOrEmpty(vararg any: T, function: () -> Unit) {
-    if (any.all { !TextUtils.isEmpty(it) }) function()
+internal fun ifAllWereNotNullOrEmpty(vararg list: String?, function: List<String>.() -> Unit) {
+    if (list.all { !TextUtils.isEmpty(it) }) function(list.map { it!! })
 }
 
-fun <T: String?> ifAnyWasNullOrEmpty(vararg any: T, function: () -> Unit) {
-    if (any.any { TextUtils.isEmpty(it) }) function()
+internal fun ifAnyWasNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
+    if (list.any { TextUtils.isEmpty(it) }) function(list.toList())
 }
 
-fun <T: String?> ifAnyWasNotNullOrEmpty(vararg any: T, function: () -> Unit) {
-    if (any.any { !TextUtils.isEmpty(it) }) function()
+internal fun ifAnyWasNotNullOrEmpty(vararg list: String?, function: List<String?>.() -> Unit) {
+    if (list.any { !TextUtils.isEmpty(it) }) function(list.toList())
 }
 
 //endregion
