@@ -92,6 +92,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.os.UserManagerCompat
+import java.io.File
 
 //region System Service
 
@@ -703,6 +704,18 @@ fun Context.getAppIcon(packageName: String): Drawable? {
         packageManager.getApplicationIcon(packageName)
     } catch (e: PackageManager.NameNotFoundException) {
         null
+    }
+}
+
+//endregion
+//region Uri
+
+@Suppress("NestedBlockDepth")
+fun Context.deleteLocalUri(uri: Uri) {
+    when {
+        uri.isContent -> contentResolver.delete(uri, null, null)
+        uri.isFile    -> uri.path?.let { with(File(it)) { if (exists()) delete() } }
+        else          -> return
     }
 }
 

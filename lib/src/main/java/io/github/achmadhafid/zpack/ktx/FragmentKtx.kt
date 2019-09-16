@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -268,17 +269,23 @@ inline fun <reified VM : ViewModel> Fragment.bindViewModel() =
             .get(VM::class.java)
     }
 
-inline fun <reified T: ViewModel> Fragment.getViewModelWithActivityScope() =
-    ViewModelProvider(requireActivity()).getViewModel<T>()
-
 inline fun <reified T: ViewModel> Fragment.getViewModel() =
     ViewModelProvider(this).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModel(factory: ViewModelProvider.Factory) =
+    ViewModelProvider(this, factory).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModelWithActivityScope() =
+    ViewModelProvider(requireActivity()).getViewModel<T>()
 
 inline fun <reified T: ViewModel> Fragment.getViewModelWithActivityScope(factory: ViewModelProvider.Factory) =
     ViewModelProvider(requireActivity(), factory).getViewModel<T>()
 
-inline fun <reified T: ViewModel> Fragment.getViewModel(factory: ViewModelProvider.Factory) =
-    ViewModelProvider(this, factory).getViewModel<T>()
+inline fun <reified T: ViewModel> Fragment.getViewModelWithParentScope() =
+    ViewModelProvider(requireParentFragment()).getViewModel<T>()
+
+inline fun <reified T: ViewModel> Fragment.getViewModelWithParentScope(factory: ViewModelProvider.Factory) =
+    ViewModelProvider(requireParentFragment(), factory).getViewModel<T>()
 
 //endregion
 //region Theme
@@ -310,5 +317,12 @@ inline val Fragment.isMobileDataEnabled: Boolean?
 
 inline val Fragment.isWifiEnabled
     get() = requireContext().isWifiEnabled
+
+//endregion
+//region Uri
+
+fun Fragment.deleteLocalUri(uri: Uri) {
+    requireContext().deleteLocalUri(uri)
+}
 
 //endregion
