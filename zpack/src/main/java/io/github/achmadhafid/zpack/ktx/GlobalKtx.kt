@@ -5,6 +5,7 @@ package io.github.achmadhafid.zpack.ktx
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 
 //region Logging
@@ -96,6 +97,21 @@ fun <T : Any> ifAnyWasNull(vararg list: T?, function: List<T?>.() -> Unit) {
 
 fun <T : Any> ifAnyWasNotNull(vararg list: T?, function: List<T?>.() -> Unit) {
     if (list.any { it != null }) function(list.toList())
+}
+
+//endregion
+//region View Util
+
+fun switchViews(vararg list: Triple<View?, View?, () -> Boolean>) {
+    list.forEach { (view1, view2, show1) ->
+        if (show1()) {
+            view2?.gone()
+            view1?.show()
+        } else {
+            view1?.gone()
+            view2?.show()
+        }
+    }
 }
 
 //endregion

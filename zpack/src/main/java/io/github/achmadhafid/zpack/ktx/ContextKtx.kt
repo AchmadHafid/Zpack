@@ -710,6 +710,14 @@ fun Context.getAppIcon(packageName: String): Drawable? {
 //endregion
 //region Uri
 
+fun Context.deleteLocalUris(vararg uris: Uri) {
+    uris.forEach(::deleteLocalUri)
+}
+
+fun Context.deleteLocalUris(uris: List<Uri>) {
+    uris.forEach(::deleteLocalUri)
+}
+
 @Suppress("NestedBlockDepth")
 fun Context.deleteLocalUri(uri: Uri) {
     when {
