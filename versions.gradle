@@ -1,8 +1,8 @@
 ext.versions = [
         //region Release
 
-        code              : 22,
-        name              : "0.7.4",
+        code              : 23,
+        name              : "0.7.5",
 
         //endregion
         //region SDK
@@ -26,12 +26,12 @@ ext.versions = [
         //endregion
         //region JetPack Dependencies
 
-        core              : '1.2.0-beta01',
+        core              : '1.2.0-beta02',
         appcompat         : '1.1.0',
-        activity          : '1.1.0-rc01',
-        fragment          : '1.2.0-rc01',
+        activity          : '1.1.0-rc02',
+        fragment          : '1.2.0-rc02',
         constraintlayout  : '2.0.0-beta3',
-        lifecycle         : '2.2.0-rc01',
+        lifecycle         : '2.2.0-rc02',
         navigation        : '2.2.0-rc01',
 
         //endregion
