@@ -72,6 +72,7 @@ import android.telecom.TelecomManager
 import android.telephony.CarrierConfigManager
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -620,6 +621,20 @@ inline val Context.displayWidth: Int
     get() = resources.displayMetrics.widthPixels
 inline val Context.displayHeight: Int
     get() = resources.displayMetrics.heightPixels
+
+inline val Context.hasSoftNavigationKeys: Boolean
+    get() {
+        val display = windowManager.defaultDisplay
+
+        val realMetrics = DisplayMetrics()
+        display.getRealMetrics(realMetrics)
+
+        val displayMetrics = DisplayMetrics()
+        display.getMetrics(displayMetrics)
+
+        return realMetrics.widthPixels > displayMetrics.widthPixels ||
+                realMetrics.heightPixels > displayMetrics.heightPixels
+    }
 
 //endregion
 //region App
