@@ -24,7 +24,7 @@ import android.app.usage.UsageStatsManager
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothManager
 import android.companion.CompanionDeviceManager
-import android.content.ActivityNotFoundException
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ComponentName
 import android.content.Context
@@ -292,8 +292,21 @@ inline val Context.wifiRttManager
 
 fun LocationManager.isLocationEnabledCompat() =
     LocationManagerCompat.isLocationEnabled(this)
+
 fun UserManager.isUserUnlockedCompat(context: Context) =
     UserManagerCompat.isUserUnlocked(context)
+
+fun Context.copyPlainTextToClipboard(label: CharSequence, text: CharSequence) {
+    clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
+}
+
+fun Context.copyHtmlTextToClipboard(label: CharSequence, text: CharSequence, htmlText: String) {
+    clipboardManager.setPrimaryClip(ClipData.newHtmlText(label, text, htmlText))
+}
+
+fun Context.copyRawUriToClipboard(label: CharSequence, uri: Uri) {
+    clipboardManager.setPrimaryClip(ClipData.newRawUri(label, uri))
+}
 
 //endregion
 //region Resource Binding
@@ -385,8 +398,8 @@ private fun Context.applyDimension(unit: Int, number: Number) =
 
 fun Context.dpToPx(dp: Number) = applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp)
 fun Context.pxToDp(px: Number) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
-fun Context.spToPx(sp: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
-fun Context.pxToSp(px: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
+fun Context.spToPx(sp: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
+fun Context.pxToSp(px: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
 
 fun Context.getIntRes(@IntegerRes intRes: Int) =
     resources.getInteger(intRes)
@@ -406,7 +419,7 @@ fun Context.toastShort(@StringRes messageRes: Int) {
 }
 
 fun Context.toastShort(@StringRes messageRes: Int, vararg messages: CharSequence) {
-    toastShort(String.format(getString(messageRes), *messages))
+    toastShort(String.format(getString(messageRes), messages))
 }
 
 fun Context.toastLong(message: CharSequence) {
@@ -418,7 +431,7 @@ fun Context.toastLong(@StringRes messageRes: Int) {
 }
 
 fun Context.toastLong(@StringRes messageRes: Int, vararg messages: CharSequence) {
-    toastLong(String.format(getString(messageRes), *messages))
+    toastLong(String.format(getString(messageRes), messages))
 }
 
 //endregion
@@ -438,65 +451,56 @@ fun Context.canBeResolved(intent: Intent) = intent.resolveActivity(packageManage
 //endregion
 //region Navigation
 
-fun Context.startActivityIfResolved(intent: Intent): Boolean {
-    return if (canBeResolved(intent)) {
-        startActivity(intent)
-        true
-    } else false
+fun Context.startActivityIfResolved(intent: Intent) = if (canBeResolved(intent)) {
+    startActivity(intent)
+    true
+} else {
+    e("Can not start activity because the intent can not be resolved")
+    false
 }
 
-inline fun <reified T : Activity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) {
-    startActivity(intent<T>(block))
-}
+inline fun <reified T : Activity> Context.startActivity(noinline block: (Intent.() -> Unit)? = null) =
+    startActivityIfResolved(intent<T>(block))
 
-fun Context.openAppDetailSettings() {
-    startActivity(Intent(
+fun Context.openAppDetailSettings() = startActivityIfResolved(
+    Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", packageName, null)
-    ))
-}
+    )
+)
 
-fun Context.openAdminSettings() {
-    startActivity(Intent().apply {
-        component = ComponentName(
-            "com.android.settings",
-            "com.android.settings.DeviceAdminSettings"
+fun Context.openAdminSettings() = startActivityIfResolved(Intent().apply {
+    component = ComponentName(
+        "com.android.settings",
+        "com.android.settings.DeviceAdminSettings"
+    )
+})
+
+fun Context.openUsageAccessSettings() =
+    startActivityIfResolved(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+
+fun Context.openWirelessSettings() = startActivityIfResolved(
+    Intent(Settings.ACTION_WIRELESS_SETTINGS)
+        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+)
+
+fun Context.openWriteSettings() = if (atLeastMarshmallow()) {
+    startActivityIfResolved(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+        .apply { data = Uri.parse("package:$`package`") })
+} else false
+
+fun Context.openHomeLauncher() = startActivityIfResolved(
+    Intent(Intent.ACTION_MAIN)
+        .addCategory(Intent.CATEGORY_HOME)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        .setPackage(
+            packageManager.queryIntentActivities(
+                Intent(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_HOME)
+                , PackageManager.MATCH_DEFAULT_ONLY
+            )[0].activityInfo.packageName
         )
-    })
-}
-
-fun Context.openUsageAccessSettings() {
-    startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-}
-
-fun Context.openWirelessSettings() {
-    startActivity(
-        Intent(Settings.ACTION_WIRELESS_SETTINGS)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    )
-}
-
-fun Context.openWriteSettings() {
-    if (atLeastMarshmallow()) {
-        startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-            .apply { data = Uri.parse("package:$`package`") })
-    }
-}
-
-fun Context.openHomeLauncher() {
-    startActivity(
-        Intent(Intent.ACTION_MAIN)
-            .addCategory(Intent.CATEGORY_HOME)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setPackage(
-                packageManager.queryIntentActivities(
-                    Intent(Intent.ACTION_MAIN)
-                        .addCategory(Intent.CATEGORY_HOME)
-                    , PackageManager.MATCH_DEFAULT_ONLY
-                )[0].activityInfo.packageName
-            )
-    )
-}
+)
 
 fun Context.share(text: String, subject: String? = null): Boolean {
     val intent = Intent().apply {
@@ -504,21 +508,16 @@ fun Context.share(text: String, subject: String? = null): Boolean {
         subject?.let { putExtra(Intent.EXTRA_SUBJECT, it) }
         putExtra(Intent.EXTRA_TEXT, text)
     }
-    return try {
-        startActivity(createChooser(intent, null))
-        true
-    } catch (e: ActivityNotFoundException) {
-        false
-    }
+    return startActivityIfResolved(createChooser(intent, null))
 }
 
-fun Context.openUrl(url: String, newTask: Boolean = false): Boolean =
+fun Context.openUrl(url: String, newTask: Boolean = false) =
     startActivityIfResolved(intent(Intent.ACTION_VIEW) {
         data = Uri.parse(url)
         if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     })
 
-fun Context.sendEmail(email: String, subject: String = "", text: String = ""): Boolean =
+fun Context.sendEmail(email: String, subject: String = "", text: String = "") =
     startActivityIfResolved(intent(Intent.ACTION_SENDTO) {
         data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -526,12 +525,13 @@ fun Context.sendEmail(email: String, subject: String = "", text: String = ""): B
         if (text.isNotBlank()) putExtra(Intent.EXTRA_TEXT, text)
     })
 
-fun Context.dial(number: String): Boolean =
-    startActivityIfResolved(Intent(
+fun Context.dial(number: String) = startActivityIfResolved(
+    Intent(
         Intent.ACTION_CALL, Uri.parse("tel:$number")
-    ))
+    )
+)
 
-fun Context.sendSms(number: String, text: String = ""): Boolean =
+fun Context.sendSms(number: String, text: String = "") =
     startActivityIfResolved(Intent(Intent.ACTION_VIEW, Uri.parse("smsto:$number"))
         .apply { putExtra("sms_body", text) })
 
@@ -552,10 +552,7 @@ inline fun <reified T : Service> Context.stopService() =
 //region Permission
 
 inline val Context.hasWriteSettingPermission
-    get() = when{
-        atLeastMarshmallow() -> Settings.System.canWrite(this)
-        else -> null
-    }
+    get() = if (atLeastMarshmallow()) Settings.System.canWrite(this) else null
 
 inline val Context.hasAppUsagePermission: Boolean
     get() {
@@ -591,18 +588,15 @@ fun Context.arePermissionsGranted(permissions: Array<out String>) =
 inline val Context.isConnected: Boolean?
     get() {
         if (atLeastQ()) d(
-                "This function is deprecated in Q, please use NetworkCallback" +
-                "\nSee: https://developer.android.com/reference/android/net/NetworkInfo.html"
+            "This function is deprecated in Q, please use NetworkCallback" +
+                    "\nSee: https://developer.android.com/reference/android/net/NetworkInfo.html"
         )
         @Suppress("DEPRECATION")
         return connectivityManager.activeNetworkInfo?.isConnectedOrConnecting
     }
 
 inline val Context.isMobileDataEnabled: Boolean?
-    get() = when {
-        atLeastOreo() -> telephonyManager.isDataEnabled
-        else -> null
-    }
+    get() = if (atLeastOreo()) telephonyManager.isDataEnabled else null
 
 inline val Context.isWifiEnabled
     get() = wifiManager.isWifiEnabled
@@ -737,8 +731,8 @@ fun Context.deleteLocalUris(uris: List<Uri>) {
 fun Context.deleteLocalUri(uri: Uri) {
     when {
         uri.isContent -> contentResolver.delete(uri, null, null)
-        uri.isFile    -> uri.path?.let { with(File(it)) { if (exists()) delete() } }
-        else          -> return
+        uri.isFile -> uri.path?.let { with(File(it)) { if (exists()) delete() } }
+        else -> return
     }
 }
 

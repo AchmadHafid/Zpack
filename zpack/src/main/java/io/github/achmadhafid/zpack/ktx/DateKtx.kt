@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.achmadhafid.zpack.ktx
 
 import android.text.format.DateUtils
@@ -10,7 +12,7 @@ inline val Date.isToday
 inline val Date.isYesterday
     get() = DateUtils.isToday(time + DateUtils.DAY_IN_MILLIS)
 
-inline val Date.isTommorrow
+inline val Date.isTomorrow
     get() = DateUtils.isToday(time - DateUtils.DAY_IN_MILLIS)
 
 inline val Date.formatCompact: String
