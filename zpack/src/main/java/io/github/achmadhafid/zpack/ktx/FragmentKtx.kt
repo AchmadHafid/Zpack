@@ -296,10 +296,14 @@ inline fun <reified T : ViewModel> Fragment.getViewModelWithActivityScope(factor
     }
 
 inline fun <reified T : ViewModel> Fragment.getViewModelWithParentScope() =
-    ViewModelProvider(requireParentFragment()).getViewModel<T>()
+    parentFragment?.let {
+        ViewModelProvider(it).getViewModel<T>()
+    }
 
 inline fun <reified T : ViewModel> Fragment.getViewModelWithParentScope(factory: ViewModelProvider.Factory) =
-    ViewModelProvider(requireParentFragment(), factory).getViewModel<T>()
+    parentFragment?.let {
+        ViewModelProvider(it, factory).getViewModel<T>()
+    }
 
 //endregion
 //region Theme
