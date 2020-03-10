@@ -12,10 +12,3 @@ fun Window.adjustKeyboard(isVisible: Boolean = false) {
 
     setSoftInputMode(state or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 }
-
-fun Window.fullScreen() {
-    setFlags(
-        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-    )
-}

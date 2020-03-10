@@ -13,8 +13,8 @@ buildscript {
 
 plugins {
     id "com.github.dcendents.android-maven" version "2.1"
-    id "com.github.ben-manes.versions" version "0.27.0"
-    id "io.gitlab.arturbosch.detekt" version "1.3.0"
+    id "com.github.ben-manes.versions" version "0.28.0"
+    id "io.gitlab.arturbosch.detekt" version "1.7.0-beta1"
 }
 
 allprojects {
@@ -35,10 +35,15 @@ subprojects {
 }
 
 detekt {
-    toolVersion = versions.detekt
-    input       = files("$projectDir")
-    config      = files("$project.rootDir/detekt-config.yml")
-//    filters     = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    parallel    = true
+    failFast = false
+    input  = files("$projectDir")
+    config = files("$projectDir/detekt.yml")
+    reports {
+        xml.enabled = true
+        txt.enabled = true
+    }
 }
 
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    jvmTarget = "1.8"
+}

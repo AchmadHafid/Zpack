@@ -107,6 +107,7 @@ fun View.onSingleClick(autoReEnable: Boolean = true, callback: () -> Unit) = set
 //endregion
 //region Snack Bar
 
+@Suppress("LongParameterList")
 private fun View.snackBar(
     length: Int,
     message: CharSequence,

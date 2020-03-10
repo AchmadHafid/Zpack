@@ -35,23 +35,10 @@ val String.toCamelCase: String
     }
 
 val String.toTitleCase: String
-    get() {
-        if (isEmpty()) return ""
-
-        var titleCaseString = ""
-        split(" ").forEach {
-            titleCaseString = if (it.isEmpty()) {
-                "$titleCaseString "
-            } else {
-                titleCaseString + (
-                        it.substring(0, 1).toUpperCase(Locale.getDefault()) +
-                                it.substring(1).toLowerCase(Locale.getDefault()) +
-                                " "
-                        )
-            }
-        }
-        return titleCaseString
-    }
+    get() = split(" ").joinToString(" ") {
+        if (it.isEmpty()) " " else it.substring(0, 1).toUpperCase(Locale.getDefault()) +
+                it.substring(1).toLowerCase(Locale.getDefault())
+    }.replace("  ", " ")
 
 //endregion
 //region Content
