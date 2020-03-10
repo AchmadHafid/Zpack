@@ -232,7 +232,7 @@ fun View.addNavigationBarPadding() {
         paddingLeft,
         paddingTop,
         paddingRight,
-        paddingBottom + resources.navBarHeightX
+        paddingBottom + resources.navigationBarHeight
     )
 }
 
