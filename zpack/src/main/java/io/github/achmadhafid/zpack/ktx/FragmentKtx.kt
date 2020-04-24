@@ -46,19 +46,19 @@ inline val Fragment.act
 @MainThread
 fun Fragment.stringRes(@StringRes stringRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getString(stringRes)
+        resources.getText(stringRes)
     }
 
 @MainThread
 fun Fragment.stringArrayRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(arrayRes)
+        resources.getTextArray(arrayRes)
     }
 
 @MainThread
 fun Fragment.stringListRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(arrayRes)
+        resources.getTextArray(arrayRes)
             .toList()
     }
 
@@ -249,7 +249,7 @@ fun Fragment.addBackPressedListener(callback: OnBackPressedCallback.() -> Unit) 
     act?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, true, callback)
 
 fun Fragment.finishActivityOnDoubleBackPressed(
-    message: String,
+    message: CharSequence,
     handler: Handler,
     delayMilis: Long
 ): OnBackPressedCallback? = if (isStartDestination) {
@@ -265,7 +265,7 @@ fun Fragment.finishActivityOnDoubleBackPressed(
     @StringRes messageRes: Int,
     handler: Handler,
     delayMilis: Long
-) = finishActivityOnDoubleBackPressed(getString(messageRes), handler, delayMilis)
+) = finishActivityOnDoubleBackPressed(getText(messageRes), handler, delayMilis)
 
 fun Fragment.finishActivityOnBackPressed() =
     act?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) { activity?.finish() }

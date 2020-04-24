@@ -314,19 +314,19 @@ fun Context.copyRawUriToClipboard(label: CharSequence, uri: Uri) {
 @MainThread
 fun Context.stringRes(@StringRes stringRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getString(stringRes)
+        resources.getText(stringRes)
     }
 
 @MainThread
 fun Context.stringArrayRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(arrayRes)
+        resources.getTextArray(arrayRes)
     }
 
 @MainThread
 fun Context.stringListRes(@ArrayRes arrayRes: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getStringArray(arrayRes)
+        resources.getTextArray(arrayRes)
             .toList()
     }
 

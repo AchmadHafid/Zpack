@@ -19,7 +19,7 @@ fun TextView.setTextAppearanceRes(@StyleRes styleRes: Int) {
 }
 
 fun TextView.setTextRes(@StringRes textRes: Int) {
-    text = resources.getString(textRes)
+    text = resources.getText(textRes)
 }
 
 fun TextView.clear() {

@@ -18,7 +18,7 @@ import io.github.achmadhafid.zpack.R
 
 //region Binding
 
-inline fun <reified V: View> View.f(@IdRes id: Int): V =
+inline fun <reified V : View> View.f(@IdRes id: Int): V =
     findViewById(id)
 
 //endregion
@@ -33,42 +33,42 @@ inline val View.isInvisible
 inline val View.isGone
     get() = visibility == View.GONE
 
-fun View.show() : View {
+fun View.show(): View {
     if (visibility != View.VISIBLE) {
         visibility = View.VISIBLE
     }
     return this
 }
 
-inline fun View.showIf(condition: () -> Boolean) : View {
+inline fun View.showIf(condition: () -> Boolean): View {
     if (visibility != View.VISIBLE && condition()) {
         visibility = View.VISIBLE
     }
     return this
 }
 
-fun View.hide() : View {
+fun View.hide(): View {
     if (visibility != View.INVISIBLE) {
         visibility = View.INVISIBLE
     }
     return this
 }
 
-inline fun View.hideIf(condition: () -> Boolean) : View {
+inline fun View.hideIf(condition: () -> Boolean): View {
     if (visibility != View.INVISIBLE && condition()) {
         visibility = View.INVISIBLE
     }
     return this
 }
 
-fun View.gone() : View {
+fun View.gone(): View {
     if (visibility != View.GONE) {
         visibility = View.GONE
     }
     return this
 }
 
-inline fun View.goneIf(condition: () -> Boolean) : View {
+inline fun View.goneIf(condition: () -> Boolean): View {
     if (visibility != View.GONE && condition()) {
         visibility = View.GONE
     }
@@ -142,8 +142,8 @@ fun View.snackBarShort(
     @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
     onClick: (() -> Unit)? = null
 ) = snackBarShort(
-    context.getString(messageRes), anchorView,
-    actionTextRes?.let { context.getString(it) },
+    resources.getText(messageRes), anchorView,
+    actionTextRes?.let { resources.getText(it) },
     actionTextColorRes, onClick
 )
 
@@ -162,8 +162,8 @@ fun View.snackBarLong(
     @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
     onClick: (() -> Unit)? = null
 ) = snackBarLong(
-    context.getString(messageRes), anchorView,
-    actionTextRes?.let { context.getString(it) },
+    resources.getText(messageRes), anchorView,
+    actionTextRes?.let { resources.getText(it) },
     actionTextColorRes, onClick
 )
 
@@ -173,7 +173,14 @@ fun View.snackBarForever(
     actionText: CharSequence? = null,
     @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
     onClick: (() -> Unit)? = null
-) = snackBar(Snackbar.LENGTH_INDEFINITE, message, anchorView, actionText, actionTextColorRes, onClick)
+) = snackBar(
+    Snackbar.LENGTH_INDEFINITE,
+    message,
+    anchorView,
+    actionText,
+    actionTextColorRes,
+    onClick
+)
 
 fun View.snackBarForever(
     @StringRes messageRes: Int,
@@ -182,8 +189,8 @@ fun View.snackBarForever(
     @ColorRes @AttrRes actionTextColorRes: Int = R.attr.colorPrimary,
     onClick: (() -> Unit)? = null
 ) = snackBarForever(
-    context.getString(messageRes), anchorView,
-    actionTextRes?.let { context.getString(it) },
+    resources.getText(messageRes), anchorView,
+    actionTextRes?.let { resources.getText(it) },
     actionTextColorRes, onClick
 )
 
@@ -263,7 +270,7 @@ fun View.makeRoundedCornerOnTop(@DimenRes radiusRes: Int) {
 //endregion
 //region Properties
 
-inline fun <reified T: View> T.disableIf(function: () -> Boolean) {
+inline fun <reified T : View> T.disableIf(function: () -> Boolean) {
     isEnabled = isEnabled && !function()
 }
 
