@@ -506,7 +506,7 @@ Forgot to reset a value to null at 'onDestroy' ? Use this handy delegate!
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-	private var myObj: SomeHeavyObject? by lifecycleValue {
+    private var myObj: SomeHeavyObject? by lifecycleValue {
     	d("MyInt is destroyed")
         /**
          * this callback will be called at 'onDestroy'
