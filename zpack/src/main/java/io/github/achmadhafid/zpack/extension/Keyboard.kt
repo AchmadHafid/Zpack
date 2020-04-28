@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package io.github.achmadhafid.zpack.ktx
+package io.github.achmadhafid.zpack.extension
 
 import android.view.Window
 import android.view.WindowManager

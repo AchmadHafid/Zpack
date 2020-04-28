@@ -6,7 +6,7 @@ Zpack
 
 **Assalamu'alaikum brothers and sisters, peace be upon you!**
 
-In this small library, I try to compile many kotlin snippet code (mostly extension functions) regularly use in my project.
+In this small library, I try to compile many kotlin code snippet (mostly extension functions) regularly use in my project.
 You can directly look into its source code to find some code that you may need or just add this lib into your build.
 
 
@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.8.5'
+  implementation 'com.github.AchmadHafid:Zpack:0.9.0'
   ...
 }
 ```
@@ -45,145 +45,122 @@ dependencies {
 Quick Usage
 -----------
 
-<details>
-  <summary>Top Level (Global) Extensions</summary>
-  <br />
 
 <details>
-  <summary>Logging</summary>
+  <summary>Android Version</summary>
 
 ```kotlin
-class MyClass {
+//Version checking
 
-    fun logAll(message: String) {
-        d(message) // debug log
-        e(message) // error log
-        i(message) // info log
-        w(message) // warning log
-        v(message) // verbose log
-    }
+fun belowLollipopMR1()
+fun belowMarshmallow()
+fun belowNougat()
+fun belowNougatMR1()
+fun belowOreo()
+fun belowOreoMR1()
+fun belowPie()
+fun belowQ()
 
-}
+fun atLeastLollipopMR1()
+fun atLeastMarshmallow()
+fun atLeastNougat()
+fun atLeastNougatMR1()
+fun atLeastOreo()
+fun atLeastOreoMR1()
+fun atLeastPie()
+fun atLeastQ()
 ```
 
 </details>
 <details>
-  <summary>SDK Version</summary>
+  <summary>App</summary>
 
 ```kotlin
-class MyClass {
+// Inquiry apps info that available on the device
 
-    fun checkVersion() {
-        if (belowLollipopMR1()) TODO()
-        if (belowMarshmallow()) TODO()
-        if (belowNougat()) TODO()
-        if (belowNougatMR1()) TODO()
-        if (belowOreo()) TODO()
-        if (belowOreoMR1()) TODO()
-        if (belowPie()) TODO()
+val Context.appName
+val Context.appIcon
+val Context.foregroundApp
+val Context.installedApps
+val Context.installedAppsWithLaunchIntent
+val Context.installedAppsWithLaunchActivity
+val Context.installedLauncherApp
 
-        if (atLeastLollipopMR1()) TODO()
-        if (atLeastMarshmallow()) TODO()
-        if (atLeastNougat()) TODO()
-        if (atLeastNougatMR1()) TODO()
-        if (atLeastOreo()) TODO()
-        if (atLeastOreoMR1()) TODO()
-        if (atLeastPie()) TODO()
-    }
-
-}
+fun Context.getAppName()
+fun Context.getAppIcon()
 ```
 
 </details>
 <details>
-  <summary>Theme</summary>
+  <summary>Clipboard</summary>
 
 ```kotlin
-class MyClass {
-
-    // This will restart current foreground activity
-    fun applyApplicationLevelTheme() {
-        // use AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM on Pie and above
-        // else use AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-        defaultTheme()
-
-        lightTheme()
-        darkTheme()
-    }
-
-}
-```
-
-</details>
-
-</details>
-<details>
-  <summary>Context (e.g. AppCompatActivity & Service) Extensions</summary>
-  <br />
-
-<details>
-  <summary>System Services</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val allSystemServices = listOf(
-            accessibilityManager, accountManager, activityManager, appOpsManager,
-            usageStatsManager, notificationManager, powerManager, keyGuardManager,
-            telephonyManager, layoutInflater, connectivityManager, wifiManager
-            // and many more.....
-        )
-    }
-}
+fun Context.copyPlainTextToClipboard()
+fun Context.copyHtmlTextToClipboard()
+fun Context.copyRawUriToClipboard()
 ```
 
 </details>
 <details>
-  <summary>Lazy Resource Binding</summary>
+  <summary>Collection</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+// Null checking
 
-    private val myString         by stringRes(R.string.my_string)
-    private val myNullableString by stringResNullable(R.string.my_string)
-    private val myStringArray    by stringArrayRes(R.array.my_string_array)
-    private val myStringList     by stringListRes(R.array.my_string_array)
-    private val myInt            by intRes(R.integer.my_int)
-    private val myIntArray       by intArrayRes(R.array.my_int_array)
-    private val myIntList        by intListRes(R.array.my_int_array)
-    private val myLong           by longRes(R.integer.my_long)
-    private val myLongArray      by longArrayRes(R.array.my_long_array)
-    private val myLongList       by longListRes(R.array.my_long_array)
-    private val myDimen          by dimenRes(R.dimen.my_dimen)
-    private val myColor          by colorRes(R.color.my_color)
+val Collection.areAllNull
+val Collection.areAllNotNull
 
-}
+fun areAllNull()
+fun areAllNotNull()
+
+// Collection operation
+
+fun MutableList.addIfNotExist()
+
+// Transformer
+
+fun Map<K, List<V>>.asMutable(): MutableMap<K, MutableList<V>>
+fun Map<K, Set<V>>.asMutable(): MutableMap<K, MutableSet<V>>
 ```
 
 </details>
 <details>
-  <summary>Toast</summary>
+  <summary>Connection</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+val Context.isConnected
+val Context.isMobileDataEnabled
+val Context.isWifiEnabled
+```
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+</details>
+<details>
+  <summary>Date</summary>
 
-        /**
-         * Simpler way to show a toast
-         */
-        toastShort("Message")
-        toastShort(R.string.message)
-        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
-        toastLong("Message")
-        toastLong(R.string.message)
-        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
-    }
-}
+```kotlin
+val Date.isToday
+val Date.isYesterday
+val Date.formatCompact
+val Date.formatShort
+val Date.formatMedium
+val Date.formatLong
+
+fun String.toDate()
+```
+
+</details>
+<details>
+  <summary>Device</summary>
+
+```kotlin
+val Context.hasSoftNavigationKeys
+val Context.isScreenOn
+val Context.isDeviceLocked
+val Context.displayWidth
+val Context.displayHeight
+val Context.statusBarHeight
+val Context.navigationBarHeight
+val FragmentActivity.actionBarHeight
 ```
 
 </details>
@@ -191,28 +168,72 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Intent</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+fun Context.intent()
+fun Intent.canBeResolved()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+// Common Screen
 
-        // Build your intent this way
-        val intent = intent<Component>()
+fun Context.startActivityIfResolved()
+fun Context.openAppDetailSettings()
+fun Context.openAdminSettings()
+fun Context.openUsageAccessSettings()
+fun Context.openWirelessSettings()
+fun Context.openWriteSettings()
 
-        // or if you want to do some setup on the intent
-        val intent = intent<Component> {
-            // setup the intent here
-        }
+// Common Action
 
-        // Build your intent for action this way
-        val intent = intent(action)
+fun Context.openHomeLauncher()
+fun Context.share()
+fun Context.openUrl()
+fun Context.sendEmail()
+fun Context.dial()
+fun Context.sendSms()
 
-        // or if you want to do some setup on the intent
-        val intent = intent(action) {
-            // setup the intent here
-        }
-    }
-}
+// Service
+
+fun Context.stopService()
+fun Context.startService()
+fun Context.startForegroundServiceCompat()
+fun AppCompatActivity.startForegroundServiceCompat()
+```
+
+</details>
+<details>
+  <summary>Keyboard</summary>
+
+```kotlin
+fun Window.adjustKeyboard()
+```
+
+</details>
+<details>
+  <summary>Lifecycle</summary>
+
+```kotlin
+val FragmentActivity.lifecycleState
+val Fragment.lifecycleState
+val Fragment.viewLifecycleState
+```
+
+</details>
+<details>
+  <summary>LiveData</summary>
+
+```kotlin
+fun MutableLiveData.setValueIfNew()
+fun MutableLiveData.notifyObserver()
+```
+
+</details>
+<details>
+  <summary>Log</summary>
+
+```kotlin
+fun d()
+fun e()
+fun i()
+fun v()
+fun w()
 ```
 
 </details>
@@ -220,227 +241,92 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Navigation</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Start activity if the intent can be resolved
-        val isSuccess = startActivityIfResolved(intent)
-
-        // Same with default startActivity
-        startActivity<OtherActivity>()
-        // or
-        startActivity<OtherActivity> {
-            // setup the intent here
-        }
-
-        // This will open OtherActivity than call finish
-        goto<OtherActivity>()
-        // or
-        goto<OtherActivity> {
-            // setup the intent here
-        }
-
-        // Navigate to setting screens
-        openAdminSettings()
-        openAppDetailSettings()
-        openUsageAccessSettings()
-        openWirelessSettings()
-        openWriteSettings()
-
-        // Go to home
-        openHomeLauncher()
-
-        // Do something specific
-        openUrl("https://github.com/")
-        share("Something I want to share with you")
-        sendEmail("recepient@google.com", "This is subject", "This is content")
-        dial("+6281234567890")
-        sendSms("+6281234567890", "This is content")
-    }
-}
+val Fragment.isStartDestination
+fun Fragment.finish() // popup fragment from navigation stack
 ```
 
 </details>
 <details>
-  <summary>Service</summary>
+  <summary>Permission</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+val IntArray.arePermissionsGranted
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+fun Context.arePermissionsGranted()
+fun Context.isPermissionGranted()
 
-        // Same with default service
-        startService<MyService>()
-        // or
-        startService<MyService> {
-            // setup your intent here
-        }
+val Context.hasWriteSettingPermission
+val Context.hasAppUsagePermission
 
-        // Start a foreground service
-        startForegroundServiceCompat<MyForegroundService>()
-        // or
-        startForegroundServiceCompat<MyForegroundService> {
-            // setup your intent here
-        }
-    }
-}
+fun AppCompatActivity.requestPermissionCompat()
+fun AppCompatActivity.shouldShowRequestPermissionRationales()
+fun Fragment.shouldShowRequestPermissionRationales()
 ```
 
 </details>
 <details>
-  <summary>Permission Checker</summary>
+  <summary>Resource</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+fun Context.stringRes()
+fun Context.stringArrayRes()
+fun Context.stringListRes()
+fun Context.intRes()
+fun Context.intArrayRes()
+fun Context.intListRes()
+fun Context.dimenRes()
+fun Context.colorRes()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+fun Fragment.stringRes()
+fun Fragment.stringArrayRes()
+fun Fragment.stringListRes()
+fun Fragment.intRes()
+fun Fragment.intArrayRes()
+fun Fragment.intListRes()
+fun Fragment.dimenRes()
+fun Fragment.colorRes()
 
-        // Check permission already granted, more to come
-        val permissions = listOf(
-            hasWriteSettingPermission,
-            hasAppUsagePermission
-        )
+fun Context.getColorCompat()
+fun Context.resolveColor()
 
-        // fallback function that can be used to check permissions
-        val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
-    }
-}
+fun Context.dpToPx()
+fun Context.pxToDp()
+fun Context.spToPx()
+fun Context.pxToSp()
 ```
 
 </details>
 <details>
-  <summary>Internet Connection States</summary>
+  <summary>Snackbar</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Check some connection states
-        val connections = listOf(
-            isConnected,
-            isMobileDataEnabled,
-            isWifiEnabled
-        )
-    }
-}
+fun View.snackBarShort()
+fun View.snackBarLong()
+fun View.snackBarForever()
 ```
 
 </details>
 <details>
-  <summary>Device States & Properties</summary>
+  <summary>String</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+val String.toCamelCase
+val String.toTitleCase
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Device states
-        val someDeviceProperties = listOf(
-            isScreenOn,
-            isDeviceLocked
-        )
-
-        // Device properties
-        val someDeviceProperties = listOf(
-            displayWidth,
-            displayHeight
-        )
-    }
-}
+val String?.blankIfNull
+val String?.nullIfBlank
 ```
 
 </details>
 <details>
-  <summary>Application Info</summary>
+  <summary>System Service</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+// All System Service
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // current foreground app (usually used in foreground service)
-        val packageName = foregroundApp
-
-        // list of installed apps in this device
-        val packageNameList = installedApps
-
-        // list of installed apps in this device that can be launched from home only
-        val packageNameList = installedAppsWithLaunchIntent
-
-        // application name
-        val appName = getAppName(packageName)
-
-        // launcher icon
-        val iconDrawable = getAppIcon(packageName)
-    }
-}
-```
-
-</details>
-
-</details>
-<details>
-  <summary>AppCompatActivity Extensions </summary>
-  <br />
-
-<details>
-  <summary>Lazy Resource Binding</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    // bind a view
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
-}
-```
-
-</details>
-<details>
-  <summary>Navigation</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // This will open OtherActivity than call finish
-        goto<OtherActivity>()
-        // or
-        goto<OtherActivity> {
-            // setup the intent here
-        }
-
-        // Finish this activity only if user double click the back button
-        val onBackPressedCallback = finishActivityOnDoubleBackPressed(
-            message    = "My Exit Message" // or R.string.some_messsage // first backpress message
-            handler    = handler,          // Android handler to do postDelayed
-            delayMilis = 1000L             // time to wait for the second back press
-        )
-    }
-}
-```
-
-</details>
-<details>
-  <summary>ViewModel</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    // bind a view model lazily
-    private val viewModel: MainActivityViewModel by bindViewModel()
-
-}
+val Context.accessibilityManager
+...
+val Context.windowManager
 ```
 
 </details>
@@ -448,420 +334,218 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
   <summary>Theme</summary>
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+fun applyTheme()
+fun lightTheme()
+fun darkTheme()
+fun defaultTheme()
+fun AppCompatActivity.toggleTheme()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+val Context.isDarkThemeEnabled
+```
 
-        // check whether dark theme currently applied
-        val x = isDarkThemeEnabled
+</details>
+<details>
+  <summary>Toast</summary>
 
-        /**
-         * if currently not dark (default or light), will switch to dark theme
-         * if currently dark, switch to light theme
-         * Notes:
-         * - This is application level theme setting
-         * - will restart current activity
-         */
-        val currentTheme = toggleTheme()
-    }
-}
+```kotlin
+fun Context.toastShort
+fun Context.toastLong
+fun Fragment.toastShort
+fun Fragment.toastLong
+```
+
+</details>
+<details>
+  <summary>Uri</summary>
+
+```kotlin
+val Uri.isContent
+val Uri.isFile
+val Uri.isContentOrFile
+val Uri.isHttp
+val Uri.isHttps
+val Uri.isUrl
+
+fun Context.deleteLocalUri()
+fun Context.deleteLocalUris()
+```
+
+</details>
+<details>
+  <summary>View Model</summary>
+
+```kotlin
+fun ViewModelProvider.getViewModel()
+fun FragmentActivity.getViewModel()
+fun Fragment.getViewModel()
+fun Fragment.getViewModelWithActivityScope()
+fun Fragment.getViewModelWithParentScope()
 ```
 
 </details>
 <details>
   <summary>View</summary>
+    <br/>
+    <details>
+  	<summary>Bottom Sheet Dialog</summary>
+
+  ```kotlin
+  fun BottomSheetDialog.setExpanded()
+  ```
+
+  </details>
+  <details>
+  	<summary>Constraint Layout</summary>
+
+  ```kotlin
+  fun View.clearConstraint()
+  var View.constraintMarginStart
+  var View.constraintMarginEnd
+  ```
+
+  </details>
+  <details>
+  	<summary>Edit Text</summary>
+
+  ```kotlin
+  var EditText.value
+  fun EditText.setText()
+  fun EditText.onInput()
+  fun EditText.showPasswordInputType()
+  fun EditText.hidePasswordInputType()
+  fun EditText.togglePasswordVisibility()
+
+  const val INPUT_TYPE_VISIBLE_PASSWORD
+  const val INPUT_TYPE_HIDDEN_PASSWORD
+  ```
+
+  </details>
+  <details>
+  	<summary>Image View</summary>
+
+  ```kotlin
+  fun ImageView.setImageTintList()
+  ```
+
+  </details>
+  <details>
+	<summary>Text View</summary>
+
+  ```kotlin
+  fun TextView.setFontRes()
+  fun TextView.setTextAppearanceRes()
+  fun TextView.setTextRes()
+  fun TextView.clear()
+  fun TextView.underLine()
+  fun TextView.deleteLine()
+  fun TextView.bold()
+  ```
+
+  </details>
+  <details>
+  	<summary>View</summary>
+
+  ```kotlin
+  fun View.f(id) // shortcut for findViewById(id)
+  fun ViewGroup.inflate()
+
+  // Visibility
+
+  val View.isVisible
+  fun View.show()
+  fun List<View>.show()
+  fun View.showIf()
+  fun List<View>.showIf()
+
+  val View.isInvisible
+  fun View.invisible()
+  fun List<View>.invisible()
+  fun View.invisibleIf()
+  fun List<View>.invisibleIf
+
+  val View.isGone
+  fun View.gone()
+  fun List<View>.gone()
+  fun View.goneIf()
+  fun List<View>.goneIf()
+
+  fun View.visibleOrInvisible()
+  fun List<View>.visibleOrInvisible()
+  fun View.visibleOrGone()
+  fun List<View>.visibleOrGone()
+
+  // Availability
+
+  val List<View>.areAllEnabled
+  val List<View>.areAllDisabled
+  fun List<View>.enabled()
+
+  // Resource
+
+  fun View.setPaddingRes()
+  fun View.setBackgroundColorRes()
+
+  // Shape
+
+  fun View.makeRoundedCornerOnTop()
+
+  // Listener
+
+  fun View.onSingleClick()
+  ```
+
+  </details>
+</details>
+
+Bonus!
+-----------
+<details>
+  <summary>Lifecycle Value</summary>
+Forgot to reset a value to null at 'onDestroy' ? Use this handy delegate!
 
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // shortcut function, because many times we do nothing with toolbar
-        setToolbar(R.id.toolbar)
-        // or if you use MaterialToolbar from MaterialComponents
-        setMaterialToolbar(R.id.toolbar)
-    }
-}
-```
-
-</details>
-
-</details>
-<details>
-  <summary>Fragment Extensions </summary>
-  <br />
-
-<details>
-  <summary>Toast</summary>
-
-```kotlin
-class MainFragment : Fragment() {
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+	private var myObj: SomeHeavyObject? by lifecycleValue {
+    	d("MyInt is destroyed")
         /**
-         * Simpler way to show a toast
+         * this callback will be called at 'onDestroy'
+         * after this callback returned, 'myInt' will be set to null
          */
-        toastShort("Message")
-        toastShort(R.string.message)
-        toastShort(R.string.format, message1, message2, ..., messageN)  // use String.format()
-        toastLong("Message")
-        toastLong(R.string.message)
-        toastLong(R.string.format, message1, message2, ..., messageN)  // use String.format()
     }
-}
-```
 
-</details>
-<details>
-  <summary>Permission Checker</summary>
-
-```kotlin
-class MainFragment : Fragment() {
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // Check permission already granted, more to come
-        val permissions = listOf(
-            hasWriteSettingPermission,
-            hasAppUsagePermission
-        )
-
-        // fallback function that can be used to check permissions
-        val canReadContacts = isGranted(Manifest.permission.READ_CONTACTS)
+    fun onCreate(savedInstanceState: Bundle?) {
+    	super.onCreate(savedInstanceState)
+        myObj = SomeHeavyObject() // use value as usual
     }
-}
-```
-
-</details>
-<details>
-  <summary>Intent</summary>
-
-```kotlin
-class MainFragment : Fragment() {
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // Build your intent this way
-        val intent = intent<Component>()
-
-        // or if you want to do some setup on the intent
-        val intent = intent<Component> {
-            // setup the intent here
-        }
-
-        // Build your intent for action this way
-        val intent = intent(action)
-
-        // or if you want to do some setup on the intent
-        val intent = intent(action) {
-            // setup the intent here
-        }
-    }
-}
-```
-
-</details>
-<details>
-  <summary>Navigation</summary>
-
-```kotlin
-class MainFragment : Fragment() {
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // Same with startActivity on Activity
-        startActivity<OtherActivity>()
-        // or
-        startActivity<OtherActivity> {
-            // setup the intent here
-        }
-
-        // This will open OtherActivity than call finish on holder activity (if any)
-        goto<OtherActivity>()
-        // or
-        goto<OtherActivity> {
-            // setup the intent here
-        }
-
-        // JetPack navigation
-        // Check whether this fragment is a start destination
-        val x = isStartDestination
-
-        // JetPack navigation
-        // Finish holder activity only if user double click the back button
-        // Can only be used if this fragment is defined as a start destination
-        val onBackPressedCallback = finishActivityOnDoubleBackPressed(
-            message    = "My Exit Message" // or R.string.some_message // first back press message
-            handler    = handler,          // Android handler to do postDelayed
-            delayMilis = 1000L             // time to wait for the second back press
-        )
-
-        // Finish holder activity when user press the back button
-        // Useful when using JetPack navigation, when we want to override its back press default behavior
-        val onBackPressedCallback = finishActivityOnBackPressed()
-    }
-}
-```
-
-</details>
-<details>
-  <summary>ViewModel</summary>
-
-```kotlin
-class MainFragment : Fragment() {
-
-    // bind a view model lazily
-    private val viewModel: MainFragmentViewModel by bindViewModel()
 
 }
 ```
 
 </details>
 <details>
-  <summary>Theme</summary>
+	<summary>Ignorable Observer</summary>
+Usually we atttach a livedata observer at 'OnCreate' lifecycle event. This is a standard way to make sure that we only attach an observer once. But what if you want to attach a livedata observer dynamically? maybe after some event like 'onClick'? Use this handy extension!
 
 ```kotlin
-class MainFragment : Fragment() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // check whether dark theme currently applied
-        val x = isDarkThemeEnabled
-
+    fun thisFunctionMaybeCalledMultipleTimes() {
         /**
-         * if currently not dark (default or light), will switch to dark theme
-         * if currently dark, switch to light theme
-         * Notes:
-         * - This is application level theme setting
-         * - will restart current activity
+         * below observe function will be ignored if already called before
+         * by doing this, we prevent a multiple observer with the same lifecycle owner to be attached to the same livedata
          */
-        val currentTheme = toggleTheme()
+        myViewModel.myLiveData.observeOrIgnore() {
+            // callback
+        }
     }
+
 }
 ```
 
 </details>
 
-</details>
-<details>
-  <summary>View Extensions</summary>
-  <br />
-
-<details>
-  <summary>Visibility</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val myView: ViewType by bindView(R.id.my_view)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        val visibilityStates = listOf(
-            myView.isVisible,
-            myView.isInvisible,
-            myView.isGone
-        )
-
-        // change visibility state
-        myView.show() // set visibility = View.VISIBLE
-        myView.hide() // set visibility = View.INVISIBLE
-        myView.gone() // set visibility = View.GONE
-
-        // same as above but takes function as arguments
-        myView.showIf { true }
-        myView.hideIf { false }
-        myView.goneIf { true }
-
-        // self explanatory
-        myView.visibleOrInvisible { true }
-        myView.visibleOrGone { false }
-    }
-}
-```
-
-</details>
-<details>
-  <summary>Listener</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val myView: ViewType by bindView(R.id.my_view)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Make sure that this view can only be clicked once before fire a callback
-        myView.onSingleClick { TODO() }
-
-        // If you wish to re-enable click listener manually, specify a flag for it
-        myView.onSingleClick(autoReEnable = false) { TODO() }
-        // Then you MUST re-enable click listener manually later by using:
-        // myView.isClickable = true
-    }
-}
-```
-
-</details>
-<details>
-  <summary>Snack Bar</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val myView: ViewType by bindView(R.id.my_view)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // basic snackbar
-        myView.snackBarShort("message")
-
-        // fully customized snack bar with action
-        myView.snackBarShort(
-            message = "My message", // or: messageRes = R.string.my_message
-            anchorView = anAnchorView, // default is null
-            actionText = "Undo", // or: actionTextRes = R.string.action_text
-            actionTextColorRes = R.color.colorAccent // can also be attribute value, e.g. R.attr.colorOnPrimary
-        ) { TODO("Do something when action button is clicked") }
-
-        // also available for other length types
-        myView.snackBarLong()     // Arguments are the same with above
-        myView.snackBarForever()  // Arguments are the same with above
-    }
-}
-```
-
-</details>
-<details>
-  <summary>TextView</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val tv: TextView by bindView(R.id.tv)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // set TextView's text from string resource
-        tv.textRes = R.string.text
-
-        // self explanatory
-        tv.underline()
-        tv.deleteLine()
-        tv.bold()
-    }
-}
-```
-
-</details>
-<details>
-  <summary>EditText</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val edt: EditText by bindView(R.id.edt)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // no more edt.text.toString()
-        val text = edt.value
-    }
-}
-```
-
-</details>
-<details>
-  <summary>AppBarLayout</summary>
-
-```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
-    private val appBarLayout: AppBarLayout by bindView(R.id.appBarLayout)
-    private val scrollView: NestedScrollView by bindView(R.id.scrollView)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Set appBarLayout selected property to true when scrollView scrolled down
-        // and to false when it can not scroll up anymore
-        // Commonly used to set/unset elevation on AppBarLayout based on list position inside scrollView
-        appBarLayout.setSelectedOnScrollDown(scrollView)
-    }
-}
-```
-
-</details>
-<details>
-  <summary>Util</summary>
-
-  **WIP, please see source code**
-
-</details>
-
-</details>
-<details>
-  <summary>LiveData Extensions</summary>
-  <br />
-
-```kotlin
-class MainFragmentViewModel : ViewModel() {
-
-    private val _myLiveData: MutableLiveData<List<String>> = MutableLiveData()
-    private val myLiveData: LiveData<List<String>> = _myLiveData
-
-    private fun notifyObserver() {
-        // In quite a rare case, you may to call the observer callback manually without change live data value
-        _myLiveData.notifyObserver()
-    }
-}
-```
-
-</details>
-<details>
-  <summary>String Extensions</summary>
-  <br />
-
-<details>
-  <summary>Date</summary>
-
-```kotlin
-// get Date instance from a string
-// default format is "yyyy/MM/dd hh:mm"
-fun getSomeImportantDate() = "2000/01/01 00:00".toDate()
-
-// You can specify a custom format
-fun getSomeImportantDate(someDateFormat: String) = "2000/01/01 00:00".toDate(someDateFormat)
-```
-
-</details>
-<details>
-  <summary>Case</summary>
-
-```kotlin
-val thisIsTheResult = "ThIs iS tHe ResULt".toCamelCase
-val ThisIsTheResult = "ThIs iS tHe ResULt".toTitleCase
-```
-
-</details>
-
-</details>
-
-**Stay tuned, There will be more to come!<br/>Anyway may this library ease your Android development task**
+<br/>**Stay tuned, There will be more to come!**<br/>
 
 
 License

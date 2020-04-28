@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package io.github.achmadhafid.zpack.ktx
+package io.github.achmadhafid.zpack.extension.view
 
 import android.graphics.Paint
 import android.widget.TextView

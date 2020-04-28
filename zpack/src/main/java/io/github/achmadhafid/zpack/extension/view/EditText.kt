@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package io.github.achmadhafid.zpack.ktx
+package io.github.achmadhafid.zpack.extension.view
 
 import android.text.InputType
 import android.widget.EditText
@@ -12,12 +10,12 @@ var EditText.value: String
         setText(value)
     }
 
-fun EditText.setTextAndMoveCursor(text: CharSequence) {
+fun EditText.setText(text: CharSequence, moveCursorToLast: Boolean = false) {
     setText(text)
-    setSelection(text.length)
+    if (moveCursorToLast) setSelection(text.length)
 }
 
-fun EditText.onUserInput(
+fun EditText.onInput(
     char: Char,
     shouldTrim: Boolean = true,
     function: (String) -> Unit
@@ -31,14 +29,14 @@ fun EditText.onUserInput(
     }
 }
 
-//region Input Type
-
 fun EditText.showPasswordInputType() {
-    inputType = INPUT_TYPE_VISIBLE_PASSWORD
+    inputType =
+        INPUT_TYPE_VISIBLE_PASSWORD
 }
 
 fun EditText.hidePasswordInputType() {
-    inputType = INPUT_TYPE_HIDDEN_PASSWORD
+    inputType =
+        INPUT_TYPE_HIDDEN_PASSWORD
 }
 
 fun EditText.togglePasswordVisibility() {
@@ -53,6 +51,3 @@ const val INPUT_TYPE_VISIBLE_PASSWORD =
 
 const val INPUT_TYPE_HIDDEN_PASSWORD =
     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-
-//endregion
-

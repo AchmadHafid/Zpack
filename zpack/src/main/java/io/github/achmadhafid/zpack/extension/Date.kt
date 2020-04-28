@@ -1,10 +1,10 @@
-@file:Suppress("unused")
-
-package io.github.achmadhafid.zpack.ktx
+package io.github.achmadhafid.zpack.extension
 
 import android.text.format.DateUtils
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 inline val Date.isToday
     get() = DateUtils.isToday(time)
@@ -35,3 +35,7 @@ inline val Date.formatLong: String
     get() = DateFormat
         .getDateInstance(DateFormat.LONG)
         .format(this)
+
+fun String.toDate(format: String, locale: Locale = Locale.getDefault()): Date? = runCatching {
+    SimpleDateFormat(format, locale).parse(this)
+}.getOrNull()

@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package io.github.achmadhafid.zpack.ktx
+package io.github.achmadhafid.zpack.extension.view
 
 import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetBehavior
