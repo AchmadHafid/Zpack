@@ -2,7 +2,6 @@ package io.github.achmadhafid.zpack.extension
 
 import android.content.Context
 import android.util.DisplayMetrics
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
 inline val Context.hasSoftNavigationKeys: Boolean
@@ -32,23 +31,27 @@ inline val Context.displayWidth: Int
 inline val Context.displayHeight: Int
     get() = resources.displayMetrics.heightPixels
 
-inline val Context.statusBarHeight: Int
-    get() = resources.getIdentifier(
-        "status_bar_height",
-        "dimen",
-        "android"
-    ).runCatching {
-        resources.getDimensionPixelSize(this)
-    }.getOrDefault(0)
+inline val Context.statusBarHeight
+    get() = runCatching {
+        resources.getIdentifier(
+            "status_bar_height",
+            "dimen",
+            "android"
+        ).run {
+            resources.getDimensionPixelSize(this)
+        }
+    }.getOrNull()
 
-inline val Context.navigationBarHeight: Int
-    get() = resources.getIdentifier(
-        "navigation_bar_height",
-        "dimen",
-        "android"
-    ).runCatching {
-        resources.getDimensionPixelSize(this)
-    }.getOrDefault(0)
+inline val Context.navigationBarHeight
+    get() = runCatching {
+        resources.getIdentifier(
+            "navigation_bar_height",
+            "dimen",
+            "android"
+        ).run {
+            resources.getDimensionPixelSize(this)
+        }
+    }.getOrNull()
 
 inline val FragmentActivity.actionBarHeight: Int
     @Suppress("MagicNumber")
