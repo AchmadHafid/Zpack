@@ -27,97 +27,62 @@ inline fun <reified T> ViewGroup.inflate(@IdRes id: Int, attachToRoot: Boolean =
 //endregion
 //region Visibility
 
-inline val View.isVisible get() = visibility == View.VISIBLE
-
-fun View.show() = run {
-    if (visibility != View.VISIBLE) {
-        visibility = View.VISIBLE
-    }
-    this
-}
-
-fun List<View>.show() = run {
-    forEach { it.show() }
-    this
-}
-
-inline fun View.showIf(condition: () -> Boolean) = run {
-    if (condition()) show()
-    this
-}
-
-inline fun List<View>.showIf(condition: () -> Boolean) = run {
-    val isShow = condition()
-    forEach { if (isShow) it.show() }
-    this
-}
-
+inline val View.isVisible get()   = visibility == View.VISIBLE
 inline val View.isInvisible get() = visibility == View.INVISIBLE
+inline val View.isGone get()      = visibility == View.GONE
 
-fun View.invisible() = run {
-    if (visibility != View.INVISIBLE) {
-        visibility = View.INVISIBLE
-    }
-    this
+fun View.visible()   = apply {
+    if (!isVisible) visibility = View.VISIBLE
+}
+fun View.invisible() = apply {
+    if (!isInvisible) visibility = View.INVISIBLE
+}
+fun View.gone()      = apply {
+    if (!isGone) visibility = View.GONE
 }
 
-fun List<View>.invisible() = run {
+fun List<View>.visible()   = apply {
+    forEach { it.visible() }
+}
+fun List<View>.invisible() = apply {
     forEach { it.invisible() }
-    this
+}
+fun List<View>.gone()      = apply {
+    forEach { it.gone() }
 }
 
-inline fun View.invisibleIf(condition: () -> Boolean) = run {
+inline fun View.visibleIf(condition: () -> Boolean)   = apply {
+    if (condition()) visible()
+}
+inline fun View.invisibleIf(condition: () -> Boolean) = apply {
     if (condition()) invisible()
-    this
 }
-
-inline fun List<View>.invisibleIf(condition: () -> Boolean) = run {
-    val isHide = condition()
-    forEach { if (isHide) it.invisible() }
-    this
-}
-
-inline val View.isGone get() = visibility == View.GONE
-
-fun View.gone() = run {
-    if (visibility != View.GONE) {
-        visibility = View.GONE
-    }
-    this
-}
-
-fun List<View>.gone() = run {
-    forEach { it.invisible() }
-    this
-}
-
-inline fun View.goneIf(condition: () -> Boolean) = run {
+inline fun View.goneIf(condition: () -> Boolean)      = apply {
     if (condition()) gone()
-    this
 }
 
-inline fun List<View>.goneIf(condition: () -> Boolean) = run {
-    val isGone = condition()
-    forEach { if (isGone) it.gone() }
-    this
+inline fun List<View>.visibleIf(condition: () -> Boolean)   = apply {
+    if (condition()) visible()
+}
+inline fun List<View>.invisibleIf(condition: () -> Boolean) = apply {
+    if (condition()) invisible()
+}
+inline fun List<View>.goneIf(condition: () -> Boolean)      = apply {
+    if (condition()) gone()
 }
 
-fun View.visibleOrInvisible(visibleIf: () -> Boolean) {
-    if (visibleIf()) show() else invisible()
+fun View.visibleOrInvisible(visibleIf: () -> Boolean) = apply {
+    if (visibleIf()) visible() else invisible()
+}
+fun View.visibleOrGone(visibleIf: () -> Boolean)      = apply {
+    if (visibleIf()) visible() else gone()
 }
 
-fun List<View>.visibleOrInvisible(visibleIf: () -> Boolean) {
-    val isVisible = visibleIf()
-    forEach { if (isVisible) it.show() else it.invisible() }
+fun List<View>.visibleOrInvisible(visibleIf: () -> Boolean) = apply {
+    if (visibleIf()) visible() else invisible()
 }
-
-fun View.visibleOrGone(visibleIf: () -> Boolean) {
-    if (visibleIf()) show() else gone()
-}
-
-fun List<View>.visibleOrGone(visibleIf: () -> Boolean) {
-    val isVisible = visibleIf()
-    forEach { if (isVisible) it.show() else it.gone() }
+fun List<View>.visibleOrGone(visibleIf: () -> Boolean)      = apply {
+    if (visibleIf()) visible() else gone()
 }
 
 //endregion
