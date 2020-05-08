@@ -2,6 +2,8 @@ package io.github.achmadhafid.zpack.extension
 
 import android.view.Window
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 
 fun Window.adjustKeyboard(isVisible: Boolean = false) {
     val state =
@@ -10,3 +12,9 @@ fun Window.adjustKeyboard(isVisible: Boolean = false) {
 
     setSoftInputMode(state or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 }
+
+fun Fragment.dismissKeyboard() =
+    context?.inputMethodManager?.hideSoftInputFromWindow(view?.rootView?.windowToken, 0)
+
+fun AppCompatActivity.dismissKeyboard() =
+    inputMethodManager.hideSoftInputFromWindow(window?.decorView?.windowToken, 0)

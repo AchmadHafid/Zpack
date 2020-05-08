@@ -62,6 +62,7 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.CaptioningManager
+import android.view.inputmethod.InputMethodManager
 import android.view.textclassifier.TextClassificationManager
 import android.view.textservice.TextServicesManager
 import androidx.core.app.NotificationManagerCompat
@@ -110,6 +111,8 @@ inline val Context.dropBoxManager
     get() = getSystemService(Context.DROPBOX_SERVICE) as DropBoxManager
 inline val Context.inputManager
     get() = getSystemService(Context.INPUT_SERVICE) as InputManager
+inline val Context.inputMethodManager
+    get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 inline val Context.jobScheduler
     get() = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 inline val Context.keyGuardManager
