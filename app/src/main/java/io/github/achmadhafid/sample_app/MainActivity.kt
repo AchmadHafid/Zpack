@@ -3,12 +3,12 @@ package io.github.achmadhafid.sample_app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
-import io.github.achmadhafid.zpack.delegate.lifecycleValue
+import io.github.achmadhafid.zpack.delegate.lifecycleVar
 import io.github.achmadhafid.zpack.extension.d
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private var myInt: Int? by lifecycleValue {
+    private var myInt: Int? by lifecycleVar {
         d("MyInt is destroyed")
     }
 
