@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.9.3'
+  implementation 'com.github.AchmadHafid:Zpack:0.9.4'
   ...
 }
 ```
@@ -504,9 +504,9 @@ Bonus!
 Forgot to reset a value to null at 'onDestroy' ? Use this handy delegate!
 
 ```kotlin
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main) { // can also be used inside Fragment or LifecycleService
 
-    private var myObj: SomeHeavyObject? by lifecycleValue {
+    private var myObj: SomeHeavyObject? by lifecycleVar { // or viewLifecycleVar for Fragment's view lifecycle binding
     	d("MyInt is destroyed")
         /**
          * this callback will be called at 'onDestroy'
