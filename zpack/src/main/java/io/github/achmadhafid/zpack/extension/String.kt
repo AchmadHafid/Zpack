@@ -31,4 +31,6 @@ inline val String.toTitleCase: String
 inline val String?.blankIfNull get() = this ?: ""
 inline val String?.nullIfBlank get() = if (this == "") null else this
 
+fun String?.orEmpty(placeholder: String) = if (this?.isNotEmpty() == true) this else placeholder
+
 //endregion
