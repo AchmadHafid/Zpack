@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:0.9.4'
+  implementation 'com.github.AchmadHafid:Zpack:0.9.5'
   ...
 }
 ```
@@ -238,9 +238,18 @@ fun w()
 
 </details>
 <details>
+  <summary>Metadata</summary>
+
+```kotlin
+val Context.metaData
+```
+
+</details>
+<details>
   <summary>Navigation</summary>
 
 ```kotlin
+val Fragment.appCompatActivity
 val Fragment.isStartDestination
 fun Fragment.finish() // popup fragment from navigation stack
 ```
@@ -315,6 +324,7 @@ val String.toTitleCase
 
 val String?.blankIfNull
 val String?.nullIfBlank
+fun String?.orEmpty()
 ```
 
 </details>
@@ -525,7 +535,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) { // can also be 
 </details>
 <details>
 	<summary>Ignorable Observer</summary>
-Usually we atttach a livedata observer at 'OnCreate' lifecycle event. This is a standard way to make sure that we only attach an observer once. But what if you want to attach a livedata observer dynamically? maybe after some event like 'onClick'? Use this handy extension!
+Usually we attach a livedata observer at 'OnCreate' lifecycle event. This is a standard way to make sure that we only attach an observer once. But what if you want to attach a livedata observer dynamically? maybe after some event like 'onClick'? Use this handy extension!
 
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
