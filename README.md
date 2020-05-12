@@ -212,7 +212,9 @@ fun Window.adjustKeyboard()
 ```kotlin
 val FragmentActivity.lifecycleState
 val Fragment.lifecycleState
+val Fragment.viewLifecycle
 val Fragment.viewLifecycleState
+val Fragment.viewLifecycleScope
 ```
 
 </details>
