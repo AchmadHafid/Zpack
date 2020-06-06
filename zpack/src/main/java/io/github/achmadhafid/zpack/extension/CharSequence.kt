@@ -4,7 +4,7 @@ import java.util.Locale
 
 //region Case
 
-inline val String.toCamelCase: String
+inline val CharSequence.toCamelCase: CharSequence
     get() {
         if (isEmpty()) return ""
 
@@ -19,7 +19,7 @@ inline val String.toCamelCase: String
         return camelCaseString
     }
 
-inline val String.toTitleCase: String
+inline val CharSequence.toTitleCase: CharSequence
     get() = split(" ").joinToString(" ") {
         if (it.isEmpty()) " " else it.substring(0, 1).toUpperCase(Locale.getDefault()) +
                 it.substring(1).toLowerCase(Locale.getDefault())
@@ -28,9 +28,10 @@ inline val String.toTitleCase: String
 //endregion
 //region Content
 
-inline val String?.blankIfNull get() = this ?: ""
-inline val String?.nullIfBlank get() = if (this == "") null else this
+infix fun CharSequence?.whenNullOrEmpty(placeholder: CharSequence) =
+    if (this?.isNotEmpty() == true) this else placeholder
 
-fun String?.orEmpty(placeholder: String) = if (this?.isNotEmpty() == true) this else placeholder
+infix fun CharSequence?.whenNullOrBlank(placeholder: CharSequence) =
+    if (this?.isNotBlank() == true) this else placeholder
 
 //endregion

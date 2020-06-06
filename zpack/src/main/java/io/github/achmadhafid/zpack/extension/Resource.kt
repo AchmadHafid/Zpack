@@ -13,110 +13,188 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 //region Context
+//region CharSequence
 
 @MainThread
-fun Context.stringRes(@StringRes stringRes: Int) =
+fun Context.charSequenceRes(@StringRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getText(stringRes)
+        resources.getText(resourceId)
     }
 
 @MainThread
-fun Context.stringArrayRes(@ArrayRes arrayRes: Int) =
+fun Context.charSequenceArrayRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getTextArray(arrayRes)
+        resources.getTextArray(resourceId)
     }
 
 @MainThread
-fun Context.stringListRes(@ArrayRes arrayRes: Int) =
+fun Context.charSequenceListRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getTextArray(arrayRes)
+        resources.getTextArray(resourceId)
             .toList()
-    }
-
-@MainThread
-fun Context.intRes(@IntegerRes intRes: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        resources.getInteger(intRes)
-    }
-
-@MainThread
-fun Context.intArrayRes(@ArrayRes arrayRes: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(arrayRes)
-    }
-
-@MainThread
-fun Context.intListRes(@ArrayRes arrayRes: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(arrayRes)
-            .toList()
-    }
-
-@MainThread
-fun Context.dimenRes(@DimenRes dimenRes: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        resources.getDimensionPixelSize(dimenRes)
-    }
-
-@MainThread
-fun Context.colorRes(@ColorRes colorRes: Int) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        getColorCompat(colorRes)
     }
 
 //endregion
+//region String
+
+@MainThread
+fun Context.stringRes(@StringRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getString(resourceId)
+    }
+
+@MainThread
+fun Context.stringRes(@StringRes resourceId: Int, vararg formatArgs: Any) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getString(resourceId, formatArgs)
+    }
+
+@MainThread
+fun Context.stringArrayRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getStringArray(resourceId)
+    }
+
+@MainThread
+fun Context.stringListRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getStringArray(resourceId)
+            .toList()
+    }
+
+//endregion
+//region Int
+
+@MainThread
+fun Context.intRes(@IntegerRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getInteger(resourceId)
+    }
+
+@MainThread
+fun Context.intArrayRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId)
+    }
+
+@MainThread
+fun Context.intListRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId)
+            .toList()
+    }
+
+//endregion
+//region Dimension
+
+@MainThread
+fun Context.dimenRes(@DimenRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimensionPixelSize(resourceId)
+    }
+
+//endregion
+//region Color
+
+@MainThread
+fun Context.colorRes(@ColorRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resolveColor(resourceId)
+    }
+
+//endregion
+//endregion
 //region Fragment
+//region CharSequence
 
 @MainThread
-fun Fragment.stringRes(@StringRes stringRes: Int) =
+fun Fragment.charSequenceRes(@StringRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getText(stringRes)
+        resources.getText(resourceId)
     }
 
 @MainThread
-fun Fragment.stringArrayRes(@ArrayRes arrayRes: Int) =
+fun Fragment.charSequenceArrayRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getTextArray(arrayRes)
+        resources.getTextArray(resourceId)
     }
 
 @MainThread
-fun Fragment.stringListRes(@ArrayRes arrayRes: Int) =
+fun Fragment.charSequenceListRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getTextArray(arrayRes)
+        resources.getTextArray(resourceId)
             .toList()
     }
 
+//endregion
+//region String
+
 @MainThread
-fun Fragment.intRes(@IntegerRes intRes: Int) =
+fun Fragment.stringRes(@StringRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getInteger(intRes)
+        resources.getString(resourceId)
     }
 
 @MainThread
-fun Fragment.intArrayRes(@ArrayRes arrayRes: Int) =
+fun Fragment.stringRes(@StringRes resourceId: Int, vararg formatArgs: Any) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(arrayRes)
+        resources.getString(resourceId, formatArgs)
     }
 
 @MainThread
-fun Fragment.intListRes(@ArrayRes arrayRes: Int) =
+fun Fragment.stringArrayRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getIntArray(arrayRes)
+        resources.getStringArray(resourceId)
+    }
+
+@MainThread
+fun Fragment.stringListRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getStringArray(resourceId)
             .toList()
     }
 
+//endregion
+//region Int
+
 @MainThread
-fun Fragment.dimenRes(@DimenRes dimenRes: Int) =
+fun Fragment.intRes(@IntegerRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        resources.getDimensionPixelSize(dimenRes)
+        resources.getInteger(resourceId)
     }
 
 @MainThread
-fun Fragment.colorRes(@ColorRes colorRes: Int) =
+fun Fragment.intArrayRes(@ArrayRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
-        requireContext().getColorCompat(colorRes)
+        resources.getIntArray(resourceId)
     }
 
+@MainThread
+fun Fragment.intListRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId)
+            .toList()
+    }
+
+//endregion
+//region Dimension
+
+@MainThread
+fun Fragment.dimenRes(@DimenRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimensionPixelSize(resourceId)
+    }
+
+//endregion
+//region Color
+
+@MainThread
+fun Fragment.colorRes(@ColorRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        requireContext().resolveColor(resourceId)
+    }
+
+//endregion
 //endregion
 
 fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)

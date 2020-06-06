@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 //region Binding
 
-inline fun <reified V : View> View.f(@IdRes id: Int): V = findViewById(id)
+inline infix fun <reified V : View> View.f(@IdRes id: Int): V = findViewById(id)
 
 //endregion
 //region Inflater

@@ -13,6 +13,6 @@ inline val Fragment.isStartDestination
 
 fun Fragment.finish() {
     runCatching {
-        findNavController().popBackStack()
+        findNavController().navigateUp()
     }
 }
