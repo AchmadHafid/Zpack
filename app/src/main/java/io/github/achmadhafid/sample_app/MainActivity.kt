@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(findViewById<MaterialToolbar>(R.id.toolbar))
+        @Suppress("MagicNumber")
         myInt = 5
     }
 
