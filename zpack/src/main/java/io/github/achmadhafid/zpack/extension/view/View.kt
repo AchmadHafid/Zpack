@@ -12,6 +12,7 @@ import androidx.annotation.IdRes
 import androidx.core.view.setPadding
 import io.github.achmadhafid.zpack.extension.resolveColor
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 //region Binding
@@ -132,21 +133,20 @@ fun View.makeRoundedCornerOnTop(@DimenRes radiusRes: Int) {
 //endregion
 //region Listener
 
-fun View.onSingleClick(autoReEnable: Boolean = true, callback: () -> Unit) = setOnClickListener {
+fun View.onSingleClick(callback: () -> Unit) = setOnClickListener {
     isClickable = false
     callback()
-    isClickable = autoReEnable
 }
 
 fun View.onSingleClick(
     coroutineScope: CoroutineScope,
-    autoReEnable: Boolean = true,
+    debounce: Long,
     callback: suspend () -> Unit
 ) = setOnClickListener {
     coroutineScope.launch {
-        isClickable = false
         callback()
-        isClickable = autoReEnable
+        delay(debounce)
+        isClickable = true
     }
 }
 
