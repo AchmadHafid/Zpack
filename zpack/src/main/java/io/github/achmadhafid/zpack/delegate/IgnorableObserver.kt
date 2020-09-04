@@ -6,8 +6,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.observe
 
 @PublishedApi
 internal object IgnorableObserver {
@@ -54,6 +54,6 @@ inline fun <T> LiveData<T>.observeOrIgnore(
             Log.d("IgnorableObserver", "new observer attached: $it")
         })
 
-        observe(owner, onChanged)
+        observe(owner, Observer { onChanged(it) })
     }
 }

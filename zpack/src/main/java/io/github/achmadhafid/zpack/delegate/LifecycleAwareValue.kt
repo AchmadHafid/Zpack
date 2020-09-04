@@ -5,7 +5,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.observe
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -49,7 +48,7 @@ class FragmentViewLifecycleAwareVariable<T>(
 
     init {
         _value = defaultValue
-        fragment.viewLifecycleOwnerLiveData.observe(fragment) {
+        fragment.viewLifecycleOwnerLiveData.observe(fragment, {
             if (!isObserverAttached) {
                 it?.lifecycle?.let { lifecycle ->
                     isObserverAttached = true
@@ -65,7 +64,7 @@ class FragmentViewLifecycleAwareVariable<T>(
                     })
                 }
             }
-        }
+        })
     }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T? = _value
