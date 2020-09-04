@@ -19,24 +19,20 @@ fun EditText.onInput(
     char: Char,
     shouldTrim: Boolean = true,
     function: (String) -> Unit
-) {
-    doAfterTextChanged {
-        it?.toString()?.let { input ->
-            if (input.isNotEmpty() && input.last() == char) {
-                function(if (shouldTrim) input.trim() else input)
-            }
+) = doAfterTextChanged {
+    it?.toString()?.let { input ->
+        if (input.isNotEmpty() && input.last() == char) {
+            function(if (shouldTrim) input.trim() else input)
         }
     }
 }
 
 fun EditText.showPasswordInputType() {
-    inputType =
-        INPUT_TYPE_VISIBLE_PASSWORD
+    inputType = INPUT_TYPE_VISIBLE_PASSWORD
 }
 
 fun EditText.hidePasswordInputType() {
-    inputType =
-        INPUT_TYPE_HIDDEN_PASSWORD
+    inputType = INPUT_TYPE_HIDDEN_PASSWORD
 }
 
 fun EditText.togglePasswordVisibility() {
