@@ -20,3 +20,11 @@ fun <K, V> Map<K, List<V>>.asMutable(): MutableMap<K, MutableList<V>> =
 @JvmName("mutableMapSet")
 fun <K, V> Map<K, Set<V>>.asMutable(): MutableMap<K, MutableSet<V>> =
     entries.associateBy({ it.key }, { it.value.toMutableSet() }).toMutableMap()
+
+infix fun <T> Collection<T>.multiplyBy(n: Int): Collection<T> {
+    val newList = mutableListOf<T>()
+    repeat(n) {
+        newList.addAll(this)
+    }
+    return newList
+}
