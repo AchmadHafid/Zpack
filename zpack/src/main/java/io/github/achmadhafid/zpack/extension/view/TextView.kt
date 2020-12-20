@@ -36,16 +36,16 @@ infix fun TextView.withTextAppearanceRes(@StyleRes styleRes: Int) {
     TextViewCompat.setTextAppearance(this, styleRes)
 }
 
+@Deprecated(
+    "Will be removed in the next release", ReplaceWith(
+        "withTextRes",
+        "io.github.achmadhafid.zpack.extension.view"
+    )
+)
 fun TextView.setTextRes(@StringRes textRes: Int) {
     text = resources.getText(textRes)
 }
 
-@Deprecated(
-    "Will be removed in the next release", ReplaceWith(
-        "setTextRes",
-        "io.github.achmadhafid.zpack.extension.view"
-    )
-)
 infix fun TextView.withTextRes(@StringRes textRes: Int) {
     text = resources.getText(textRes)
 }
