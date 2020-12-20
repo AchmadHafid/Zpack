@@ -7,7 +7,18 @@ import androidx.annotation.ColorRes
 import androidx.core.widget.ImageViewCompat
 import io.github.achmadhafid.zpack.extension.resolveColor
 
+@Deprecated(
+    "Will be removed in the next release", ReplaceWith(
+        "setTextRes",
+        "io.github.achmadhafid.zpack.extension.view"
+    )
+)
 fun ImageView.setImageTintList(@ColorRes @AttrRes tintRes: Int) {
+    val tintList = ColorStateList.valueOf(context.resolveColor(tintRes))
+    ImageViewCompat.setImageTintList(this, tintList)
+}
+
+infix fun ImageView.withTintRes(@ColorRes @AttrRes tintRes: Int) {
     val tintList = ColorStateList.valueOf(context.resolveColor(tintRes))
     ImageViewCompat.setImageTintList(this, tintList)
 }

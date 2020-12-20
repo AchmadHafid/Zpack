@@ -6,6 +6,7 @@ import androidx.annotation.ArrayRes
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
@@ -103,6 +104,15 @@ fun Context.colorRes(@ColorRes resourceId: Int) =
     }
 
 //endregion
+//region region
+
+@MainThread
+fun Context.drawableRes(@DrawableRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        ContextCompat.getDrawable(this@drawableRes, resourceId)
+    }
+
+//endregion
 //endregion
 //region Fragment
 //region CharSequence
@@ -195,6 +205,15 @@ fun Fragment.colorRes(@ColorRes resourceId: Int) =
     }
 
 //endregion
+//region region
+
+@MainThread
+fun Fragment.drawableRes(@DrawableRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        ContextCompat.getDrawable(requireContext(), resourceId)
+    }
+
+//endregion
 //endregion
 
 fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
@@ -212,5 +231,5 @@ private fun Context.applyDimension(unit: Int, number: Number) =
 
 fun Context.dpToPx(dp: Number) = applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp)
 fun Context.pxToDp(px: Number) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
-fun Context.spToPx(sp: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
-fun Context.pxToSp(px: Int)    = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
+fun Context.spToPx(sp: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
+fun Context.pxToSp(px: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
