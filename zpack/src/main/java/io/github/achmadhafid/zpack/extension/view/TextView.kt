@@ -50,6 +50,14 @@ infix fun TextView.withTextRes(@StringRes textRes: Int) {
     text = resources.getText(textRes)
 }
 
+infix fun TextView.withNewText(newText: CharSequence) {
+    if (text != newText) text = newText
+}
+
+infix fun TextView.withNewText(newText: String) {
+    if (text != newText) text = newText
+}
+
 fun TextView.clear() {
     text = ""
 }

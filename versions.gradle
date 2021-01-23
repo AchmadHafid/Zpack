@@ -1,8 +1,8 @@
 ext.versions = [
         //region Release
 
-        code              : 50,
-        name              : "1.2.7",
+        code              : 51,
+        name              : "1.2.8",
 
         //endregion
         //region SDK
@@ -14,22 +14,22 @@ ext.versions = [
         //endregion
         //region Plugin
 
-        agp               : '4.1.1',
+        agp               : '4.1.2',
         kotlin            : '1.4.21',
 
         //endregion
         //region Core Dependencies
 
         stdlib            : '1.3.41',
-        material          : '1.3.0-beta01',
+        material          : '1.3.0-rc01',
 
         //endregion
         //region JetPack Dependencies
 
         activity          : '1.2.0-rc01',
-        appcompat         : '1.3.0-alpha02',
+        appcompat         : '1.3.0-beta01',
         constraintlayout  : '2.1.0-alpha2',
-        core              : '1.5.0-alpha05',
+        core              : '1.5.0-beta01',
         fragment          : '1.3.0-rc01',
         lifecycle         : '2.3.0-rc01',
         navigation        : '2.3.2',

@@ -1,8 +1,17 @@
 package io.github.achmadhafid.zpack.extension
 
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+
+fun AppCompatActivity.navControllerWithFragmentContainer(@IdRes id: Int): Lazy<NavController> =
+    lazy(LazyThreadSafetyMode.NONE) {
+        (supportFragmentManager.findFragmentById(id) as NavHostFragment).navController
+    }
 
 inline val Fragment.appCompatActivity get() = activity as? AppCompatActivity
 
@@ -11,8 +20,24 @@ inline val Fragment.isStartDestination
         graph.startDestination == currentDestination?.id
     }
 
-fun Fragment.finish() {
-    runCatching {
-        findNavController().navigateUp()
+fun Fragment.navigateIfNotCurrent(@IdRes destinationId: Int, action: () -> NavDirections) {
+    with(findNavController()) {
+        if (currentDestination?.id != destinationId) {
+            navigate(action())
+        }
     }
+}
+
+fun Fragment.navigateUp() {
+    findNavController().navigateUp()
+}
+
+fun Fragment.finish(onNoBackStack: () -> Unit = { finishActivity() }) {
+    if (findNavController().popBackStack().not()) {
+        onNoBackStack()
+    }
+}
+
+fun Fragment.finishActivity() {
+    activity?.finish()
 }
