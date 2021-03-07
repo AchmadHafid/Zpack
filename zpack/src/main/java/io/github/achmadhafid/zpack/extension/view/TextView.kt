@@ -8,42 +8,12 @@ import androidx.annotation.StyleRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.TextViewCompat
 
-@Deprecated(
-    "Will be removed in the next release", ReplaceWith(
-        "withFontRes",
-        "io.github.achmadhafid.zpack.extension.view"
-    )
-)
-fun TextView.setFontRes(@FontRes fontRes: Int) {
-    typeface = ResourcesCompat.getFont(context, fontRes)
-}
-
 infix fun TextView.withFontRes(@FontRes fontRes: Int) {
     typeface = ResourcesCompat.getFont(context, fontRes)
 }
 
-@Deprecated(
-    "Will be removed in the next release", ReplaceWith(
-        "withTextAppearanceRes",
-        "io.github.achmadhafid.zpack.extension.view"
-    )
-)
-fun TextView.setTextAppearanceRes(@StyleRes styleRes: Int) {
-    TextViewCompat.setTextAppearance(this, styleRes)
-}
-
 infix fun TextView.withTextAppearanceRes(@StyleRes styleRes: Int) {
     TextViewCompat.setTextAppearance(this, styleRes)
-}
-
-@Deprecated(
-    "Will be removed in the next release", ReplaceWith(
-        "withTextRes",
-        "io.github.achmadhafid.zpack.extension.view"
-    )
-)
-fun TextView.setTextRes(@StringRes textRes: Int) {
-    text = resources.getText(textRes)
 }
 
 infix fun TextView.withTextRes(@StringRes textRes: Int) {

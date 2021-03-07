@@ -10,3 +10,10 @@ fun ViewPager2.showPrevious(onUnavailable: () -> Unit = {}) {
     if (currentItem == 0) onUnavailable()
     else currentItem -= 1
 }
+
+fun ViewPager2.showNext(onUnavailable: () -> Unit = {}) {
+    adapter?.itemCount?.let {
+        if (currentItem < it - 1) currentItem += 1
+        else onUnavailable()
+    } ?: onUnavailable()
+}
