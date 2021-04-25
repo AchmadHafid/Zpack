@@ -28,13 +28,30 @@ fun Fragment.navigateIfNotCurrent(@IdRes destinationId: Int, action: () -> NavDi
     }
 }
 
-fun Fragment.navigateUp() {
+fun Fragment.navigateUp() =
     findNavController().navigateUp()
+
+fun Fragment.navigateUpOrFinishActivity() {
+    if (navigateUp().not())
+        finishActivity()
 }
 
+@Deprecated(
+    "Use extension function below as a replacement",
+    ReplaceWith("popBackStackOrFinishActivity()")
+)
 fun Fragment.finish(onNoBackStack: () -> Unit = { finishActivity() }) {
     if (findNavController().popBackStack().not()) {
         onNoBackStack()
+    }
+}
+
+fun Fragment.popBackStack() =
+    findNavController().popBackStack()
+
+fun Fragment.popBackStackOrFinishActivity() {
+    if (popBackStack().not()) {
+        finishActivity()
     }
 }
 

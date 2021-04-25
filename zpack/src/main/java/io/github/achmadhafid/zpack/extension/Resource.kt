@@ -205,7 +205,7 @@ fun Fragment.colorRes(@ColorRes resourceId: Int) =
     }
 
 //endregion
-//region region
+//region Drawable
 
 @MainThread
 fun Fragment.drawableRes(@DrawableRes resourceId: Int) =
@@ -216,15 +216,23 @@ fun Fragment.drawableRes(@DrawableRes resourceId: Int) =
 //endregion
 //endregion
 
-fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+infix fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
 
-fun Context.resolveColor(@ColorRes @AttrRes id: Int) = with(TypedValue()) {
+infix fun Context.resolveColor(@ColorRes @AttrRes id: Int) = with(TypedValue()) {
     when {
         theme.resolveAttribute(id, this, true) -> data
         atLeastMarshmallow() -> getColor(id)
         else -> getColorCompat(id)
     }
 }
+
+infix fun Context.resolveAttrColor(@AttrRes id: Int) =
+    obtainStyledAttributes(intArrayOf(id)).let { type ->
+        type.getColorStateList(type.getIndex(0)).also {
+            type.recycle()
+        }
+    }
+
 
 private fun Context.applyDimension(unit: Int, number: Number) =
     TypedValue.applyDimension(unit, number.toFloat(), resources.displayMetrics)
