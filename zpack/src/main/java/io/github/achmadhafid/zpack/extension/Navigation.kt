@@ -1,5 +1,6 @@
 package io.github.achmadhafid.zpack.extension
 
+import android.content.Intent
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,7 +18,7 @@ inline val Fragment.appCompatActivity get() = activity as? AppCompatActivity
 
 inline val Fragment.isStartDestination
     get() = with(findNavController()) {
-        graph.startDestination == currentDestination?.id
+        graph.startDestinationId == currentDestination?.id
     }
 
 fun Fragment.navigateIfNotCurrent(@IdRes destinationId: Int, action: () -> NavDirections) {
@@ -58,3 +59,37 @@ fun Fragment.popBackStackOrFinishActivity() {
 fun Fragment.finishActivity() {
     activity?.finish()
 }
+
+fun AppCompatActivity.startActivity(
+    path: String,
+    finnishCurrent: Boolean = false,
+    intentBuilder: Intent.() -> Intent = { this }
+) = startActivity(createIntent(path).intentBuilder(), finnishCurrent)
+
+fun Fragment.startActivity(
+    path: String,
+    finnishCurrent: Boolean = false,
+    intentBuilder: Intent.() -> Intent = { this }
+) = startActivity(createIntent(path).intentBuilder(), finnishCurrent)
+
+private fun AppCompatActivity.startActivity(intent: Intent, finnishCurrent: Boolean) =
+    intent.canBeResolved(this).also { isResolved ->
+        if (isResolved) {
+            startActivity(intent)
+            if (finnishCurrent) finish()
+        }
+    }
+
+private fun Fragment.startActivity(intent: Intent, finnishCurrent: Boolean) =
+    intent.canBeResolved(requireContext()).also { isResolved ->
+        if (isResolved) {
+            startActivity(intent)
+            if (finnishCurrent) activity?.finish()
+        }
+    }
+
+private fun AppCompatActivity.createIntent(path: String) =
+    Intent(this, Class.forName(path))
+
+private fun Fragment.createIntent(path: String) =
+    Intent(requireContext(), Class.forName(path))

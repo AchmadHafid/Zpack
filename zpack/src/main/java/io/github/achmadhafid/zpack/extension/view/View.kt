@@ -28,76 +28,104 @@ inline fun <reified T> ViewGroup.inflate(@IdRes id: Int, attachToRoot: Boolean =
 //endregion
 //region Visibility
 
-inline val View.isVisible get()   = visibility == View.VISIBLE
+inline val View.isVisible get() = visibility == View.VISIBLE
 inline val View.isInvisible get() = visibility == View.INVISIBLE
-inline val View.isGone get()      = visibility == View.GONE
+inline val View.isGone get() = visibility == View.GONE
 
-fun View.visible()   = apply {
+fun View.visible() = apply {
     if (!isVisible) visibility = View.VISIBLE
 }
+
 fun View.invisible() = apply {
     if (!isInvisible) visibility = View.INVISIBLE
 }
-fun View.gone()      = apply {
+
+fun View.gone() = apply {
     if (!isGone) visibility = View.GONE
 }
 
-fun List<View>.visible()   = apply {
+fun Collection<View>.visible() = apply {
     forEach { it.visible() }
 }
-fun List<View>.invisible() = apply {
+
+fun Collection<View>.invisible() = apply {
     forEach { it.invisible() }
 }
-fun List<View>.gone()      = apply {
+
+fun Collection<View>.gone() = apply {
     forEach { it.gone() }
 }
 
-inline fun View.visibleIf(condition: () -> Boolean)   = apply {
+inline fun View.visibleIf(condition: () -> Boolean) = apply {
     if (condition()) visible()
 }
+
 inline fun View.invisibleIf(condition: () -> Boolean) = apply {
     if (condition()) invisible()
 }
-inline fun View.goneIf(condition: () -> Boolean)      = apply {
+
+inline fun View.goneIf(condition: () -> Boolean) = apply {
     if (condition()) gone()
 }
 
-inline fun List<View>.visibleIf(condition: () -> Boolean)   = apply {
+inline fun Collection<View>.visibleIf(condition: () -> Boolean) = apply {
     if (condition()) visible()
 }
-inline fun List<View>.invisibleIf(condition: () -> Boolean) = apply {
+
+inline fun Collection<View>.invisibleIf(condition: () -> Boolean) = apply {
     if (condition()) invisible()
 }
-inline fun List<View>.goneIf(condition: () -> Boolean)      = apply {
+
+inline fun Collection<View>.goneIf(condition: () -> Boolean) = apply {
     if (condition()) gone()
 }
 
 fun View.visibleOrInvisible(visibleIf: () -> Boolean) = apply {
     if (visibleIf()) visible() else invisible()
 }
-fun View.visibleOrGone(visibleIf: () -> Boolean)      = apply {
+
+fun View.visibleOrGone(visibleIf: () -> Boolean) = apply {
     if (visibleIf()) visible() else gone()
 }
 
-fun List<View>.visibleOrInvisible(visibleIf: () -> Boolean) = apply {
+fun Collection<View>.visibleOrInvisible(visibleIf: () -> Boolean) = apply {
     if (visibleIf()) visible() else invisible()
 }
-fun List<View>.visibleOrGone(visibleIf: () -> Boolean)      = apply {
+
+fun Collection<View>.visibleOrGone(visibleIf: () -> Boolean) = apply {
     if (visibleIf()) visible() else gone()
 }
 
 //endregion
 //region Availability
 
-inline val List<View>.areAllEnabled: Boolean
+fun View.enable() {
+    isEnabled = true
+}
+
+fun View.disable() {
+    isEnabled = false
+}
+
+fun Collection<View>.enable() {
+    forEach { it.isEnabled = true }
+}
+
+fun Collection<View>.disable() {
+    forEach { it.isEnabled = false }
+}
+
+inline val Collection<View>.areAnyEnabled: Boolean
+    get() = any { it.isEnabled }
+
+inline val Collection<View>.areAnyDisabled: Boolean
+    get() = any { !it.isEnabled }
+
+inline val Collection<View>.areAllEnabled: Boolean
     get() = all { it.isEnabled }
 
-inline val List<View>.areAllDisabled: Boolean
+inline val Collection<View>.areAllDisabled: Boolean
     get() = all { !it.isEnabled }
-
-fun List<View>.enabled(isEnabled: Boolean) {
-    forEach { it.isEnabled = isEnabled }
-}
 
 //endregion
 //region Padding
@@ -152,6 +180,8 @@ fun View.onSingleClick(
 
 //endregion
 
+@Suppress("DEPRECATION")
 fun View.makeFullscreen() {
-    systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+    systemUiVisibility =
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 }

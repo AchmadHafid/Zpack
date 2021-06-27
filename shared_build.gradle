@@ -42,6 +42,7 @@ dependencies {
     implementation deps.core
     implementation deps.appcompat
     implementation deps.constraintlayout
+    implementation deps.viewpager2
 
     testImplementation deps.test_core
     testImplementation deps.test_runner

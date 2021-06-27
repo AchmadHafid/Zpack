@@ -86,12 +86,39 @@ fun Context.intListRes(@ArrayRes resourceId: Int) =
     }
 
 //endregion
+//region Long
+
+@MainThread
+fun Context.longRes(@IntegerRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getInteger(resourceId).toLong()
+    }
+
+@MainThread
+fun Context.longArrayRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId).map { it.toLong() }.toLongArray()
+    }
+
+@MainThread
+fun Context.longListRes(@ArrayRes resourceId: Int): Lazy<List<Long>> =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId).map { it.toLong() }
+    }
+
+//endregion
 //region Dimension
 
 @MainThread
 fun Context.dimenRes(@DimenRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
         resources.getDimensionPixelSize(resourceId)
+    }
+
+@MainThread
+fun Context.dimenFloatRes(@DimenRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimension(resourceId)
     }
 
 //endregion

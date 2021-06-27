@@ -10,6 +10,7 @@ fun belowOreo()          = Build.VERSION.SDK_INT < Build.VERSION_CODES.O
 fun belowOreoMR1()       = Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1
 fun belowPie()           = Build.VERSION.SDK_INT < Build.VERSION_CODES.P
 fun belowQ()             = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+fun belowR()             = Build.VERSION.SDK_INT < Build.VERSION_CODES.R
 
 fun atLeastLollipopMR1() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
 fun atLeastMarshmallow() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -19,3 +20,4 @@ fun atLeastOreo()        = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 fun atLeastOreoMR1()     = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
 fun atLeastPie()         = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 fun atLeastQ()           = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+fun atLeastR()           = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R

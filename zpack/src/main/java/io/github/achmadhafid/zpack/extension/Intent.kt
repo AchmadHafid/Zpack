@@ -77,8 +77,7 @@ fun Context.openHomeLauncher(onFailure: () -> Unit = {}) {
             .setPackage(
                 packageManager.queryIntentActivities(
                     Intent(Intent.ACTION_MAIN)
-                        .addCategory(Intent.CATEGORY_HOME)
-                    , PackageManager.MATCH_DEFAULT_ONLY
+                        .addCategory(Intent.CATEGORY_HOME), PackageManager.MATCH_DEFAULT_ONLY
                 )[0].activityInfo.packageName
             ),
         onFailure
@@ -124,6 +123,16 @@ fun Context.sendSms(number: String, text: String = "", onFailure: () -> Unit = {
     startActivityIfResolved(
         Intent(Intent.ACTION_VIEW, Uri.parse("smsto:$number"))
             .apply { putExtra("sms_body", text) },
+        onFailure
+    )
+}
+
+fun Context.openGallery(onFailure: () -> Unit = {}) {
+    startActivityIfResolved(
+        Intent(Intent.ACTION_VIEW).apply {
+            type = "image/*"
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        },
         onFailure
     )
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.DisplayMetrics
 import androidx.fragment.app.FragmentActivity
 
+@Suppress("DEPRECATION")
 inline val Context.hasSoftNavigationKeys: Boolean
     get() {
         val display = windowManager.defaultDisplay

@@ -1,38 +1,39 @@
 ext.versions = [
         //region Release
 
-        code              : 53,
-        name              : "1.3.1",
+        code              : 54,
+        name              : "1.4.0",
 
         //endregion
         //region SDK
 
-        compileSdkVersion : 29,
+        compileSdkVersion : 30,
         minSdkVersion     : 21,
-        targetSdkVersion  : 29,
+        targetSdkVersion  : 30,
 
         //endregion
         //region Plugin
 
-        agp               : '4.1.3',
-        kotlin            : '1.4.21',
+        agp               : '4.2.1',
+        kotlin            : '1.5.10',
 
         //endregion
         //region Core Dependencies
 
-        stdlib            : '1.3.41',
-        material          : '1.4.0-alpha02',
+        material          : '1.4.0-rc01',
 
         //endregion
         //region JetPack Dependencies
 
-        activity          : '1.3.0-alpha07',
-        appcompat         : '1.3.0-rc01',
-        constraintlayout  : '2.1.0-beta01',
-        core              : '1.6.0-alpha02',
-        fragment          : '1.3.3',
+        core              : '1.5.0',
+        constraintlayout  : '2.0.4',
+        viewpager2        : '1.0.0',
+
+        activity          : '1.3.0-beta01',
+        appcompat         : '1.4.0-alpha02',
+        fragment          : '1.4.0-alpha02',
         lifecycle         : '2.4.0-alpha01',
-        navigation        : '2.3.5',
+        navigation        : '2.4.0-alpha01',
 
         //endregion
         //region Testing Dependencies
@@ -74,10 +75,16 @@ ext.deps = [
         lifecycle       : [
                 "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle",
                 "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle",
+                "androidx.lifecycle:lifecycle-viewmodel-savedstate:$versions.lifecycle",
+                "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle",
                 "androidx.lifecycle:lifecycle-service:$versions.lifecycle",
-                "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"
+                "androidx.lifecycle:lifecycle-process:$versions.lifecycle"
         ],
-        navigation      : "androidx.navigation:navigation-fragment-ktx:$versions.navigation",
+        navigation      : [
+                "androidx.navigation:navigation-fragment-ktx:$versions.navigation",
+                "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+        ],
+        viewpager2      : "androidx.viewpager2:viewpager2:$versions.viewpager2",
 
         //endregion
         //region Testing

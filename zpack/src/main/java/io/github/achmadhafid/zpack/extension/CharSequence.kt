@@ -12,7 +12,7 @@ inline val CharSequence.toCamelCase: CharSequence
         split(" ").forEach {
             camelCaseString = when {
                 it.isEmpty() -> "$camelCaseString "
-                camelCaseString.trim().isEmpty() -> camelCaseString + it.toLowerCase(Locale.getDefault()) + " "
+                camelCaseString.trim().isEmpty() -> camelCaseString + it.lowercase(Locale.getDefault()) + " "
                 else -> camelCaseString + it.toTitleCase
             }
         }
@@ -21,8 +21,8 @@ inline val CharSequence.toCamelCase: CharSequence
 
 inline val CharSequence.toTitleCase: CharSequence
     get() = split(" ").joinToString(" ") {
-        if (it.isEmpty()) " " else it.substring(0, 1).toUpperCase(Locale.getDefault()) +
-                it.substring(1).toLowerCase(Locale.getDefault())
+        if (it.isEmpty()) " " else it.substring(0, 1).uppercase(Locale.getDefault()) +
+                it.substring(1).lowercase(Locale.getDefault())
     }.replace("  ", " ")
 
 //endregion

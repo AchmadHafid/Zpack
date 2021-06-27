@@ -10,6 +10,7 @@ fun Window.adjustKeyboard(isVisible: Boolean = false) {
         if (isVisible) WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
         else WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
 
+    @Suppress("DEPRECATION")
     setSoftInputMode(state or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 }
 

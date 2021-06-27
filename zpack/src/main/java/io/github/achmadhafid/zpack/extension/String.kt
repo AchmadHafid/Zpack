@@ -1,5 +1,7 @@
 package io.github.achmadhafid.zpack.extension
 
+import java.util.UUID
+
 //region Case
 
 inline val String.toCamelCase: String get() = (this as CharSequence).toCamelCase.toString()
@@ -15,3 +17,6 @@ infix fun String?.whenNullOrBlank(placeholder: String) =
     if (this?.isNotBlank() == true) this else placeholder
 
 //endregion
+
+inline val newId: String
+    get() = UUID.randomUUID().toString()

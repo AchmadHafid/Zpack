@@ -31,3 +31,6 @@ infix fun <T> Collection<T>.duplicateBy(n: Int): Collection<T> {
     }
     return newList
 }
+
+fun <T : Any?, S : Any?> Pair<T, S>.invert() =
+    second to first
