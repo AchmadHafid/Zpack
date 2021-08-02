@@ -18,3 +18,16 @@ dependencies {
     implementation deps.lifecycle
     implementation deps.navigation
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.AchmadHafid'
+                artifactId = 'zpack'
+                version = '1.5.1'
+            }
+        }
+    }
+}
