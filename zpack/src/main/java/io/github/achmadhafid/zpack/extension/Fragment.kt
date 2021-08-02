@@ -34,3 +34,13 @@ fun Fragment.hideChildFragment(@IdRes id: Int, transaction: FragmentTransaction.
         }
     }
 }
+
+fun Fragment.removeChildFragment(@IdRes id: Int) {
+    with(childFragmentManager) {
+        findFragmentById(id)?.let { fragment ->
+            beginTransaction()
+                .remove(fragment)
+                .commit()
+        }
+    }
+}

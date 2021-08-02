@@ -2,6 +2,7 @@ package io.github.achmadhafid.zpack.extension
 
 import android.content.Context
 import android.util.TypedValue
+import android.view.View
 import androidx.annotation.ArrayRes
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
@@ -214,12 +215,39 @@ fun Fragment.intListRes(@ArrayRes resourceId: Int) =
     }
 
 //endregion
+//region Long
+
+@MainThread
+fun Fragment.longRes(@IntegerRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getInteger(resourceId).toLong()
+    }
+
+@MainThread
+fun Fragment.longArrayRes(@ArrayRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId).map { it.toLong() }.toLongArray()
+    }
+
+@MainThread
+fun Fragment.longListRes(@ArrayRes resourceId: Int): Lazy<List<Long>> =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getIntArray(resourceId).map { it.toLong() }
+    }
+
+//endregion
 //region Dimension
 
 @MainThread
 fun Fragment.dimenRes(@DimenRes resourceId: Int) =
     lazy(LazyThreadSafetyMode.NONE) {
         resources.getDimensionPixelSize(resourceId)
+    }
+
+@MainThread
+fun Fragment.dimenFloatRes(@DimenRes resourceId: Int) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimension(resourceId)
     }
 
 //endregion
@@ -268,3 +296,6 @@ fun Context.dpToPx(dp: Number) = applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp)
 fun Context.pxToDp(px: Number) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
 fun Context.spToPx(sp: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, sp)
 fun Context.pxToSp(px: Int) = applyDimension(TypedValue.COMPLEX_UNIT_PX, px)
+
+infix fun View.getString(@StringRes id: Int) =
+    resources.getString(id)
