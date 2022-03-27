@@ -13,7 +13,6 @@ buildscript {
 plugins {
     id "maven-publish"
     id "com.github.ben-manes.versions" version "0.38.0"
-    id "io.gitlab.arturbosch.detekt" version "1.17.1"
 }
 
 allprojects {
@@ -30,18 +29,4 @@ subprojects {
             allWarningsAsErrors = true
         }
     }
-}
-
-detekt {
-    failFast = false
-    input  = files("$projectDir")
-    config = files("$projectDir/detekt.yml")
-    reports {
-        xml.enabled = true
-        txt.enabled = true
-    }
-}
-
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
-    jvmTarget = "1.8"
 }
