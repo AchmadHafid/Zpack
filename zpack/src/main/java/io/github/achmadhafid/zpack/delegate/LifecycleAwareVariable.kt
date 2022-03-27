@@ -1,10 +1,8 @@
 package io.github.achmadhafid.zpack.delegate
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -18,10 +16,17 @@ class LifecycleAwareVariable<T>(
 
     init {
         _value = defaultValue
-        lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
-            @Suppress("unused")
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            fun onDestroy() {
+//        lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
+//            @Suppress("unused")
+//            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//            fun onDestroy() {
+//                lifecycleOwner.lifecycle.removeObserver(this)
+//                onDestroy(_value)
+//                _value = null
+//            }
+//        })
+        lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
                 lifecycleOwner.lifecycle.removeObserver(this)
                 onDestroy(_value)
                 _value = null
@@ -48,14 +53,22 @@ class FragmentViewLifecycleAwareVariable<T>(
 
     init {
         _value = defaultValue
-        fragment.viewLifecycleOwnerLiveData.observe(fragment, {
+        fragment.viewLifecycleOwnerLiveData.observe(fragment) {
             if (!isObserverAttached) {
                 it?.lifecycle?.let { lifecycle ->
                     isObserverAttached = true
-                    lifecycle.addObserver(object : LifecycleObserver {
-                        @Suppress("unused")
-                        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-                        fun onDestroy() {
+//                    lifecycle.addObserver(object : LifecycleObserver {
+//                        @Suppress("unused")
+//                        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//                        fun onDestroy() {
+//                            it.lifecycle.removeObserver(this)
+//                            onDestroy(_value)
+//                            _value = null
+//                            isObserverAttached = false
+//                        }
+//                    })
+                    lifecycle.addObserver(object : DefaultLifecycleObserver {
+                        override fun onDestroy(owner: LifecycleOwner) {
                             it.lifecycle.removeObserver(this)
                             onDestroy(_value)
                             _value = null
@@ -64,7 +77,7 @@ class FragmentViewLifecycleAwareVariable<T>(
                     })
                 }
             }
-        })
+        }
     }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T? = _value

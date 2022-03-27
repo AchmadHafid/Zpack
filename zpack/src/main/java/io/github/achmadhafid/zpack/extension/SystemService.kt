@@ -50,7 +50,6 @@ import android.os.DropBoxManager
 import android.os.HardwarePropertiesManager
 import android.os.PowerManager
 import android.os.UserManager
-import android.os.Vibrator
 import android.os.health.SystemHealthManager
 import android.os.storage.StorageManager
 import android.print.PrintManager
@@ -174,8 +173,6 @@ inline val Context.userManager
     get() = (getSystemService(Context.USER_SERVICE) as UserManager).also {
         w("Please use `UserManagerCompat` instead")
     }
-inline val Context.vibrator
-    get() = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 inline val Context.wallpaperManager
     get() = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
 inline val Context.wifiManager
@@ -254,6 +251,7 @@ inline val Context.wifiAwareManager
 //region Pie
 
 inline val Context.crossProfileApps
+    @SuppressLint("ServiceCast")
     get() = if (atLeastPie())
         getSystemService(Context.CROSS_PROFILE_APPS_SERVICE) as CrossProfileApps
     else null

@@ -1,5 +1,6 @@
 package io.github.achmadhafid.zpack.extension
 
+import android.annotation.SuppressLint
 import android.app.usage.UsageEvents
 import android.content.Context
 import android.content.Intent
@@ -51,6 +52,7 @@ inline val Context.foregroundApp: String?
     }
 
 inline val Context.installedApps: List<ApplicationInfo>
+    @SuppressLint("QueryPermissionsNeeded")
     get() = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
 
 inline val Context.installedAppsWithLaunchIntent: List<ApplicationInfo>
@@ -59,6 +61,7 @@ inline val Context.installedAppsWithLaunchIntent: List<ApplicationInfo>
         .filter { packageManager.getLaunchIntentForPackage(it.packageName) != null }
 
 inline val Context.installedAppsWithLaunchActivity: List<ApplicationInfo>
+    @SuppressLint("QueryPermissionsNeeded")
     get() {
         val intent = Intent(Intent.ACTION_MAIN, null)
             .apply { addCategory(Intent.CATEGORY_LAUNCHER) }
@@ -72,6 +75,7 @@ inline val Context.installedAppsWithLaunchActivity: List<ApplicationInfo>
     }
 
 inline val Context.installedLauncherApp: List<ApplicationInfo>
+    @SuppressLint("QueryPermissionsNeeded")
     get() {
         val intent = Intent(Intent.ACTION_MAIN, null)
             .apply { addCategory(Intent.CATEGORY_LAUNCHER) }

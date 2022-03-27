@@ -1,6 +1,7 @@
 package io.github.achmadhafid.zpack.extension
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Service
 import android.content.ComponentName
@@ -18,6 +19,7 @@ import kotlin.reflect.KClass
 inline fun <reified T : Any> Context.intent(noinline block: Intent.() -> Unit = {}): Intent =
     Intent(this, T::class.java).apply(block)
 
+@SuppressLint("QueryPermissionsNeeded")
 fun Intent.canBeResolved(context: Context) = resolveActivity(context.packageManager) != null
 
 fun Context.startActivityIfResolved(intent: Intent, onActivityCanNotBeResolved: () -> Unit = {}) {
@@ -69,6 +71,7 @@ fun Context.openWriteSettings(onFailure: () -> Unit = {}) {
 //endregion
 //region Common Action
 
+@SuppressLint("QueryPermissionsNeeded")
 fun Context.openHomeLauncher(onFailure: () -> Unit = {}) {
     startActivityIfResolved(
         Intent(Intent.ACTION_MAIN)
