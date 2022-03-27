@@ -2,6 +2,7 @@ package io.github.achmadhafid.zpack.extension
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
@@ -25,8 +26,17 @@ fun defaultTheme() {
 
 inline val Context.isDarkThemeEnabled
     get() = resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
 fun AppCompatActivity.toggleTheme() =
     if (isDarkThemeEnabled) lightTheme()
     else darkTheme()
+
+@Suppress("DEPRECATION")
+fun View.setLightNavBar(isLight: Boolean) {
+    if (atLeastOreo()) {
+        systemUiVisibility = if (isLight) {
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        } else systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+    }
+}

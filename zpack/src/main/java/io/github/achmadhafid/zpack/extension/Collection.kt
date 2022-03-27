@@ -34,3 +34,12 @@ infix fun <T> Collection<T>.duplicateBy(n: Int): Collection<T> {
 
 fun <F, S> Pair<F, S>.invert(): Pair<S, F> =
     second to first
+
+fun <K : Any, V : Any> Map<K, List<V>>.flatten(): List<Any> {
+    val temp = mutableListOf<Any>()
+    forEach { (key, value) ->
+        temp.add(key)
+        temp.addAll(value)
+    }
+    return temp
+}

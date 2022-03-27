@@ -73,18 +73,18 @@ fun Fragment.startActivity(
 ) = startActivity(createIntent(path).intentBuilder(), finnishCurrent)
 
 private fun AppCompatActivity.startActivity(intent: Intent, finnishCurrent: Boolean) =
-    intent.canBeResolved(this).also { isResolved ->
-        if (isResolved) {
-            startActivity(intent)
-            if (finnishCurrent) finish()
+    runCatching {
+        startActivity(intent)
+        if (finnishCurrent) {
+            finish()
         }
     }
 
 private fun Fragment.startActivity(intent: Intent, finnishCurrent: Boolean) =
-    intent.canBeResolved(requireContext()).also { isResolved ->
-        if (isResolved) {
-            startActivity(intent)
-            if (finnishCurrent) activity?.finish()
+    runCatching {
+        startActivity(intent)
+        if (finnishCurrent) {
+            popBackStackOrFinishActivity()
         }
     }
 

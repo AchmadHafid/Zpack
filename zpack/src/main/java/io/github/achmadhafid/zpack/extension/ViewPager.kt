@@ -3,6 +3,14 @@ package io.github.achmadhafid.zpack.extension
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
 
+inline val ViewPager2.isFirstPage: Boolean
+    get() = currentItem == 0
+
+inline val ViewPager2.isLastPage: Boolean
+    get() = adapter?.itemCount?.let {
+        currentItem == it - 1
+    } ?: true
+
 fun ViewPager2.showFirstPage() {
     currentItem = 0
 }

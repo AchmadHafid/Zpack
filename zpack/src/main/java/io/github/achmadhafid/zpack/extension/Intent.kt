@@ -19,12 +19,12 @@ import kotlin.reflect.KClass
 inline fun <reified T : Any> Context.intent(noinline block: Intent.() -> Unit = {}): Intent =
     Intent(this, T::class.java).apply(block)
 
-@SuppressLint("QueryPermissionsNeeded")
-fun Intent.canBeResolved(context: Context) = resolveActivity(context.packageManager) != null
-
 fun Context.startActivityIfResolved(intent: Intent, onActivityCanNotBeResolved: () -> Unit = {}) {
-    if (intent.canBeResolved(this)) startActivity(intent)
-    else onActivityCanNotBeResolved()
+    runCatching {
+        startActivity(intent)
+    }.onFailure {
+        onActivityCanNotBeResolved()
+    }
 }
 
 //region Common Screen
