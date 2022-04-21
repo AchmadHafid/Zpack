@@ -96,7 +96,7 @@ fun Context.share(text: String, subject: String? = null, onFailure: () -> Unit =
     startActivityIfResolved(Intent.createChooser(intent, null), onFailure)
 }
 
-fun Context.openUrl(url: String, newTask: Boolean = false, onFailure: () -> Unit = {}) {
+fun Context.openUrl(url: String, newTask: Boolean = true, onFailure: () -> Unit = {}) {
     startActivityIfResolved(Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
         if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }, onFailure)

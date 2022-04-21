@@ -32,6 +32,22 @@ inline val Context.displayWidth: Int
 inline val Context.displayHeight: Int
     get() = resources.displayMetrics.heightPixels
 
+inline val Context.screenHeightPixel: Int
+    get() = realDisplayMetrics.heightPixels
+
+inline val Context.screenWidthPixel: Int
+    get() = realDisplayMetrics.widthPixels
+
+inline val Context.realDisplayMetrics: DisplayMetrics
+    get() = DisplayMetrics().apply {
+        if (atLeastR()) {
+            windowManager.currentWindowMetrics
+        } else {
+            @Suppress("DEPRECATION")
+            windowManager.defaultDisplay.getRealMetrics(this)
+        }
+    }
+
 inline val Context.statusBarHeight
     get() = runCatching {
         resources.getIdentifier(

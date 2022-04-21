@@ -3,9 +3,13 @@ package io.github.achmadhafid.zpack.extension.view
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
 
-infix fun ViewPager2.setCurrentItemTo(itemIndex: Int) {
+fun ViewPager2.setCurrentItemTo(
+    itemIndex: Int,
+    withSmoothScroll: Boolean = true,
+    forceSmoothScrollNextPage: Boolean = false
+) {
     if (currentItem != itemIndex) {
-        val isSmoothScroll = abs(currentItem - itemIndex) == 1
+        val isSmoothScroll = withSmoothScroll || (abs(currentItem - itemIndex) == 1 && forceSmoothScrollNextPage)
         setCurrentItem(itemIndex, isSmoothScroll)
     }
 }

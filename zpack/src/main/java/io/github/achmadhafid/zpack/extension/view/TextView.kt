@@ -9,6 +9,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.StringRes
@@ -28,12 +29,22 @@ infix fun TextView.withTextRes(@StringRes textRes: Int) {
     text = resources.getText(textRes)
 }
 
-infix fun TextView.withNewText(newText: CharSequence) {
-    if (text != newText) text = newText
+fun EditText.withNewText(newText: CharSequence, moveCursorToTheEnd: Boolean = false) {
+    if ("$text" != newText) {
+        setText(newText)
+        if (moveCursorToTheEnd) {
+            setSelection(text.length)
+        }
+    }
 }
 
-infix fun TextView.withNewText(newText: String) {
-    if (text != newText) text = newText
+fun EditText.withNewText(newText: String, moveCursorToTheEnd: Boolean = false) {
+    if ("$text" != newText) {
+        setText(newText)
+        if (moveCursorToTheEnd) {
+            setSelection(text.length)
+        }
+    }
 }
 
 fun TextView.clear() {

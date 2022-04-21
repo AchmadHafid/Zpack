@@ -32,6 +32,15 @@ infix fun <T> Collection<T>.duplicateBy(n: Int): Collection<T> {
     return newList
 }
 
+inline fun <reified T> List<T>.duplicateBy(n: Int, builder: (T) -> T = { it }): List<T> {
+    val newList = mutableListOf<T>()
+    newList.addAll(this)
+    repeat(n) {
+        newList.addAll(map { builder(it) })
+    }
+    return newList
+}
+
 fun <F, S> Pair<F, S>.invert(): Pair<S, F> =
     second to first
 
