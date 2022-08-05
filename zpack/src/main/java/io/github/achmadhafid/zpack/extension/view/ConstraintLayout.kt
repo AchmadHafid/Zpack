@@ -54,6 +54,15 @@ fun ConstraintLayout.setEndMargin(@IdRes targetView: Int, @Px marginInPx: Int) {
     setMargin(targetView, ConstraintSet.END, marginInPx)
 }
 
+infix fun ConstraintLayout.matchHorizontally(@IdRes viewId: Int) {
+    ConstraintSet().let {
+        it.clone(this)
+        it.connect(id, ConstraintSet.START, viewId, ConstraintSet.START)
+        it.connect(id, ConstraintSet.END, viewId, ConstraintSet.END)
+        it.applyTo(this)
+    }
+}
+
 private fun ConstraintLayout.setMargin(@IdRes targetView: Int, anchor: Int, @Px marginInPx: Int) {
     ConstraintSet().run {
         clone(this@setMargin)

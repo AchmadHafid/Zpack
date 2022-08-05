@@ -16,15 +16,6 @@ class LifecycleAwareVariable<T>(
 
     init {
         _value = defaultValue
-//        lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
-//            @Suppress("unused")
-//            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-//            fun onDestroy() {
-//                lifecycleOwner.lifecycle.removeObserver(this)
-//                onDestroy(_value)
-//                _value = null
-//            }
-//        })
         lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 lifecycleOwner.lifecycle.removeObserver(this)
@@ -57,16 +48,6 @@ class FragmentViewLifecycleAwareVariable<T>(
             if (!isObserverAttached) {
                 it?.lifecycle?.let { lifecycle ->
                     isObserverAttached = true
-//                    lifecycle.addObserver(object : LifecycleObserver {
-//                        @Suppress("unused")
-//                        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-//                        fun onDestroy() {
-//                            it.lifecycle.removeObserver(this)
-//                            onDestroy(_value)
-//                            _value = null
-//                            isObserverAttached = false
-//                        }
-//                    })
                     lifecycle.addObserver(object : DefaultLifecycleObserver {
                         override fun onDestroy(owner: LifecycleOwner) {
                             it.lifecycle.removeObserver(this)

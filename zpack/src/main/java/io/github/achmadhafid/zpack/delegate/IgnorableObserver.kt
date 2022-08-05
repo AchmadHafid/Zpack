@@ -35,25 +35,6 @@ inline fun <T> LiveData<T>.observeOrIgnore(
     if (!IgnorableObserver.contains(owner, this)) {
         IgnorableObserver.add(owner, this)
 
-//        owner.lifecycle.addObserver(object : LifecycleObserver {
-//            private fun onRemoved() {
-//                Log.d("IgnorableObserver", "observer removed: $this")
-//                IgnorableObserver.remove(owner, this@observeOrIgnore)
-//            }
-//
-//            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-//            fun onStop() {
-//                if (event == Lifecycle.Event.ON_STOP) onRemoved()
-//            }
-//
-//            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-//            fun onDestroy() {
-//                if (event == Lifecycle.Event.ON_DESTROY) onRemoved()
-//            }
-//        }.also {
-//            Log.d("IgnorableObserver", "new observer attached: $it")
-//        })
-
         owner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStop(owner: LifecycleOwner) {
                 if (event == Lifecycle.Event.ON_STOP) onRemoved()

@@ -1,7 +1,9 @@
 package io.github.achmadhafid.zpack.extension
 
 import android.content.Context
+import android.provider.Settings
 import android.util.DisplayMetrics
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
 @Suppress("DEPRECATION")
@@ -77,3 +79,19 @@ inline val FragmentActivity.actionBarHeight: Int
         it.recycle()
         height
     }
+
+inline val Fragment.screenHeight: Int
+    get() = if (atLeastR()) {
+        requireContext().windowManager
+            .currentWindowMetrics
+            .bounds
+            .height()
+    } else DisplayMetrics().apply {
+        @Suppress("DEPRECATION")
+        requireContext().windowManager
+            .defaultDisplay
+            .getRealMetrics(this)
+    }.heightPixels
+
+inline val Context.isAirplaneModeActive: Boolean
+    get() = Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
