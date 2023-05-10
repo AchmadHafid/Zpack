@@ -13,7 +13,7 @@ You can directly look into its source code to find some code that you may need o
 Compatibility
 -------------
 
-This library is compatible from API 21 (Android 5.0 Lollipop) & AndroidX.
+This library is compatible from API 26 & AndroidX.
 
 
 Download
@@ -36,7 +36,7 @@ Add the dependency
 ```groovy
 dependencies {
   ...
-  implementation 'com.github.AchmadHafid:Zpack:1.5.1'
+  implementation 'com.github.AchmadHafid:Zpack:1.9.0'
   ...
 }
 ```
@@ -52,18 +52,10 @@ Quick Usage
 ```kotlin
 //Version checking
 
-fun belowLollipopMR1()
-fun belowMarshmallow()
-fun belowNougat()
-fun belowNougatMR1()
-fun belowOreo()
 fun belowOreoMR1()
 fun belowPie()
 fun belowQ()
 
-fun atLeastLollipopMR1()
-fun atLeastMarshmallow()
-fun atLeastNougat()
 fun atLeastNougatMR1()
 fun atLeastOreo()
 fun atLeastOreoMR1()
