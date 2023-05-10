@@ -7,8 +7,14 @@ apply from: '../shared_build.gradle'
 group = 'com.github.AchmadHafid'
 
 android {
+    namespace = 'io.github.achmadhafid.zpack'
     defaultConfig {
         consumerProguardFiles 'consumer-rules.pro'
+    }
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
     }
 }
 
@@ -19,14 +25,15 @@ dependencies {
     implementation deps.navigation
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.AchmadHafid'
+            artifactId = 'zpack'
+            version = '1.5.1'
+
+            afterEvaluate {
                 from components.release
-                groupId = 'com.github.AchmadHafid'
-                artifactId = 'zpack'
-                version = '1.5.1'
             }
         }
     }

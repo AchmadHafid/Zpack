@@ -14,8 +14,8 @@ ext.versions = [
         //endregion
         //region Plugin
 
-        agp               : '7.2.2',
-        kotlin            : '1.6.20',
+        agp               : '8.0.1',
+        kotlin            : '1.6.21',
 
         //endregion
         //region Core Dependencies
