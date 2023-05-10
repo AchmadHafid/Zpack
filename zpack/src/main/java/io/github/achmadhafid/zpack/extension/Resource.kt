@@ -276,7 +276,6 @@ infix fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getCol
 infix fun Context.resolveColor(@ColorRes @AttrRes id: Int) = with(TypedValue()) {
     when {
         theme.resolveAttribute(id, this, true) -> data
-        atLeastMarshmallow() -> getColor(id)
         else -> getColorCompat(id)
     }
 }

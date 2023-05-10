@@ -185,45 +185,31 @@ inline val Context.windowManager
 //region Lollipop MR1
 
 inline val Context.subscriptionManager
-    get() = if (atLeastLollipopMR1())
-        getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-    else null
+    get() = getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
 
 //endregion
 //region Marshmallow
 
 inline val Context.carrierConfigManager
-    get() = if (atLeastMarshmallow())
-        getSystemService(Context.CARRIER_CONFIG_SERVICE) as CarrierConfigManager
-    else null
+    get() = getSystemService(Context.CARRIER_CONFIG_SERVICE) as CarrierConfigManager
 inline val Context.midiManager
-    get() = if (atLeastMarshmallow())
-        getSystemService(Context.MIDI_SERVICE) as MidiManager
-    else null
+    get() = getSystemService(Context.MIDI_SERVICE) as MidiManager
 inline val Context.networkStatsManager
-    get() = if (atLeastMarshmallow())
-        getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-    else null
+    get() = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
 
 //endregion
 //region Nougat
 
 inline val Context.hardwarePropertiesManager
-    get() = if (atLeastNougat())
-        getSystemService(Context.HARDWARE_PROPERTIES_SERVICE) as HardwarePropertiesManager
-    else null
+    get() = getSystemService(Context.HARDWARE_PROPERTIES_SERVICE) as HardwarePropertiesManager
 inline val Context.systemHealthManager
-    get() = if (atLeastNougat())
-        getSystemService(Context.SYSTEM_HEALTH_SERVICE) as SystemHealthManager
-    else null
+    get() = getSystemService(Context.SYSTEM_HEALTH_SERVICE) as SystemHealthManager
 
 //endregion
 //region Nougat MR1
 
 inline val Context.shortcutManager
-    get() = (if (atLeastNougatMR1())
-        getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
-    else null).also {
+    get() = (getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager).also {
         d("Please use `ShortcutManagerCompat instead`")
     }
 
@@ -231,21 +217,13 @@ inline val Context.shortcutManager
 //region Oreo
 
 inline val Context.companionDeviceManager
-    get() = if (atLeastOreo())
-        getSystemService(Context.COMPANION_DEVICE_SERVICE) as CompanionDeviceManager
-    else null
+    get() = getSystemService(Context.COMPANION_DEVICE_SERVICE) as CompanionDeviceManager
 inline val Context.storageStatsManager
-    get() = if (atLeastOreo())
-        getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
-    else null
+    get() = getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
 inline val Context.textClassificationManager
-    get() = if (atLeastOreo())
-        getSystemService(Context.TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
-    else null
+    get() = getSystemService(Context.TEXT_CLASSIFICATION_SERVICE) as TextClassificationManager
 inline val Context.wifiAwareManager
-    get() = if (atLeastOreo())
-        getSystemService(Context.WIFI_AWARE_SERVICE) as WifiAwareManager
-    else null
+    get() = getSystemService(Context.WIFI_AWARE_SERVICE) as WifiAwareManager
 
 //endregion
 //region Pie

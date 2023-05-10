@@ -12,6 +12,7 @@ inline val Context.appName get() = getAppName(packageName)
 
 inline val Context.appIcon get() = getAppIcon(packageName)
 
+@Suppress("DEPRECATION")
 fun Context.getAppName(packageName: String): String? = runCatching {
     packageManager.getApplicationLabel(
         packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
@@ -51,6 +52,7 @@ inline val Context.foregroundApp: String?
         return foregroundApp
     }
 
+@Suppress("DEPRECATION")
 inline val Context.installedApps: List<ApplicationInfo>
     @SuppressLint("QueryPermissionsNeeded")
     get() = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
@@ -66,6 +68,7 @@ inline val Context.installedAppsWithLaunchActivity: List<ApplicationInfo>
         val intent = Intent(Intent.ACTION_MAIN, null)
             .apply { addCategory(Intent.CATEGORY_LAUNCHER) }
 
+        @Suppress("DEPRECATION")
         val packageNames = packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.packageName }
 
@@ -80,6 +83,7 @@ inline val Context.installedLauncherApp: List<ApplicationInfo>
         val intent = Intent(Intent.ACTION_MAIN, null)
             .apply { addCategory(Intent.CATEGORY_LAUNCHER) }
 
+        @Suppress("DEPRECATION")
         val packageNames = packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.packageName }
 
@@ -87,6 +91,6 @@ inline val Context.installedLauncherApp: List<ApplicationInfo>
             .filter { it.packageName?.isNotEmpty() ?: false }
             .filter {
                 packageManager.getLaunchIntentForPackage(it.packageName) != null ||
-                        packageNames.contains(it.packageName)
+                    packageNames.contains(it.packageName)
             }
     }

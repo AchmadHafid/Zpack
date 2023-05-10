@@ -4,5 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 
+@Suppress("DEPRECATION")
 val Context.metaData: Bundle
     get() = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).metaData

@@ -42,7 +42,7 @@ infix fun <T : View> T.fadingOutBy(durationInMilis: Long) {
         .alpha(0F)
         .setDuration(durationInMilis)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 invisible()
             }
         })

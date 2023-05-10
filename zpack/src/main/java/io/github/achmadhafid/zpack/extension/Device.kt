@@ -1,5 +1,6 @@
 package io.github.achmadhafid.zpack.extension
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.util.DisplayMetrics
@@ -18,15 +19,14 @@ inline val Context.hasSoftNavigationKeys: Boolean
         display.getMetrics(displayMetrics)
 
         return realMetrics.widthPixels > displayMetrics.widthPixels ||
-                realMetrics.heightPixels > displayMetrics.heightPixels
+            realMetrics.heightPixels > displayMetrics.heightPixels
     }
 
 inline val Context.isScreenOn
     get() = powerManager.isInteractive
 
 inline val Context.isDeviceLocked
-    get() = if (atLeastLollipopMR1()) keyGuardManager.isDeviceLocked
-    else keyGuardManager.isKeyguardLocked
+    get() = keyGuardManager.isDeviceLocked
 
 inline val Context.displayWidth: Int
     get() = resources.displayMetrics.widthPixels
@@ -51,6 +51,7 @@ inline val Context.realDisplayMetrics: DisplayMetrics
     }
 
 inline val Context.statusBarHeight
+    @SuppressLint("DiscouragedApi", "InternalInsetResource")
     get() = runCatching {
         resources.getIdentifier(
             "status_bar_height",
@@ -62,6 +63,7 @@ inline val Context.statusBarHeight
     }.getOrNull()
 
 inline val Context.navigationBarHeight
+    @SuppressLint("DiscouragedApi", "InternalInsetResource")
     get() = runCatching {
         resources.getIdentifier(
             "navigation_bar_height",

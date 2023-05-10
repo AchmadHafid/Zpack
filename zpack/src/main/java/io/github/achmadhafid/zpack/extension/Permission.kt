@@ -10,16 +10,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 inline val IntArray.arePermissionsGranted
-    get() = belowMarshmallow() || all { it == PackageManager.PERMISSION_GRANTED }
+    get() = all { it == PackageManager.PERMISSION_GRANTED }
 
 fun Context.arePermissionsGranted(permissions: Array<out String>) =
-    belowMarshmallow() || permissions.all { isPermissionGranted(it) }
+    permissions.all { isPermissionGranted(it) }
 
-fun Context.isPermissionGranted(permission: String) = belowMarshmallow() ||
-        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+fun Context.isPermissionGranted(permission: String) =
+    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
 inline val Context.hasWriteSettingPermission
-    get() = if (atLeastMarshmallow()) Settings.System.canWrite(this) else null
+    get() = Settings.System.canWrite(this)
 
 inline val Context.hasAppUsagePermission: Boolean
     get() {
@@ -47,7 +47,7 @@ fun AppCompatActivity.requestPermissionCompat(permission: Array<out String>, req
     ActivityCompat.requestPermissions(this, permission, requestCode)
 
 fun AppCompatActivity.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
-    atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
+    permissions.any { shouldShowRequestPermissionRationale(it) }
 
 fun Fragment.shouldShowRequestPermissionRationales(permissions: Array<out String>) =
-    atLeastMarshmallow() && permissions.any { shouldShowRequestPermissionRationale(it) }
+    permissions.any { shouldShowRequestPermissionRationale(it) }

@@ -28,10 +28,3 @@ fun Fragment.showKeyboardOn(editText: EditText) {
         InputMethodManager.SHOW_IMPLICIT
     )
 }
-
-fun Fragment.forceShowKeyboardOn(editText: EditText) {
-    requireContext().inputMethodManager.showSoftInput(
-        editText,
-        InputMethodManager.SHOW_FORCED
-    )
-}

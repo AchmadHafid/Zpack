@@ -34,9 +34,7 @@ fun AppCompatActivity.toggleTheme() =
 
 @Suppress("DEPRECATION")
 fun View.setLightNavBar(isLight: Boolean) {
-    if (atLeastOreo()) {
-        systemUiVisibility = if (isLight) {
-            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        } else systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-    }
+    systemUiVisibility = if (isLight) {
+        systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    } else systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
 }

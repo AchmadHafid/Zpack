@@ -66,7 +66,7 @@ fun AppCompatActivity.resetNavBarButtonsColor() {
     setLightNavBarButtons(isDarkThemeEnabled)
 }
 
-@Suppress("DEPRECATION", "NestedBlockDepth")
+@Suppress("NestedBlockDepth")
 fun Fragment.setLightStatusBarIcons(isLight: Boolean) {
     appCompatActivity?.setLightStatusBarIcons(isLight)
 }
@@ -88,7 +88,7 @@ fun AppCompatActivity.setLightStatusBarIcons(isLight: Boolean) {
     }
 }
 
-@Suppress("DEPRECATION", "NestedBlockDepth")
+@Suppress("NestedBlockDepth")
 fun Fragment.setLightNavBarButtons(isLight: Boolean) {
     appCompatActivity?.setLightNavBarButtons(isLight)
 }

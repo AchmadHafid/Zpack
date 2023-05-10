@@ -60,18 +60,17 @@ fun Context.openWirelessSettings(onFailure: () -> Unit = {}) {
 }
 
 fun Context.openWriteSettings(onFailure: () -> Unit = {}) {
-    if (atLeastMarshmallow()) {
-        startActivityIfResolved(
-            Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-                .apply { data = Uri.parse("package:$`package`") }, onFailure
-        )
-    } else onFailure()
+    startActivityIfResolved(
+        Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            .apply { data = Uri.parse("package:$`package`") }, onFailure
+    )
 }
 
 //endregion
 //region Common Action
 
 @SuppressLint("QueryPermissionsNeeded")
+@Suppress("DEPRECATION")
 fun Context.openHomeLauncher(onFailure: () -> Unit = {}) {
     startActivityIfResolved(
         Intent(Intent.ACTION_MAIN)

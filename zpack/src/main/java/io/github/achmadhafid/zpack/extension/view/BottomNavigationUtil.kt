@@ -16,8 +16,8 @@ inline val BottomSheetDialogFragment.bottomSheetBehavior: BottomSheetBehavior<Fr
         BottomSheetBehavior.from(it)
     }
 
-fun BottomSheetDialogFragment.setDismissable(isDismissable: Boolean = true) {
-        dialog?.setCancelable(isDismissable)
-        dialog?.setCanceledOnTouchOutside(isDismissable)
-        bottomSheetBehavior?.isHideable = isDismissable
+fun BottomSheetDialogFragment.setDismissible(isDismissible: Boolean = true) {
+        dialog?.setCancelable(isDismissible)
+        dialog?.setCanceledOnTouchOutside(isDismissible)
+        bottomSheetBehavior?.isHideable = isDismissible
     }
